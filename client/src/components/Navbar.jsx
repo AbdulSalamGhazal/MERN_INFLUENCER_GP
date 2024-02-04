@@ -1,25 +1,37 @@
+import { useState } from "react";
+import Tabs from "@mui/material/Tabs";
+import Tab from "@mui/material/Tab";
+
+import ChatIcon from "@mui/icons-material/Chat";
+import PersonSearchIcon from "@mui/icons-material/PersonSearch";
+import CampaignIcon from "@mui/icons-material/Campaign";
+
+import { Link } from "react-router-dom";
+
+// Update LinkTab to correctly forward props
+const LinkTab = (props) => <Tab component={Link} {...props} />;
+
 export default function Navbar() {
+  const [value, setValue] = useState(0);
+  const handleChange = (event, newValue) => {
+    setValue(newValue);
+  };
+
   return (
-    <>
-      <nav className="navbar navbar-expand-lg bg-body-tertiary">
-        <div className="container-fluid">
-          <a className="navbar-brand" href="#">
-            Influcner Platform
-          </a>
-
-          <div className="collapse navbar-collapse" id="navbarNavAltMarkup">
-            <div className="navbar-nav">
-              <a className="nav-link active" aria-current="page" href="#">
-                Home
-              </a>
-
-              <a className="nav-link" href="#">
-                Chats
-              </a>
-            </div>
-          </div>
-        </div>
-      </nav>
-    </>
+    <Tabs value={value} onChange={handleChange} centered>
+      <LinkTab
+        icon={<PersonSearchIcon />}
+        label="Influencer"
+        to="/influencers"
+        value={0} // Assigning value for each tab
+      />
+      <LinkTab icon={<ChatIcon />} label="Chat" to="/chat" value={1} />
+      <LinkTab
+        icon={<CampaignIcon />}
+        label="Campaign"
+        to="/campaign"
+        value={2}
+      />
+    </Tabs>
   );
 }
