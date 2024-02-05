@@ -7,6 +7,14 @@ app.use(express.json());
 
 mongoose.connect("mongodb://127.0.0.1:27017/MERN_INFLUENCER_GP");
 
+app.get("/influencers", async (req, res) => {
+    const influencers = await Influencer.find({});
+    if (influencers.length === 0) {
+      return res.status(404).json("No influencers found");
+    }
+    res.json(influencers); 
+});
+
 app.post("/influencers", async (req, res) => {
   console.log(req.body);
   Influencer.create(req.body)

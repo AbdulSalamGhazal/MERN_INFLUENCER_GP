@@ -1,14 +1,12 @@
-import { useState } from "react";
-import Tabs from "@mui/material/Tabs";
-import Tab from "@mui/material/Tab";
-
-import ChatIcon from "@mui/icons-material/Chat";
+import React, { useState } from "react";
+import { Tabs, Tab } from "@mui/material";
+import HomeIcon from "@mui/icons-material/Home";
 import PersonSearchIcon from "@mui/icons-material/PersonSearch";
+import ChatIcon from "@mui/icons-material/Chat";
 import CampaignIcon from "@mui/icons-material/Campaign";
-
+import AccountBoxIcon from "@mui/icons-material/AccountBox";
 import { Link } from "react-router-dom";
 
-// Update LinkTab to correctly forward props
 const LinkTab = (props) => <Tab component={Link} {...props} />;
 
 export default function Navbar() {
@@ -18,19 +16,55 @@ export default function Navbar() {
   };
 
   return (
-    <Tabs value={value} onChange={handleChange} centered>
+    <Tabs
+      value={value}
+      onChange={handleChange}
+      centered
+      sx={{
+        "& .MuiTabs-flexContainer": {
+          justifyContent: "space-between",
+        },
+      }}
+    >
+      {/* Home tab on the far left */}
+      <LinkTab
+        icon={<HomeIcon />}
+        label="Home"
+        to="/home"
+        value={0}
+        sx={{ flex: 1, maxWidth: "none" }}
+      />
+
+      {/* Middle tabs */}
       <LinkTab
         icon={<PersonSearchIcon />}
         label="Influencer"
         to="/influencers"
-        value={0} // Assigning value for each tab
+        value={1}
+        sx={{ flex: 1, maxWidth: "none" }}
       />
-      <LinkTab icon={<ChatIcon />} label="Chat" to="/chat" value={1} />
+      <LinkTab
+        icon={<ChatIcon />}
+        label="Chat"
+        to="/chat"
+        value={2}
+        sx={{ flex: 1, maxWidth: "none" }}
+      />
       <LinkTab
         icon={<CampaignIcon />}
         label="Campaign"
         to="/campaign"
-        value={2}
+        value={3}
+        sx={{ flex: 1, maxWidth: "none" }}
+      />
+
+      {/* Account tab on the far right */}
+      <LinkTab
+        icon={<AccountBoxIcon />}
+        label="Account"
+        to="/account"
+        value={4}
+        sx={{ flex: 1, maxWidth: "none" }}
       />
     </Tabs>
   );
