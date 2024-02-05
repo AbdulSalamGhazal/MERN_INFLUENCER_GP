@@ -24,6 +24,7 @@ export default function Navbar() {
         "& .MuiTabs-flexContainer": {
           justifyContent: "space-between",
         },
+        mb: 3,
       }}
     >
       <LinkTab

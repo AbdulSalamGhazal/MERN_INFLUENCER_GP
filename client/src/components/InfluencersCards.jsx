@@ -1,6 +1,6 @@
 import InfluencerCard from "./InfluencerCard";
 import Box from "@mui/material/Box";
-import Grid from "@mui/material/Unstable_Grid2"; // Ensure this is the correct import for your version of MUI
+import Grid from "@mui/material/Unstable_Grid2";
 
 function InfluencersCards({ influencers }) {
   return (

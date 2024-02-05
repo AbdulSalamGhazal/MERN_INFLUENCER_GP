@@ -12,8 +12,8 @@ function InfluencerCard({ influencer }) {
         <CardMedia
           component="img"
           alt="green iguana"
-          height="250"
-          image="https://t3.ftcdn.net/jpg/02/43/12/34/360_F_243123463_zTooub557xEWABDLk0jJklDyLSGl2jrr.jpg"
+          height="300"
+          image={influencer.image}
         />
         <CardContent>
           <Typography gutterBottom variant="h5" component="div">
