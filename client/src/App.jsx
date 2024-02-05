@@ -8,9 +8,7 @@ function App() {
   return (
     <>
       <BrowserRouter>
-        <Container maxWidth="lg" sx={{ mt: 4, mb: 4 }}>
-          {" "}
-          {/* Adjust maxWidth and margins as needed */}
+        <Container maxWidth="xl" sx={{ mt: 1, mb: 4 }}>
           <Navbar />
           <Routes>
             <Route path="/influencers" element={<Influencers />} />

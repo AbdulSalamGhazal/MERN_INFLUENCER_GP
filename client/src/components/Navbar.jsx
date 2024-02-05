@@ -26,7 +26,6 @@ export default function Navbar() {
         },
       }}
     >
-      {/* Home tab on the far left */}
       <LinkTab
         icon={<HomeIcon />}
         label="Home"
@@ -35,7 +34,6 @@ export default function Navbar() {
         sx={{ flex: 1, maxWidth: "none" }}
       />
 
-      {/* Middle tabs */}
       <LinkTab
         icon={<PersonSearchIcon />}
         label="Influencer"
@@ -58,7 +56,6 @@ export default function Navbar() {
         sx={{ flex: 1, maxWidth: "none" }}
       />
 
-      {/* Account tab on the far right */}
       <LinkTab
         icon={<AccountBoxIcon />}
         label="Account"

@@ -5,22 +5,22 @@ import CardMedia from "@mui/material/CardMedia";
 import Button from "@mui/material/Button";
 import Typography from "@mui/material/Typography";
 
-function InfluencerCard() {
+function InfluencerCard({ influencer }) {
   return (
     <>
       <Card sx={{ maxWidth: 345 }}>
         <CardMedia
           component="img"
           alt="green iguana"
-          height="200"
+          height="250"
           image="https://t3.ftcdn.net/jpg/02/43/12/34/360_F_243123463_zTooub557xEWABDLk0jJklDyLSGl2jrr.jpg"
         />
         <CardContent>
           <Typography gutterBottom variant="h5" component="div">
-            name
+            {influencer.name}
           </Typography>
           <Typography variant="body2" color="text.secondary">
-            Description
+            {influencer.desc}
             <p>audiunce, etc....</p>
           </Typography>
         </CardContent>

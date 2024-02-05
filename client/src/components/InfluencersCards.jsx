@@ -1,24 +1,17 @@
 import InfluencerCard from "./InfluencerCard";
 import Box from "@mui/material/Box";
-import Grid from "@mui/material/Unstable_Grid2";
+import Grid from "@mui/material/Unstable_Grid2"; // Ensure this is the correct import for your version of MUI
 
-function InfluencersCards() {
+function InfluencersCards({ influencers }) {
   return (
     <>
-      <Box sx={{ flexGrow: 1 }}>
+      <Box sx={{ flexGrow: 1, pl: 1 }}>
         <Grid container spacing={2}>
-          <Grid xs={3}>
-            <InfluencerCard />
-          </Grid>
-          <Grid xs={3}>
-            <InfluencerCard />
-          </Grid>
-          <Grid xs={3}>
-            <InfluencerCard />
-          </Grid>
-          <Grid xs={3}>
-            <InfluencerCard />
-          </Grid>
+          {influencers.map((influencer) => (
+            <Grid item xs={3} key={influencer.id}>
+              <InfluencerCard influencer={influencer} />
+            </Grid>
+          ))}
         </Grid>
       </Box>
     </>
