@@ -9,12 +9,9 @@ import FormControl from "@mui/material/FormControl";
 import Select from "@mui/material/Select";
 import OutlinedInput from "@mui/material/OutlinedInput";
 import Slider from "@mui/material/Slider";
-import { DemoContainer } from "@mui/x-date-pickers/internals/demo";
-import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
-import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
-import { DatePicker } from "@mui/x-date-pickers/DatePicker";
-import Stack from "@mui/material/Stack";
 import Button from "@mui/material/Button";
+import Switch from "@mui/material/Switch";
+import BackspaceIcon from "@mui/icons-material/Backspace";
 
 function Filters({ setFilters }) {
   const updateFilters = (newFilter) => {
@@ -34,32 +31,61 @@ function Filters({ setFilters }) {
     const {
       target: { value },
     } = event;
-    let newValue = typeof value === "string" ? value.split(",") : value;
-    setField(newValue);
-    updateFilters({ field: newValue });
-    console.log(newValue);
+    let newField = typeof value === "string" ? value.split(",") : value;
+    setField(newField);
+    updateFilters({ field: newField });
+    console.log(newField);
   };
   const [platform, setPlatform] = useState([]);
-
   const handleChangePlatform = (event) => {
     const {
       target: { value },
     } = event;
-    setPlatform(typeof value === "string" ? value.split(",") : value);
+    let newPlatform = typeof value === "string" ? value.split(",") : value;
+    setPlatform(newPlatform);
+    updateFilters({ platforms: newPlatform });
+  };
+  const [audience, setAudience] = useState([]);
+  const handleChangeAudience = (event) => {
+    const {
+      target: { value },
+    } = event;
+    let newAudience = typeof value === "string" ? value.split(",") : value;
+    setAudience(newAudience);
+    updateFilters({ audience: newAudience });
   };
 
   const [cost, setCost] = useState([5000, 50000]);
-  const handleChangeCost = (event, newValue) => {
-    setCost(newValue);
+  const handleChangeCost = (event, newCost) => {
+    setCost(newCost);
+    updateFilters({ avg_cost_min: newCost[0], avg_cost_max: newCost[1] });
   };
 
   const [followers, setFollowers] = useState("");
+  const handleChangeFollowers = (event) => {
+    let newFollowers = event.target.value;
+    setFollowers(newFollowers);
+    updateFilters({ total_followers: newFollowers });
+  };
+  const [location, setLocation] = useState([]);
+  const handleChangeLocation = (event) => {
+    const {
+      target: { value },
+    } = event;
+    let newLocation = typeof value === "string" ? value.split(",") : value;
+    setLocation(newLocation);
+    updateFilters({ location: newLocation });
+  };
+  const [checked, setChecked] = useState(true);
+  const handleChangeVerified = (event) => {
+    setChecked(event.target.checked);
+  };
 
   return (
     <>
       <Box sx={{ flexGrow: 1, pl: 1 }}>
         <Grid container spacing={2}>
-          <Grid xs={4}>
+          <Grid xs={3}>
             <TextField
               value={search}
               id="outlined-basic"
@@ -68,7 +94,7 @@ function Filters({ setFilters }) {
               fullWidth
             />
           </Grid>
-          <Grid xs={4}>
+          <Grid xs={3}>
             <FormControl fullWidth>
               <InputLabel id="field-label">Field</InputLabel>
               <Select
@@ -86,7 +112,7 @@ function Filters({ setFilters }) {
               </Select>
             </FormControl>
           </Grid>
-          <Grid xs={4}>
+          <Grid xs={3}>
             <FormControl fullWidth>
               <InputLabel id="platform-label">Platform</InputLabel>
               <Select
@@ -98,14 +124,57 @@ function Filters({ setFilters }) {
                 onChange={handleChangePlatform}
                 input={<OutlinedInput label="Platform" />}
               >
-                <MenuItem value={"youtube"}>YouTube</MenuItem>
-                <MenuItem value={"X(twitter)"}>X (twitter)</MenuItem>
-                <MenuItem value={"snapchat"}>Snapchat</MenuItem>
-                <MenuItem value={"instagram"}>Instagram</MenuItem>
+                <MenuItem value={"YouTube"}>YouTube</MenuItem>
+                <MenuItem value={"X (twitter)"}>X (twitter)</MenuItem>
+                <MenuItem value={"Snapchat"}>Snapchat</MenuItem>
+                <MenuItem value={"Instagram"}>Instagram</MenuItem>
+                <MenuItem value={"Facebook"}>Facebook</MenuItem>
+                <MenuItem value={"TikTok"}>TikTok</MenuItem>
               </Select>
             </FormControl>
           </Grid>
-          <Grid xs={4}>
+          <Grid xs={3}>
+            <FormControl fullWidth>
+              <InputLabel id="audience-label">Audience</InputLabel>
+              <Select
+                labelId="audience-label"
+                id="audience"
+                label="audience"
+                multiple
+                value={audience}
+                onChange={handleChangeAudience}
+                input={<OutlinedInput label="audience" />}
+              >
+                <MenuItem value={"Fashion"}>Fashion</MenuItem>
+                <MenuItem value={"Technology"}>Technology</MenuItem>
+                <MenuItem value={"Fitness"}>Fitness</MenuItem>
+                <MenuItem value={"Gaming"}>Gaming</MenuItem>
+                <MenuItem value={"Travel"}>Travel</MenuItem>
+                <MenuItem value={"Food"}>Food</MenuItem>
+                <MenuItem value={"DIY Projects"}>DIY Projects</MenuItem>
+                <MenuItem value={"Entertainment"}>Entertainment</MenuItem>
+                <MenuItem value={"Education"}>Education</MenuItem>
+                <MenuItem value={"Sustainability"}>Sustainability</MenuItem>
+                <MenuItem value={"Health and Wellness"}>
+                  Health and Wellness
+                </MenuItem>
+                <MenuItem value={"Beauty"}>Beauty</MenuItem>
+                <MenuItem value={"Sports"}>Sports</MenuItem>
+                <MenuItem value={"Music"}>Music</MenuItem>
+                <MenuItem value={"Photography"}>Photography</MenuItem>
+                <MenuItem value={"Art and Design"}>Art and Design</MenuItem>
+                <MenuItem value={"Personal Finance"}>Personal Finance</MenuItem>
+                <MenuItem value={"Parenting"}>Parenting</MenuItem>
+                <MenuItem value={"Outdoor Activities"}>
+                  Outdoor Activities
+                </MenuItem>
+                <MenuItem value={"Literature and Reading"}>
+                  Literature and Reading
+                </MenuItem>
+              </Select>
+            </FormControl>
+          </Grid>
+          <Grid xs={3}>
             <InputLabel id="cost-label">Cost</InputLabel>
 
             <Slider
@@ -119,7 +188,7 @@ function Filters({ setFilters }) {
               max={100000}
             />
           </Grid>
-          <Grid xs={4}>
+          <Grid xs={3}>
             <FormControl fullWidth>
               <InputLabel id="followers-label">Followers</InputLabel>
               <Select
@@ -127,7 +196,7 @@ function Filters({ setFilters }) {
                 id="followers"
                 label="followers"
                 value={followers}
-                onChange={(e) => setFollowers(e.target.value)}
+                onChange={handleChangeFollowers}
                 input={<OutlinedInput label="Followers" />}
               >
                 <MenuItem value={50000}> &lt; 50K</MenuItem>
@@ -140,23 +209,52 @@ function Filters({ setFilters }) {
                 <MenuItem value={50000000}> &lt; 50M</MenuItem>
               </Select>
             </FormControl>
-          </Grid>
-          <Grid xs={2} sx={{ pt: 0 }}>
-            <LocalizationProvider dateAdapter={AdapterDayjs}>
-              <DemoContainer components={["DatePicker"]}>
-                <DatePicker label="Date" />
-              </DemoContainer>
-            </LocalizationProvider>
+          </Grid>{" "}
+          <Grid xs={3}>
+            <FormControl fullWidth>
+              <InputLabel id="location-label">Location</InputLabel>
+              <Select
+                labelId="location-label"
+                id="location"
+                label="location"
+                multiple
+                value={location}
+                onChange={handleChangeLocation}
+                input={<OutlinedInput label="location" />}
+              >
+                <MenuItem value={"Central"}>Central (e.g., Riyadh)</MenuItem>
+                <MenuItem value={"Western"}>
+                  Western (e.g., Jeddah, Mecca, Medina)
+                </MenuItem>
+                <MenuItem value={"Eastern"}>
+                  Eastern (e.g., Dammam, Khobar, Al-Ahsa)
+                </MenuItem>
+                <MenuItem value={"Southern"}>
+                  Southern (e.g., Abha, Najran, Jizan)
+                </MenuItem>
+                <MenuItem value={"Northern"}>
+                  Northern (e.g., Tabuk, Al-Jouf)
+                </MenuItem>
+              </Select>
+            </FormControl>
           </Grid>
           <Grid xs={2}>
-            <Stack spacing={2} direction="row" sx={{ my: 1 }}>
-              <Button variant="text" size="small">
-                Clear
-              </Button>
-              <Button fullWidth variant="contained" size="large">
-                Search
-              </Button>
-            </Stack>
+            <InputLabel id="check">Verfied?</InputLabel>
+
+            <Switch
+              sx={{ ml: 4 }}
+              checked={checked}
+              onChange={handleChangeVerified}
+            />
+          </Grid>
+          <Grid xs={1}>
+            <Button
+              sx={{ mt: 2 }}
+              variant="outlined"
+              endIcon={<BackspaceIcon />}
+            >
+              Clear
+            </Button>
           </Grid>
         </Grid>
       </Box>

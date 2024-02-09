@@ -2,38 +2,41 @@ function filters({
   name,
   field,
   platforms,
+  audience,
   avg_cost_min,
   avg_cost_max,
   total_followers,
+  location,
 }) {
-  // Initialize the query object
   let query = {};
 
-  // Name search (case-insensitive partial match)
   if (name) {
     query.name = { $regex: new RegExp(name, "i") };
   }
 
-  // Field filter (multiple values)
   if (field && field.length) {
     query.field = { $in: field };
   }
 
-  // Platform filter (multiple values)
   if (platforms && platforms.length) {
     query.platforms = { $in: platforms };
   }
+  if (audience && audience.length) {
+    query.audience_interests = { $in: audience };
+  }
 
-  // Average cost range
   if (avg_cost_min !== undefined || avg_cost_max !== undefined) {
     query.avg_cost = {};
     if (avg_cost_min !== undefined) query.avg_cost.$gte = avg_cost_min;
     if (avg_cost_max !== undefined) query.avg_cost.$lte = avg_cost_max;
   }
 
-  // Total followers range
   if (total_followers !== undefined) {
     query.total_followers = { $lte: total_followers };
+  }
+
+  if (location && location.length) {
+    query.audience_location = { $in: location };
   }
 
   return query;

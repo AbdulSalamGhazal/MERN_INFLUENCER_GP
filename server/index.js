@@ -12,11 +12,7 @@ mongoose.connect("mongodb://127.0.0.1:27017/MERN_INFLUENCER_GP");
 
 app.get("/influencers", async (req, res) => {
   const query = filters(req.query);
-  console.log(query);
   const influencers = await Influencer.find(query);
-  if (influencers.length === 0) {
-    return res.status(404).json("No influencers found");
-  }
   res.json(influencers);
 });
 
