@@ -1,7 +1,7 @@
 const express = require("express");
 const mongoose = require("mongoose");
 const cors = require("cors");
-
+const filters = require("./functions/filters");
 const Influencer = require("./models/influencer");
 
 const app = express();
@@ -11,7 +11,9 @@ app.use(cors());
 mongoose.connect("mongodb://127.0.0.1:27017/MERN_INFLUENCER_GP");
 
 app.get("/influencers", async (req, res) => {
-  const influencers = await Influencer.find({});
+  const query = filters(req.query);
+  console.log(query);
+  const influencers = await Influencer.find(query);
   if (influencers.length === 0) {
     return res.status(404).json("No influencers found");
   }

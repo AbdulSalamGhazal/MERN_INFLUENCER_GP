@@ -16,17 +16,28 @@ import { DatePicker } from "@mui/x-date-pickers/DatePicker";
 import Stack from "@mui/material/Stack";
 import Button from "@mui/material/Button";
 
-function Filters() {
+function Filters({ setFilters }) {
+  const updateFilters = (newFilter) => {
+    setFilters((prevFilter) => ({
+      ...prevFilter,
+      ...newFilter,
+    }));
+  };
   const [search, setSearch] = useState("");
   const handleChangeSearch = (event) => {
-    setSearch(event.target.value);
+    let searchTerm = event.target.value;
+    setSearch(searchTerm);
+    updateFilters({ name: searchTerm });
   };
   const [field, setField] = useState([]);
   const handleChangeField = (event) => {
     const {
       target: { value },
     } = event;
-    setField(typeof value === "string" ? value.split(",") : value);
+    let newValue = typeof value === "string" ? value.split(",") : value;
+    setField(newValue);
+    updateFilters({ field: newValue });
+    console.log(newValue);
   };
   const [platform, setPlatform] = useState([]);
 

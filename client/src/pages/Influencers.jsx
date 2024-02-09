@@ -4,11 +4,13 @@ import Filters from "../components/Filters";
 import InfluencersCards from "../components/InfluencersCards";
 function Influencers() {
   const [influencers, setInfluencers] = useState([]);
-
+  const [filters, setFilters] = useState({});
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const response = await axios.get("http://localhost:3001/influencers");
+        const response = await axios.get("http://localhost:3001/influencers", {
+          params: filters,
+        });
         setInfluencers(response.data);
       } catch (error) {
         console.error("Error fetching data:", error);
@@ -16,11 +18,11 @@ function Influencers() {
     };
 
     fetchData();
-  }, []);
+  }, [filters]);
 
   return (
     <>
-      <Filters />
+      <Filters setFilters={setFilters} />
       <InfluencersCards influencers={influencers} />
     </>
   );
