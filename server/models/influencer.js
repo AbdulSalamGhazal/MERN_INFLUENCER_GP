@@ -9,6 +9,10 @@ const influencerSchema = new Schema({
   description: String,
   platforms: [String],
   field: String,
+  verified: {
+    type: Boolean,
+    default: false,
+  },
 
   avg_cost: Number,
 

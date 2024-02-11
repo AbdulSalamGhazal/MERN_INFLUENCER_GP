@@ -7,6 +7,7 @@ function filters({
   avg_cost_max,
   total_followers,
   location,
+  verified,
 }) {
   let query = {};
 
@@ -38,7 +39,9 @@ function filters({
   if (location && location.length) {
     query.audience_location = { $in: location };
   }
-
+  if (verified === "true") {
+    query.verified = true;
+  }
   return query;
 }
 

@@ -9,8 +9,8 @@ function App() {
   return (
     <>
       <BrowserRouter>
-        <Container maxWidth="xl" sx={{ mt: 1, mb: 4 }}>
-          <Navbar />
+        <Navbar />
+        <Container maxWidth="xl" sx={{ mt: 3, mb: 4 }}>
           <Routes>
             <Route path="/influencers" element={<Influencers />} />
             <Route path="/home" element={<h1>Welcome</h1>} />

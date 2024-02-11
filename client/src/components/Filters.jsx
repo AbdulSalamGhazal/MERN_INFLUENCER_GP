@@ -76,9 +76,34 @@ function Filters({ setFilters }) {
     setLocation(newLocation);
     updateFilters({ location: newLocation });
   };
-  const [checked, setChecked] = useState(true);
+  const [checked, setChecked] = useState(false);
   const handleChangeVerified = (event) => {
-    setChecked(event.target.checked);
+    let isVerified = event.target.checked;
+    setChecked(isVerified);
+    updateFilters({ verified: isVerified });
+  };
+
+  const handleClearFilters = () => {
+    setSearch("");
+    setField([]);
+    setPlatform([]);
+    setAudience([]);
+    setCost([5000, 50000]);
+    setFollowers("");
+    setLocation([]);
+    setChecked(false);
+
+    updateFilters({
+      name: "",
+      field: [],
+      platforms: [],
+      audience: [],
+      avg_cost_min: 5000,
+      avg_cost_max: 50000,
+      total_followers: 50000000,
+      location: [],
+      verified: undefined,
+    });
   };
 
   return (
@@ -106,9 +131,50 @@ function Filters({ setFilters }) {
                 onChange={handleChangeField}
                 input={<OutlinedInput label="Field" />}
               >
-                <MenuItem value={"food"}>Food</MenuItem>
-                <MenuItem value={"sport"}>Sport</MenuItem>
-                <MenuItem value={"tv"}>TV</MenuItem>
+                <MenuItem value={"Gaming"}>Gaming</MenuItem>
+                <MenuItem value={"Beauty and Makeup"}>
+                  Beauty and Makeup
+                </MenuItem>
+                <MenuItem value={"Fashion"}>Fashion</MenuItem>
+                <MenuItem value={"Fitness and Health"}>
+                  Fitness and Health
+                </MenuItem>
+                <MenuItem value={"Technology and Gadgets"}>
+                  Technology and Gadgets
+                </MenuItem>
+                <MenuItem value={"Food and Cooking"}>Food and Cooking</MenuItem>
+                <MenuItem value={"Travel"}>Travel</MenuItem>
+                <MenuItem value={"DIY and Crafts"}>DIY and Crafts</MenuItem>
+                <MenuItem value={"Parenting and Family"}>
+                  Parenting and Family
+                </MenuItem>
+                <MenuItem value={"Lifestyle"}>Lifestyle</MenuItem>
+                <MenuItem value={"Education and Learning"}>
+                  Education and Learning
+                </MenuItem>
+                <MenuItem value={"Business and Entrepreneurship"}>
+                  Business and Entrepreneurship
+                </MenuItem>
+                <MenuItem value={"Photography and Videography"}>
+                  Photography and Videography
+                </MenuItem>
+                <MenuItem value={"Music and Dance"}>Music and Dance</MenuItem>
+                <MenuItem value={"Sports and Athletics"}>
+                  Sports and Athletics
+                </MenuItem>
+                <MenuItem value={"Wellness and Mental Health"}>
+                  Wellness and Mental Health
+                </MenuItem>
+                <MenuItem value={"Home Decor and Interior Design"}>
+                  Home Decor and Interior Design
+                </MenuItem>
+                <MenuItem value={"Art and Design"}>Art and Design</MenuItem>
+                <MenuItem value={"Science and Innovation"}>
+                  Science and Innovation
+                </MenuItem>
+                <MenuItem value={"Environmental Sustainability"}>
+                  Environmental Sustainability
+                </MenuItem>
               </Select>
             </FormControl>
           </Grid>
@@ -252,6 +318,7 @@ function Filters({ setFilters }) {
               sx={{ mt: 2 }}
               variant="outlined"
               endIcon={<BackspaceIcon />}
+              onClick={handleClearFilters}
             >
               Clear
             </Button>
