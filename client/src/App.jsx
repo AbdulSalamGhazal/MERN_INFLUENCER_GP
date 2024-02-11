@@ -5,6 +5,10 @@ import Container from "@mui/material/Container";
 import Influencers from "./pages/influencers";
 import Login from "./pages/Login";
 import Navbar from "./components/Navbar";
+import InfluencerSignup from "./pages/InfluencerSignup";
+import BusinessSignup from "./pages/BusinessSignup";
+import Signup from "./pages/Signup";
+
 function App() {
   return (
     <>
@@ -13,8 +17,11 @@ function App() {
         <Container maxWidth="xl" sx={{ mt: 3, mb: 4 }}>
           <Routes>
             <Route path="/influencers" element={<Influencers />} />
-            <Route path="/home" element={<h1>Welcome</h1>} />
+            <Route path="/home" element={<div><h1>Welcome</h1><a href="/login">login</a><br /><a href="/signup">signup</a></div>} />
             <Route path="/login" element={<Login />} />
+            <Route path="/signup" element={<Signup />} />
+            <Route path="/signup/influencer" element={<InfluencerSignup />} />
+            <Route path="/signup/business" element={<BusinessSignup />} />
           </Routes>
         </Container>
       </BrowserRouter>

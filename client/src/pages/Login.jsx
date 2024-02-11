@@ -11,7 +11,7 @@ import Container from '@mui/material/Container';
 import { useState } from 'react';
 
 
-export default function Login() {
+const Login = () => {
     const [email, setEmail] = useState('')
     const [password, setPassword] = useState('')
 
@@ -24,18 +24,10 @@ export default function Login() {
     return (
         <Container component="main" maxWidth="xs">
             <CssBaseline />
-            <Box
-                sx={{
-                    marginTop: 8,
-                    display: 'flex',
-                    flexDirection: 'column',
-                    alignItems: 'center',
-                }}
-            >
-                {/* TODO: the title needs some styles */}
-                <Typography component="h1" variant="h2">
-                    Sign in
-                </Typography>
+            {/* TODO: the title needs some styles */}
+            <Typography component="h1" variant="h2" align="center">
+                Sign in
+            </Typography>
                 <Box component="form" onSubmit={handleSubmit} noValidate sx={{ mt: 1 }}>
                     <TextField
                         margin="normal"
@@ -43,7 +35,7 @@ export default function Login() {
                         fullWidth
                         id="email"
                         label="Email Address"
-                        //   name="email"
+                        name="email"
                         autoComplete="email"
                         autoFocus
                         value={email}
@@ -88,7 +80,8 @@ export default function Login() {
                         </Grid>
                     </Grid>
                 </Box>
-            </Box>
         </Container>
     );
 }
+
+export default Login;
