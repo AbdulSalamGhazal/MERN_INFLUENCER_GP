@@ -32,9 +32,9 @@ const PlatformRow = ({
   removable
 }) => {
   return (
-    <Grid container spacing={1} alignItems={'center'}>
-      <Grid xs={4}>
-        <FormControl fullWidth margin="normal" required>
+    <Grid container spacing={1} alignItems={'center'} justifyContent={'space-around'}>
+      <Grid xs={3}>
+        <FormControl required fullWidth>
           <InputLabel id="platform">Platform</InputLabel>
           <Select
             labelId="platform"
@@ -47,7 +47,7 @@ const PlatformRow = ({
           </Select>
         </FormControl>
       </Grid>
-      <Grid xs={6}>
+      <Grid xs={8}>
         <TextField
           margin="normal"
           required
@@ -105,18 +105,20 @@ const PlatformsForm = ({ platforms, setPlatforms, avgCost, setAvgCost }) => {
         value={avgCost}
         onChange={e => setAvgCost(e.target.value)}
       />
-      <FormLabel>Add your social media accounts</FormLabel>
-      {platforms.map((platform, index) => (
-        <PlatformRow
-          key={index}
-          index={index}
-          platformName={platform.name}
-          handleNameChange={handlePlatformNameChange}
-          url={platform.url}
-          handleUrlChange={handlePlatformUrlChange}
-          handleRemovePlatform={handleDeletePlatform}
-          removable={platforms.length > 0} />
-      ))}
+      <FormControl margin='normal' fullWidth>
+        <FormLabel>Add your social media accounts</FormLabel>
+        {platforms.map((platform, index) => (
+          <PlatformRow
+            key={index}
+            index={index}
+            platformName={platform.name}
+            handleNameChange={handlePlatformNameChange}
+            url={platform.url}
+            handleUrlChange={handlePlatformUrlChange}
+            handleRemovePlatform={handleDeletePlatform}
+            removable={platforms.length > 0} />
+        ))}
+      </FormControl>
       <IconButton onClick={handleAddPlatform} color="primary" aria-label="add field">
         <AddCircleOutlineIcon />
       </IconButton>
