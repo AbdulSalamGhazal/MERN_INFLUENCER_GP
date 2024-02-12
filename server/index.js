@@ -15,6 +15,10 @@ app.get("/influencers", async (req, res) => {
   const influencers = await Influencer.find(query);
   res.json(influencers);
 });
+app.get("/influencers/:id", async (req, res) => {
+  const influencer = await Influencer.findById(req.params.id);
+  res.json(influencer);
+});
 
 app.post("/influencers", async (req, res) => {
   console.log(req.body);
