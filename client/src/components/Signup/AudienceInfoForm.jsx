@@ -42,12 +42,7 @@ const AudienceInfoForm = ({
     interests, setInterests}) => {
 
   return (
-    <Box 
-        component="form" 
-        onSubmit={e => e.preventDefault()} 
-        noValidate
-        sx={{ mt: 3 }}
-        >
+    <Box>
         
         <TextField
             margin="normal"
