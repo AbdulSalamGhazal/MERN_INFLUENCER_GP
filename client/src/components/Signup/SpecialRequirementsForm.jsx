@@ -18,17 +18,18 @@ const SpecialRequirementsForm = ({ requirements, setRequirements }) => {
   }
 
   const handleChange = (index, newValue) => {
-    setRequirements(oldReqs => oldReqs[index] = newValue)
+    setRequirements(oldReqs => oldReqs.slice(0, index).concat([newValue, ...oldReqs.slice(index+1)]))
   }
 
   return (
     <Box>
-      <FormLabel>Add your social media accounts</FormLabel>
+      <FormLabel>Add your special requirements</FormLabel>
       {requirements.map((requirement, index) => (
         <Grid key={index} container alignItems={'center'} justifyContent='space-around'>
           <Grid xs={10}>
             <TextField
               margin="normal"
+              multiline
               required
               fullWidth
               label="write any special requirement"

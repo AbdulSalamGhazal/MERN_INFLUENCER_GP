@@ -8,9 +8,11 @@ import Typography from '@mui/material/Typography';
 import Container from '@mui/material/Container';
 
 import PersonalInfoForm from '../components/signup/PersonalInfoForm'
-import PlatformsForm from '../components/Signup/PlatformsForm';
+import PlatformsForm from '../components/signup/PlatformsForm';
 import AudienceInfoForm from '../components/signup/AudienceInfoForm';
 import SpecialRequirementsForm from '../components/signup/SpecialRequirementsForm';
+import axios from "axios";
+
 
 
 const InfluencerSignup = () => {
@@ -35,6 +37,7 @@ const InfluencerSignup = () => {
 
   const [platforms, setPlatforms] = useState([{name: '', url: ''}]);
 
+  const [avgCost, setAvgCost] = useState(0);
   const [requirements, setRequirements] = useState(['']);
 
   const steps = ['presonal info', 'audience info', 'platforms', 'special requirements'];
@@ -65,10 +68,13 @@ const InfluencerSignup = () => {
           interests={audienceInterests} setInterests={setAudienceInterests} />
 
       case 2:
-        return <PlatformsForm platforms={platforms} setPlatforms={setPlatforms}/>
+        return <PlatformsForm platforms={platforms} setPlatforms={setPlatforms}
+        avgCost={avgCost} setAvgCost={setAvgCost}/>
 
       case 3:
-        return <SpecialRequirementsForm requirements={requirements} setRequirements={setRequirements}/>
+        return <SpecialRequirementsForm 
+          requirements={requirements} setRequirements={setRequirements} />
+
       default:
         throw new Error('Unknown step');
     }
@@ -85,6 +91,34 @@ const InfluencerSignup = () => {
   const handleReset = () => {
     setActiveStep(0);
   };
+
+  const handleSubmit = async () => {
+    const influencer = {
+      name,
+      email,
+      location,
+      image,
+      description,
+      platforms: platforms.map(p => p.name),
+      field,
+      avg_cost: avgCost,
+      special_requriements: requirements,
+      personal_interests: presonalInterests,
+      total_followers: totalFollowers,
+      audience_location: flowersLocations,
+      audience_age_rang: `${audienceAge[0]}-${audienceAge[1]}`,
+      audience_gender: audienceGender,
+      audience_interests: audienceInterests,
+      avg_likes: likesNumber,
+      avg_comments: commentsNumber,
+    }
+    try {
+      await axios.post("http://localhost:3001/influencers", influencer);
+      setActiveStep((prevActiveStep) => prevActiveStep + 1);
+    } catch (error) {
+      console.error("Error fetching data:", error);
+    }
+  }
 
   return (
     <Container component="main" maxWidth="xs">
@@ -141,9 +175,14 @@ const InfluencerSignup = () => {
                 </Button>
                 <Box sx={{ flex: '1 1 auto' }} />
 
-                <Button onClick={handleNext}>
-                  {activeStep === steps.length - 1 ? 'Finish' : 'Next'}
-                </Button>
+                {activeStep === steps.length - 1 ? 
+                  <Button onClick={handleSubmit}>
+                    Sumbit
+                  </Button> : 
+                  <Button onClick={handleNext}>
+                    Next
+                  </Button>
+                }
               </Box>
             </>
           )}

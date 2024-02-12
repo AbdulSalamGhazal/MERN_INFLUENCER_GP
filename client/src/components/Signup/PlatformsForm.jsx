@@ -71,7 +71,7 @@ const PlatformRow = ({
   )
 }
 
-const PlatformsForm = ({ platforms, setPlatforms }) => {
+const PlatformsForm = ({ platforms, setPlatforms, avgCost, setAvgCost }) => {
 
   const handleAddPlatform = () => {
     setPlatforms(oldPlatforms => [...oldPlatforms, { name: '', url: '' }]);
@@ -95,6 +95,16 @@ const PlatformsForm = ({ platforms, setPlatforms }) => {
 
   return (
     <Box>
+      <TextField
+        margin="normal"
+        required
+        fullWidth
+        label="Average cost"
+        type="number"
+        id="avgCost"
+        value={avgCost}
+        onChange={e => setAvgCost(e.target.value)}
+      />
       <FormLabel>Add your social media accounts</FormLabel>
       {platforms.map((platform, index) => (
         <PlatformRow
