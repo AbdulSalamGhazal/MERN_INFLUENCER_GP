@@ -7,9 +7,10 @@ import Button from '@mui/material/Button';
 import Typography from '@mui/material/Typography';
 import Container from '@mui/material/Container';
 
-import PersonalInfoForm from '../components/signup/PersonalInfoForm';
+import PersonalInfoForm from '../components/signup/PersonalInfoForm'
+import PlatformsForm from '../components/Signup/PlatformsForm';
 import AudienceInfoForm from '../components/signup/AudienceInfoForm';
-import PlatformsForm from '../components/signup/PlatformsForm';
+import SpecialRequirementsForm from '../components/signup/SpecialRequirementsForm';
 
 
 const InfluencerSignup = () => {
@@ -34,7 +35,9 @@ const InfluencerSignup = () => {
 
   const [platforms, setPlatforms] = useState([{name: '', url: ''}]);
 
-  const steps = ['presonal info', 'audience info', 'platforms'];
+  const [requirements, setRequirements] = useState(['']);
+
+  const steps = ['presonal info', 'audience info', 'platforms', 'special requirements'];
 
   const getStepContent = step => {
     switch (step) {
@@ -64,6 +67,8 @@ const InfluencerSignup = () => {
       case 2:
         return <PlatformsForm platforms={platforms} setPlatforms={setPlatforms}/>
 
+      case 3:
+        return <SpecialRequirementsForm requirements={requirements} setRequirements={setRequirements}/>
       default:
         throw new Error('Unknown step');
     }
