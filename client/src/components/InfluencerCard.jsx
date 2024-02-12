@@ -15,6 +15,7 @@ import FavoriteBorderIcon from "@mui/icons-material/FavoriteBorder";
 import FavoriteIcon from "@mui/icons-material/Favorite";
 import InfoIcon from "@mui/icons-material/Info";
 import EmailIcon from "@mui/icons-material/Email";
+import { Link } from "react-router-dom";
 
 function InfluencerCard({ influencer }) {
   const [isFavorited, setIsFavorited] = useState(false);
@@ -123,13 +124,18 @@ function InfluencerCard({ influencer }) {
           >
             <EmailIcon sx={{ fontSize: 28 }} />
           </IconButton>
-          <IconButton
-            onClick={handleMoreDetails}
-            aria-label="more details"
-            size="large"
+          <Link
+            to={`/influencers/${influencer.id}`}
+            style={{ textDecoration: "none", color: "inherit" }}
           >
-            <InfoIcon sx={{ fontSize: 28 }} />
-          </IconButton>
+            <IconButton
+              onClick={handleMoreDetails}
+              aria-label="more details"
+              size="large"
+            >
+              <InfoIcon sx={{ fontSize: 28 }} />
+            </IconButton>
+          </Link>
         </CardActions>
       </Card>
     </>
