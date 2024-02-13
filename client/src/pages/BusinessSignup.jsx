@@ -33,9 +33,64 @@ const inintialBusiness = {
   }
 }
 
-const industryOptions = ['nothing'];
-const sizeOptions = ['nothing'];
-const audienceOptions = ['nothing'];
+const industryOptions = [
+  "Fashion",
+  "Beauty",
+  "Technology",
+  "Food and Beverage",
+  "Health and Wellness",
+  "Entertainment",
+  "Lifestyle",
+  "Travel and Hospitality",
+  "Sports and Fitness",
+  "Education and Learning"
+];
+const sizeOptions = [
+  "Startup: Fewer than 10 employees",
+  "Small: 11 to 50 employees",
+  "Medium: 51 to 250 employees",
+  "Large: 251 to 1000 employees",
+  "Enterprise: More than 1000 employees"
+];
+const audienceOptions =[
+  "Fashion",
+  "Technology",
+  "Fitness",
+  "Gaming",
+  "Travel",
+  "Food",
+  "DIY Projects",
+  "Entertainment",
+  "Education",
+  "Sustainability",
+  "Health and Wellness",
+  "Beauty",
+  "Sports",
+  "Music",
+  "Photography",
+  "Art and Design",
+  "Personal Finance",
+  "Parenting",
+  "Outdoor Activities",
+  "Literature and Reading"
+];
+const goalsOptions = [
+  "Increase Brand Awareness",
+  "Enhance Engagement",
+  "Drive Traffic",
+  "Generate Leads",
+  "Boost Sales",
+  "Promote a Product Launch",
+  "Expand Market Reach",
+  "Improve Customer Loyalty",
+  "Gather Customer Feedback",
+  "Create Branded Content",
+  "Startup: Fewer than 10 employees",
+  "Small: 11 to 50 employees",
+  "Medium: 51 to 250 employees",
+  "Large: 251 to 1000 employees",
+  "Enterprise: More than 1000 employees"
+];
 
 const BusinessSignup = () => {
   const [business, setBusiness] = useState({ ...inintialBusiness })
@@ -62,6 +117,7 @@ const BusinessSignup = () => {
   const handlePasswordChange = e => setBusiness(oldBusiness => ({ ...oldBusiness, password: e.target.value }))
   const handleEmailChange = e => setBusiness(oldBusiness => ({ ...oldBusiness, email: e.target.value }))
   const handleAddressChange = e => setBusiness(oldBusiness => ({ ...oldBusiness, address: e.target.value }))
+  const handleGoalsChange = e => setBusiness(oldBusiness => ({...oldBusiness, campaignGoals: e.target.value}))
 
   const handleAddSocialMediaLink = () => setBusiness(oldBusiness => (
     { ...oldBusiness, socialMediaLinks: [...oldBusiness.socialMediaLinks, ''] }
@@ -85,27 +141,27 @@ const BusinessSignup = () => {
     }
   ))
 
-  const handleAddGoals = () => setBusiness(oldBusiness => (
-    { ...oldBusiness, campaignGoals: [...oldBusiness.campaignGoals, ''] }
-  ))
+  // const handleAddGoals = () => setBusiness(oldBusiness => (
+  //   { ...oldBusiness, campaignGoals: [...oldBusiness.campaignGoals, ''] }
+  // ))
 
-  const handleDeleteGoals = index => setBusiness(oldBusiness => (
-    {
-      ...oldBusiness,
-      campaignGoals: oldBusiness.campaignGoals
-        .slice(0, index)
-        .concat(oldBusiness.campaignGoals.slice(index + 1))
-    }
-  ))
+  // const handleDeleteGoals = index => setBusiness(oldBusiness => (
+  //   {
+  //     ...oldBusiness,
+  //     campaignGoals: oldBusiness.campaignGoals
+  //       .slice(0, index)
+  //       .concat(oldBusiness.campaignGoals.slice(index + 1))
+  //   }
+  // ))
 
-  const handleChangeGoals = (changedIndex, e) => setBusiness(oldBusiness => (
-    {
-      ...oldBusiness, campaignGoals: oldBusiness.campaignGoals
-        .map((goal, index) => (
-          index === changedIndex ? e.target.value : goal
-        ))
-    }
-  ))
+  // const handleChangeGoals = (changedIndex, e) => setBusiness(oldBusiness => (
+  //   {
+  //     ...oldBusiness, campaignGoals: oldBusiness.campaignGoals
+  //       .map((goal, index) => (
+  //         index === changedIndex ? e.target.value : goal
+  //       ))
+  //   }
+  // ))
 
   const handleAddRequest = () => setBusiness(oldBusiness => (
     { ...oldBusiness, generalRequest: [...oldBusiness.generalRequest, ''] }
@@ -268,13 +324,16 @@ const BusinessSignup = () => {
 
         <FormControl fullWidth margin="normal" required>
           <FormLabel>Add campaign goals</FormLabel>
-          <ListForm
-            list={business.campaignGoals}
-            handleAdd={handleAddGoals}
-            handleDelete={handleDeleteGoals}
-            handleChange={handleChangeGoals}
-            label={'campaign goal'}
-          />
+          <Select
+            labelId="goals"
+            id="goals"
+            value={business.campaignGoals}
+            label="target goals"
+            multiple
+            onChange={handleGoalsChange}
+          >
+            {goalsOptions.map(goal => <MenuItem key={goal} value={goal}>{goal}</MenuItem>)}
+          </Select>
         </FormControl>
 
         <FormControl fullWidth margin="normal" required>
