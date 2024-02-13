@@ -24,7 +24,7 @@ const inintialBusiness = {
   websiteURL: '',
   socialMediaLinks: [],
   description: '',
-  targetAudience: '',
+  targetAudience: [],
   campaignGoals: [],
   generalRequest: [],
   budgetRange: {
@@ -282,6 +282,7 @@ const BusinessSignup = () => {
         <FormControl fullWidth margin="normal" required>
           <InputLabel id="audience">Target audience</InputLabel>
           <Select
+            multiple
             labelId="audience"
             id="audience"
             value={business.targetAudience}
