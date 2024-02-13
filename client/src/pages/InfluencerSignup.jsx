@@ -5,8 +5,6 @@ import Step from '@mui/material/Step';
 import StepLabel from '@mui/material/StepLabel';
 import Button from '@mui/material/Button';
 import Typography from '@mui/material/Typography';
-import Container from '@mui/material/Container';
-
 import PersonalInfoForm from '../components/signup/PersonalInfoForm'
 import PlatformsForm from '../components/signup/PlatformsForm';
 import AudienceInfoForm from '../components/signup/AudienceInfoForm';
@@ -29,15 +27,15 @@ const InfluencerSignup = () => {
 
   const [flowersLocations, setFollowersLocations] = useState([]);
   const [totalFollowers, setTotalFollowers] = useState([]);
-  const [audienceAge, setAudienceAge] = useState([19, 30]);
+  const [audienceAge, setAudienceAge] = useState([10, 30]);
   const [audienceGender, setAudienceGender] = useState(50);
-  const [likesNumber, setLikesNumber] = useState(0);
-  const [commentsNumber, setCommentsNumber] = useState(0);
+  const [likesNumber, setLikesNumber] = useState();
+  const [commentsNumber, setCommentsNumber] = useState();
   const [audienceInterests, setAudienceInterests] = useState([]);
 
   const [platforms, setPlatforms] = useState([{name: '', url: ''}]);
 
-  const [avgCost, setAvgCost] = useState(0);
+  const [avgCost, setAvgCost] = useState();
   const [requirements, setRequirements] = useState(['']);
 
   const steps = ['presonal info', 'audience info', 'platforms', 'special requirements'];
@@ -121,20 +119,12 @@ const InfluencerSignup = () => {
   }
 
   return (
-    <Container component="main" maxWidth="xs">
-      <Box
-        sx={{
-          marginTop: 8,
-          display: 'flex',
-          flexDirection: 'column',
-          alignItems: 'center',
-        }}
-      >
-        <Typography component="h1" variant="h4" align="center">
+      <Box>
+        <Typography component="h1" variant="h3" align="center" sx={{mt: '5px', mb: '30px'}}>
           Influencer Sign Up
         </Typography>
 
-        <Box sx={{ width: '100%' }}>
+        <Box>
           <Stepper activeStep={activeStep} alternativeLabel>
             {steps.map((label) => {
               return (
@@ -188,8 +178,6 @@ const InfluencerSignup = () => {
           )}
         </Box>
       </Box>
-
-    </Container>
   );
 }
 
