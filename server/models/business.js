@@ -12,7 +12,7 @@ const businessSchema = new Schema({
   socialMediaLinks: [String],
   description: String,
 
-  targetAudience: String, // list of options
+  targetAudience: [String], // list of options
   campaignGoals: [String], // points
 
   generalRequest: [String],
