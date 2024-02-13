@@ -16,6 +16,8 @@ import ListForm from '../components/signup/ListForm';
 
 const inintialBusiness = {
   companyName: '',
+  email: '',
+  address: '',
   industry: '',
   size: '',
   password: '',
@@ -28,49 +30,12 @@ const inintialBusiness = {
   budgetRange: {
     min: undefined,
     max: undefined
-  },
-  contactInformation: {
-    email: String,
-    phone: String,
-    address: String,
-  },
-  preferredInfluencerProfile: {
-    field: String,
-    followerCount: Number,
-    engagementRate: Number,
-  },
-  accountManager: {
-    name: String,
-    email: String,
-    phone: String,
   }
 }
 
 const industryOptions = ['nothing'];
 const sizeOptions = ['nothing'];
 const audienceOptions = ['nothing'];
-const fieldOptions = [
-  "Gaming",
-  "Beauty and Makeup",
-  "Fashion",
-  "Fitness and Health",
-  "Technology and Gadgets",
-  "Food and Cooking",
-  "Travel",
-  "DIY and Crafts",
-  "Parenting and Family",
-  "Lifestyle",
-  "Education and Learning",
-  "Business and Entrepreneurship",
-  "Photography and Videography",
-  "Music and Dance",
-  "Sports and Athletics",
-  "Wellness and Mental Health",
-  "Home Decor and Interior Design",
-  "Art and Design",
-  "Science and Innovation",
-  "Environmental Sustainability and Eco-Living"
-];
 
 const BusinessSignup = () => {
   const [business, setBusiness] = useState({ ...inintialBusiness })
@@ -95,104 +60,13 @@ const BusinessSignup = () => {
   const handleTargetAudienceChange = e => setBusiness(oldBusiness => ({ ...oldBusiness, targetAudience: e.target.value }))
   const handleWebsieteChange = e => setBusiness(oldBusiness => ({ ...oldBusiness, websiteURL: e.target.value }))
   const handlePasswordChange = e => setBusiness(oldBusiness => ({ ...oldBusiness, password: e.target.value }))
-
-  const handleEmailChange = e => setBusiness(oldBusiness => (
-    {
-      ...oldBusiness,
-      contactInformation:
-      {
-        ...oldBusiness.contactInformation,
-        email: e.target.value
-      }
-    }
-  ))
-  const handleAddressChange = e => setBusiness(oldBusiness => (
-    {
-      ...oldBusiness,
-      contactInformation:
-      {
-        ...oldBusiness.contactInformation,
-        address: e.target.value
-      }
-    }
-  ))
-  const handlePhoneChange = e => setBusiness(oldBusiness => (
-    {
-      ...oldBusiness,
-      contactInformation:
-      {
-        ...oldBusiness.contactInformation,
-        phone: e.target.value
-      }
-    }
-  ))
-  const handleInfluencerFieldChange = e => setBusiness(oldBusiness => (
-    {
-      ...oldBusiness,
-      preferredInfluencerProfile:
-      {
-        ...oldBusiness.preferredInfluencerProfile,
-        field: e.target.value
-      }
-    }
-  ))
-
-  const handleInfluecerFollowersChange = e => setBusiness(oldBusiness => (
-    {
-      ...oldBusiness,
-      preferredInfluencerProfile:
-      {
-        ...oldBusiness.preferredInfluencerProfile,
-        followerCount: e.target.value
-      }
-    }
-  ))
-
-  const handleAudienceEngagementChange = e => setBusiness(oldBusiness => (
-    {
-      ...oldBusiness,
-      preferredInfluencerProfile:
-      {
-        ...oldBusiness.preferredInfluencerProfile,
-        engagementRate: e.target.value
-      }
-    }
-  ))
-
-  const handleManagerNameChange = e => setBusiness(oldBusiness => (
-    {
-      ...oldBusiness,
-      accountManager:
-      {
-        ...oldBusiness.accountManager,
-        name: e.target.value
-      }
-    }
-  ))
-  const handleManagerEmailChange = e => setBusiness(oldBusiness => (
-    {
-      ...oldBusiness,
-      accountManager:
-      {
-        ...oldBusiness.accountManager,
-        email: e.target.value
-      }
-    }
-  ))
-  const handleManagerphoneChange = e => setBusiness(oldBusiness => (
-    {
-      ...oldBusiness,
-      accountManager:
-      {
-        ...oldBusiness.accountManager,
-        phone: e.target.value
-      }
-    }
-  ))
+  const handleEmailChange = e => setBusiness(oldBusiness => ({ ...oldBusiness, email: e.target.value }))
+  const handleAddressChange = e => setBusiness(oldBusiness => ({ ...oldBusiness, address: e.target.value }))
 
   const handleAddSocialMediaLink = () => setBusiness(oldBusiness => (
     { ...oldBusiness, socialMediaLinks: [...oldBusiness.socialMediaLinks, ''] }
   ))
+
   const handleDeleteSocialMediaLink = index => setBusiness(oldBusiness => (
     {
       ...oldBusiness,
@@ -201,6 +75,7 @@ const BusinessSignup = () => {
         .concat(oldBusiness.socialMediaLinks.slice(index + 1))
     }
   ))
+
   const handleChangeSocialMediaLink = (changedIndex, e) => setBusiness(oldBusiness => (
     {
       ...oldBusiness, socialMediaLinks: oldBusiness.socialMediaLinks
@@ -209,9 +84,11 @@ const BusinessSignup = () => {
         ))
     }
   ))
+
   const handleAddGoals = () => setBusiness(oldBusiness => (
     { ...oldBusiness, campaignGoals: [...oldBusiness.campaignGoals, ''] }
   ))
+
   const handleDeleteGoals = index => setBusiness(oldBusiness => (
     {
       ...oldBusiness,
@@ -220,6 +97,7 @@ const BusinessSignup = () => {
         .concat(oldBusiness.campaignGoals.slice(index + 1))
     }
   ))
+
   const handleChangeGoals = (changedIndex, e) => setBusiness(oldBusiness => (
     {
       ...oldBusiness, campaignGoals: oldBusiness.campaignGoals
@@ -228,9 +106,11 @@ const BusinessSignup = () => {
         ))
     }
   ))
+
   const handleAddRequest = () => setBusiness(oldBusiness => (
     { ...oldBusiness, generalRequest: [...oldBusiness.generalRequest, ''] }
   ))
+
   const handleDeleteRequest = index => setBusiness(oldBusiness => (
     {
       ...oldBusiness,
@@ -239,6 +119,7 @@ const BusinessSignup = () => {
         .concat(oldBusiness.generalRequest.slice(index + 1))
     }
   ))
+
   const handleChangeRequest = (changedIndex, e) => setBusiness(oldBusiness => (
     {
       ...oldBusiness, generalRequest: oldBusiness.generalRequest
@@ -279,7 +160,7 @@ const BusinessSignup = () => {
           id="email"
           label="Company email address"
           autoComplete="email"
-          value={business.contactInformation.email}
+          value={business.email}
           onChange={handleEmailChange}
         />
 
@@ -289,19 +170,8 @@ const BusinessSignup = () => {
           fullWidth
           id="address"
           label="Company address"
-          value={business.contactInformation.address}
+          value={business.address}
           onChange={handleAddressChange}
-        />
-
-        <TextField
-          margin="normal"
-          required
-          fullWidth
-          id="phone"
-          label="Company phone number"
-          type="number"
-          value={business.contactInformation.phone}
-          onChange={handlePhoneChange}
         />
 
         <TextField
@@ -429,73 +299,6 @@ const BusinessSignup = () => {
           />
         </FormControl>
 
-        <FormControl fullWidth margin="normal" required>
-          <InputLabel id="influencerField">What Influeners field do you prefer</InputLabel>
-          <Select
-            labelId="influencerField"
-            id="influecerField"
-            value={business.preferredInfluencerProfile.field}
-            label="What Influeners field do you prefer"
-            onChange={handleInfluencerFieldChange}
-          >
-            {fieldOptions.map(audience => <MenuItem key={audience} value={audience}>{audience}</MenuItem>)}
-          </Select>
-        </FormControl>
-
-        <TextField
-          margin="normal"
-          required
-          fullWidth
-          id="numberOfFollowers"
-          label="Number of Influencer's followers"
-          type="number"
-          value={business.contactInformation.followerCount}
-          onChange={handleInfluecerFollowersChange}
-        />
-
-        <TextField
-          margin="normal"
-          required
-          fullWidth
-          id="engagement"
-          label="Influencer's followers's engagemetn rate"
-          type="number"
-          value={business.contactInformation.engagementRate}
-          onChange={handleAudienceEngagementChange}
-        />
-
-        <TextField
-          margin="normal"
-          required
-          fullWidth
-          id="ManagerName"
-          label="Manager name"
-          type="text"
-          value={business.accountManager.name}
-          onChange={handleManagerNameChange}
-        />
-
-        <TextField
-          margin="normal"
-          required
-          fullWidth
-          id="ManagerEmail"
-          label="Manager email address"
-          autoComplete="email"
-          value={business.accountManager.email}
-          onChange={handleManagerEmailChange}
-        />
-
-        <TextField
-          margin="normal"
-          required
-          fullWidth
-          id="managerPhone"
-          label="Manager phone number"
-          type="number"
-          value={business.accountManager.phone}
-          onChange={handleManagerphoneChange}
-        />
 
         <Button
           type="submit"
