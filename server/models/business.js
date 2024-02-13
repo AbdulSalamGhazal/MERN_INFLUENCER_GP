@@ -1,3 +1,6 @@
+const mongoose = require("mongoose");
+const Schema = mongoose.Schema;
+
 const businessSchema = new Schema({
   companyName: { type: String, required: true },
   industry: String, // list of options
@@ -19,4 +22,4 @@ const businessSchema = new Schema({
   },
 });
 
-const Campaign = mongoose.model("Campaign", campaignSchema);
+module.exports = mongoose.model("Business", businessSchema);

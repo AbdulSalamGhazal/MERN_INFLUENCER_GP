@@ -3,6 +3,7 @@ const mongoose = require("mongoose");
 const cors = require("cors");
 const filters = require("./functions/filters");
 const Influencer = require("./models/influencer");
+const Business = require("./models/business")
 
 const app = express();
 app.use(express.json());
@@ -24,6 +25,14 @@ app.post("/influencers", async (req, res) => {
   console.log(req.body);
   Influencer.create(req.body)
     .then((influencer) => res.json(influencer))
+    .catch((err) => res.json(err));
+});
+
+
+app.post("/business", async (req, res) => {
+  console.log(req.body);
+  Business.create(req.body)
+    .then((business) => res.json(business))
     .catch((err) => res.json(err));
 });
 
