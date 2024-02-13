@@ -10,7 +10,7 @@ import FormLabel from '@mui/material/FormLabel'
 import Slider from "@mui/material/Slider";
 
 import { useState } from 'react';
-// import axios from 'axios';
+import axios from 'axios';
 
 import ListForm from '../components/signup/ListForm';
 
@@ -78,13 +78,13 @@ const BusinessSignup = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    // try {
-    //   const response = await axios.post("http://localhost:3001/influencers", business);
-    //   console.log(response)
-    //   setBusiness(inintialBusiness);
-    // } catch (error) {
-    //   console.error("Error fetching data:", error);
-    // }
+    try {
+      const response = await axios.post("http://localhost:3001/business", business);
+      console.log(response)
+      setBusiness(inintialBusiness);
+    } catch (error) {
+      console.error("Error fetching data:", error);
+    }
 
   };
 
