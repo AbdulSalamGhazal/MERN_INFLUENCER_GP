@@ -55,7 +55,7 @@ const PlatformRow = ({
           label="platform URL"
           type="url"
           id="platformUrl"
-          // autoComplete="image"
+          autoComplete="url"
           value={url}
           onChange={e => handleUrlChange(index, e.target.value)}
         />
