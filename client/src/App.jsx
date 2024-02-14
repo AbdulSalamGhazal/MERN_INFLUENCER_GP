@@ -1,7 +1,7 @@
 import "bootstrap/dist/css/bootstrap.min.css";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import Container from "@mui/material/Container";
-
+import Home from "./pages/Home";
 import Influencers from "./pages/influencers";
 import Login from "./pages/Login";
 import Navbar from "./components/Navbar";
@@ -21,18 +21,7 @@ function App() {
               path="/influencers/:influencerId"
               element={<InfluencerPage />}
             />
-
-            <Route
-              path="/home"
-              element={
-                <div>
-                  <h1>Welcome</h1>
-                  <a href="/login">login</a>
-                  <br />
-                  <a href="/signup">signup</a>
-                </div>
-              }
-            />
+            <Route path="/home" element={<Home />} />
             <Route path="/login" element={<Login />} />
             <Route path="/signup" element={<Signup />} />
             <Route path="/signup/influencer" element={<InfluencerSignup />} />
