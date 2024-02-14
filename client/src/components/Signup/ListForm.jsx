@@ -4,7 +4,7 @@ import AddCircleOutlineIcon from '@mui/icons-material/AddCircleOutline';
 import RemoveCircleIcon from '@mui/icons-material/RemoveCircle';
 import Grid from '@mui/material/Unstable_Grid2/Grid2';
 
-const ListForm = ({ list, handleAdd, handleDelete, handleChange, label }) => {
+const ListForm = ({ list, handleAdd, handleDelete, handleChange, label, register, errors }) => {
   return (
     <Grid container>
       {list.map((element, index) => (
@@ -18,6 +18,8 @@ const ListForm = ({ list, handleAdd, handleDelete, handleChange, label }) => {
 
           <Grid xs={11}>
             <TextField
+              {...register(`${label}${index}`, {required: 'this field is required'})}
+              error={errors[`${label}${index}`]}
               margin="normal"
               multiline
               required
