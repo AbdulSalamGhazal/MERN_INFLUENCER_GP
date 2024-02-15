@@ -1,46 +1,45 @@
-import Button from '@mui/material/Button';
-import TextField from '@mui/material/TextField';
-import Box from '@mui/material/Box';
-import Typography from '@mui/material/Typography';
-import MenuItem from '@mui/material/MenuItem';
-import FormControl from '@mui/material/FormControl';
-import FormLabel from '@mui/material/FormLabel'
+import Button from "@mui/material/Button";
+import TextField from "@mui/material/TextField";
+import Box from "@mui/material/Box";
+import Typography from "@mui/material/Typography";
+import MenuItem from "@mui/material/MenuItem";
+import FormControl from "@mui/material/FormControl";
+import FormLabel from "@mui/material/FormLabel";
 import Slider from "@mui/material/Slider";
-import ListItemText from '@mui/material/ListItemText';
-import Checkbox from '@mui/material/Checkbox';
-import IconButton from '@mui/material/IconButton';
-import InputAdornment from '@mui/material/InputAdornment';
-import Visibility from '@mui/icons-material/Visibility';
-import VisibilityOff from '@mui/icons-material/VisibilityOff';
-
+import ListItemText from "@mui/material/ListItemText";
+import Checkbox from "@mui/material/Checkbox";
+import IconButton from "@mui/material/IconButton";
+import InputAdornment from "@mui/material/InputAdornment";
+import Visibility from "@mui/icons-material/Visibility";
+import VisibilityOff from "@mui/icons-material/VisibilityOff";
 
 import { useNavigate } from "react-router-dom";
-import { useState } from 'react';
-import { useForm } from "react-hook-form"
-import useAuth from '../../context/authContext';
-import axios from 'axios';
+import { useState } from "react";
+import { useForm } from "react-hook-form";
+import useAuth from "../../context/AuthContext";
+import axios from "axios";
 
-import ListForm from '../components/signup/ListForm';
+import ListForm from "../components/signup/ListForm";
 
 const inintialBusiness = {
-  companyName: '',
-  email: '',
-  address: '',
-  industry: '',
-  size: '',
-  password: '',
-  websiteURL: '',
+  companyName: "",
+  email: "",
+  address: "",
+  industry: "",
+  size: "",
+  password: "",
+  websiteURL: "",
   socialMediaLinks: [],
-  description: '',
+  description: "",
   targetAudience: [],
   campaignGoals: [],
   generalRequest: [],
   budgetRange: {
     min: 10,
-    max: 30
+    max: 30,
   },
-  image: ''
-}
+  image: "",
+};
 
 const industryOptions = [
   "Fashion",
@@ -52,14 +51,14 @@ const industryOptions = [
   "Lifestyle",
   "Travel and Hospitality",
   "Sports and Fitness",
-  "Education and Learning"
+  "Education and Learning",
 ];
 const sizeOptions = [
   "Startup: Fewer than 10 employees",
   "Small: 11 to 50 employees",
   "Medium: 51 to 250 employees",
   "Large: 251 to 1000 employees",
-  "Enterprise: More than 1000 employees"
+  "Enterprise: More than 1000 employees",
 ];
 const audienceOptions = [
   "Fashion",
@@ -81,7 +80,7 @@ const audienceOptions = [
   "Personal Finance",
   "Parenting",
   "Outdoor Activities",
-  "Literature and Reading"
+  "Literature and Reading",
 ];
 const goalsOptions = [
   "Increase Brand Awareness",
@@ -93,15 +92,18 @@ const goalsOptions = [
   "Expand Market Reach",
   "Improve Customer Loyalty",
   "Gather Customer Feedback",
-  "Create Branded Content"
+  "Create Branded Content",
 ];
 
-const urlPattern = /(?:https?:\/\/)?(?:www\.)?(?:[-a-zA-Z0-9]+\.)+[a-zA-Z0-9]{2,}(?:\/[-a-zA-Z0-9@:%_+.~#?&/=]*)?/;
-const emailPattern = /^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?\.(?:[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?)*$/;
+const urlPattern =
+  /(?:https?:\/\/)?(?:www\.)?(?:[-a-zA-Z0-9]+\.)+[a-zA-Z0-9]{2,}(?:\/[-a-zA-Z0-9@:%_+.~#?&/=]*)?/;
+const emailPattern =
+  /^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?\.(?:[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?)*$/;
 const passwordMinLength = 8;
 const passwordMaxLength = 20;
-const requiredChars = new RegExp(`^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[!@#$%^&*()_+\\-=\\{\\}|;':",<.>/?])[a-zA-Z0-9!@#$%^&*()_+\\-=\\{\\}|;':",<.>/?]{${passwordMinLength},${passwordMaxLength}}$`);
-
+const requiredChars = new RegExp(
+  `^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[!@#$%^&*()_+\\-=\\{\\}|;':",<.>/?])[a-zA-Z0-9!@#$%^&*()_+\\-=\\{\\}|;':",<.>/?]{${passwordMinLength},${passwordMaxLength}}$`
+);
 
 const VisibilityToggler = ({ showPassword, setShowPassword }) => {
   return (
@@ -115,108 +117,146 @@ const VisibilityToggler = ({ showPassword, setShowPassword }) => {
         {showPassword ? <VisibilityOff /> : <Visibility />}
       </IconButton>
     </InputAdornment>
-  )
-}
-
+  );
+};
 
 const BusinessSignup = () => {
-  const { login } = useAuth()
+  const { login } = useAuth();
   const navigate = useNavigate();
-  const [business, setBusiness] = useState({ ...inintialBusiness })
-  const [showPassword, setShowPassword] = useState(false)
-  const [showPassword2, setShowPassword2] = useState(false)
+  const [business, setBusiness] = useState({ ...inintialBusiness });
+  const [showPassword, setShowPassword] = useState(false);
+  const [showPassword2, setShowPassword2] = useState(false);
   const {
     register,
     handleSubmit,
     formState: { errors },
-  } = useForm()
-
+  } = useForm();
 
   const onSubmit = async () => {
     try {
-      const { data } = await axios.post("http://localhost:3001/business", business);
-      console.log(data)
+      const { data } = await axios.post(
+        "http://localhost:3001/business",
+        business
+      );
+      console.log(data);
       // setBusiness(inintialBusiness);
-      login(data)
-      navigate('/home')
+      login(data);
+      navigate("/home");
     } catch (error) {
       console.error("Error fetching data:", error);
     }
-
   };
 
-  const handleNameChange = e => setBusiness(oldBusiness => ({ ...oldBusiness, companyName: e.target.value }))
-  const handleSizeChange = e => setBusiness(oldBusiness => ({ ...oldBusiness, size: e.target.value }))
-  const handleIndustryChange = e => setBusiness(oldBusiness => ({ ...oldBusiness, industry: e.target.value }))
-  const handleDescriptionChange = e => setBusiness(oldBusiness => ({ ...oldBusiness, description: e.target.value }))
-  const handleTargetAudienceChange = e => setBusiness(oldBusiness => ({ ...oldBusiness, targetAudience: e.target.value }))
-  const handleWebsieteChange = e => setBusiness(oldBusiness => ({ ...oldBusiness, websiteURL: e.target.value }))
-  const handlePasswordChange = e => setBusiness(oldBusiness => ({ ...oldBusiness, password: e.target.value }))
-  const handleEmailChange = e => setBusiness(oldBusiness => ({ ...oldBusiness, email: e.target.value }))
-  const handleAddressChange = e => setBusiness(oldBusiness => ({ ...oldBusiness, address: e.target.value }))
-  const handleGoalsChange = e => setBusiness(oldBusiness => ({ ...oldBusiness, campaignGoals: e.target.value }))
+  const handleNameChange = (e) =>
+    setBusiness((oldBusiness) => ({
+      ...oldBusiness,
+      companyName: e.target.value,
+    }));
+  const handleSizeChange = (e) =>
+    setBusiness((oldBusiness) => ({ ...oldBusiness, size: e.target.value }));
+  const handleIndustryChange = (e) =>
+    setBusiness((oldBusiness) => ({
+      ...oldBusiness,
+      industry: e.target.value,
+    }));
+  const handleDescriptionChange = (e) =>
+    setBusiness((oldBusiness) => ({
+      ...oldBusiness,
+      description: e.target.value,
+    }));
+  const handleTargetAudienceChange = (e) =>
+    setBusiness((oldBusiness) => ({
+      ...oldBusiness,
+      targetAudience: e.target.value,
+    }));
+  const handleWebsieteChange = (e) =>
+    setBusiness((oldBusiness) => ({
+      ...oldBusiness,
+      websiteURL: e.target.value,
+    }));
+  const handlePasswordChange = (e) =>
+    setBusiness((oldBusiness) => ({
+      ...oldBusiness,
+      password: e.target.value,
+    }));
+  const handleEmailChange = (e) =>
+    setBusiness((oldBusiness) => ({ ...oldBusiness, email: e.target.value }));
+  const handleAddressChange = (e) =>
+    setBusiness((oldBusiness) => ({ ...oldBusiness, address: e.target.value }));
+  const handleGoalsChange = (e) =>
+    setBusiness((oldBusiness) => ({
+      ...oldBusiness,
+      campaignGoals: e.target.value,
+    }));
   // const handleImageChange = e => setBusiness(oldBusiness => ({ ...oldBusiness, image: e.target.files[0] }))
-  const handleImageChange = e => setBusiness(oldBusiness => ({ ...oldBusiness, image: e.target.value }))
+  const handleImageChange = (e) =>
+    setBusiness((oldBusiness) => ({ ...oldBusiness, image: e.target.value }));
 
-  const handleAddSocialMediaLink = () => setBusiness(oldBusiness => (
-    { ...oldBusiness, socialMediaLinks: [...oldBusiness.socialMediaLinks, ''] }
-  ))
+  const handleAddSocialMediaLink = () =>
+    setBusiness((oldBusiness) => ({
+      ...oldBusiness,
+      socialMediaLinks: [...oldBusiness.socialMediaLinks, ""],
+    }));
 
-  const handleDeleteSocialMediaLink = index => setBusiness(oldBusiness => (
-    {
+  const handleDeleteSocialMediaLink = (index) =>
+    setBusiness((oldBusiness) => ({
       ...oldBusiness,
       socialMediaLinks: oldBusiness.socialMediaLinks
         .slice(0, index)
-        .concat(oldBusiness.socialMediaLinks.slice(index + 1))
-    }
-  ))
+        .concat(oldBusiness.socialMediaLinks.slice(index + 1)),
+    }));
 
-  const handleChangeSocialMediaLink = (changedIndex, e) => setBusiness(oldBusiness => (
-    {
-      ...oldBusiness, socialMediaLinks: oldBusiness.socialMediaLinks
-        .map((link, index) => (
-          index === changedIndex ? e.target.value : link
-        ))
-    }
-  ))
+  const handleChangeSocialMediaLink = (changedIndex, e) =>
+    setBusiness((oldBusiness) => ({
+      ...oldBusiness,
+      socialMediaLinks: oldBusiness.socialMediaLinks.map((link, index) =>
+        index === changedIndex ? e.target.value : link
+      ),
+    }));
 
-  const handleAddRequest = () => setBusiness(oldBusiness => (
-    { ...oldBusiness, generalRequest: [...oldBusiness.generalRequest, ''] }
-  ))
+  const handleAddRequest = () =>
+    setBusiness((oldBusiness) => ({
+      ...oldBusiness,
+      generalRequest: [...oldBusiness.generalRequest, ""],
+    }));
 
-  const handleDeleteRequest = index => setBusiness(oldBusiness => (
-    {
+  const handleDeleteRequest = (index) =>
+    setBusiness((oldBusiness) => ({
       ...oldBusiness,
       generalRequest: oldBusiness.generalRequest
         .slice(0, index)
-        .concat(oldBusiness.generalRequest.slice(index + 1))
-    }
-  ))
+        .concat(oldBusiness.generalRequest.slice(index + 1)),
+    }));
 
-  const handleChangeRequest = (changedIndex, e) => setBusiness(oldBusiness => (
-    {
-      ...oldBusiness, generalRequest: oldBusiness.generalRequest
-        .map((request, index) => (
-          index === changedIndex ? e.target.value : request
-        ))
-    }
-  ))
+  const handleChangeRequest = (changedIndex, e) =>
+    setBusiness((oldBusiness) => ({
+      ...oldBusiness,
+      generalRequest: oldBusiness.generalRequest.map((request, index) =>
+        index === changedIndex ? e.target.value : request
+      ),
+    }));
 
-  const handleBugdtChange = (e, range) => setBusiness(oldBusiness => (
-    { ...oldBusiness, budgetRange: { min: range[0], max: range[1] } }
-  ))
-
+  const handleBugdtChange = (e, range) =>
+    setBusiness((oldBusiness) => ({
+      ...oldBusiness,
+      budgetRange: { min: range[0], max: range[1] },
+    }));
 
   return (
     <Box>
-
       {/* TODO: the title needs some styles */}
       <Typography component="h1" variant="h4" align="center">
         Business Sign Up
       </Typography>
-      <Box component="form" onSubmit={handleSubmit(onSubmit)} noValidate sx={{ mt: 1 }} encType="multipart/form-data">
+      <Box
+        component="form"
+        onSubmit={handleSubmit(onSubmit)}
+        noValidate
+        sx={{ mt: 1 }}
+        encType="multipart/form-data"
+      >
         <TextField
-          {...register("companyName", { required: 'this field is required' })}
+          {...register("companyName", { required: "this field is required" })}
           error={errors.companyName}
           helperText={errors.companyName?.message}
           margin="normal"
@@ -226,17 +266,18 @@ const BusinessSignup = () => {
           label="Company name"
           type="text"
           // autoFocus
-          autoComplete='organization'
+          autoComplete="organization"
           value={business.companyName}
           onChange={handleNameChange}
         />
 
         <TextField
           {...register("email", {
-            required: 'this field is required', pattern: {
+            required: "this field is required",
+            pattern: {
               value: emailPattern,
-              message: 'Please enter a valid email address.',
-            }
+              message: "Please enter a valid email address.",
+            },
           })}
           error={errors.email}
           helperText={errors.email?.message}
@@ -253,18 +294,20 @@ const BusinessSignup = () => {
 
         <TextField
           {...register("password", {
-            required: 'this field is required', minLength: {
+            required: "this field is required",
+            minLength: {
               value: passwordMinLength,
-              message: 'Password must be at least 8 characters long.',
+              message: "Password must be at least 8 characters long.",
             },
             maxLength: {
               value: passwordMaxLength,
-              message: 'Password must be at most 20 characters long.',
+              message: "Password must be at most 20 characters long.",
             },
             pattern: {
               value: requiredChars,
-              message: 'Password must contain at least one lowercase letter, one uppercase letter, one number, and one special character.',
-            }
+              message:
+                "Password must contain at least one lowercase letter, one uppercase letter, one number, and one special character.",
+            },
           })}
           error={errors.password}
           helperText={errors.password?.message}
@@ -276,20 +319,23 @@ const BusinessSignup = () => {
           autoComplete="new-password"
           value={business.password}
           onChange={handlePasswordChange}
-          type={showPassword ? 'text' : 'password'}
+          type={showPassword ? "text" : "password"}
           InputProps={{
             endAdornment: (
-              <VisibilityToggler showPassword={showPassword} setShowPassword={setShowPassword} />
-            )
+              <VisibilityToggler
+                showPassword={showPassword}
+                setShowPassword={setShowPassword}
+              />
+            ),
           }}
-
         />
         <TextField
           {...register("confirmPassword", {
-            required: 'this field is required',
+            required: "this field is required",
             validate: {
-              samePassword: e => e === business.password || 'the password is different'
-            }
+              samePassword: (e) =>
+                e === business.password || "the password is different",
+            },
           })}
           error={errors.confirmPassword}
           helperText={errors.confirmPassword?.message}
@@ -299,17 +345,20 @@ const BusinessSignup = () => {
           label="Confirm password"
           id="confirmPassword"
           autoComplete="new-password"
-          type={showPassword2 ? 'text' : 'password'}
+          type={showPassword2 ? "text" : "password"}
           InputProps={{
             endAdornment: (
-              <VisibilityToggler showPassword={showPassword2} setShowPassword={setShowPassword2} />
-            )
+              <VisibilityToggler
+                showPassword={showPassword2}
+                setShowPassword={setShowPassword2}
+              />
+            ),
           }}
-        // value={business.confirmPassword}
-        // onChange={handleconfirmPasswordChange}
+          // value={business.confirmPassword}
+          // onChange={handleconfirmPasswordChange}
         />
         <TextField
-          {...register("address", { required: 'this field is required' })}
+          {...register("address", { required: "this field is required" })}
           error={errors.address}
           helperText={errors.address?.message}
           margin="normal"
@@ -317,7 +366,7 @@ const BusinessSignup = () => {
           fullWidth
           id="address"
           label="Company address"
-          type='text'
+          type="text"
           autoComplete="address-level2"
           value={business.address}
           onChange={handleAddressChange}
@@ -325,10 +374,11 @@ const BusinessSignup = () => {
 
         <TextField
           {...register("website", {
-            required: 'this field is required', pattern: {
+            required: "this field is required",
+            pattern: {
               value: urlPattern,
-              message: 'Please enter a valid URL.',
-            }
+              message: "Please enter a valid URL.",
+            },
           })}
           error={errors.website}
           helperText={errors.website?.message}
@@ -337,15 +387,15 @@ const BusinessSignup = () => {
           fullWidth
           id="website"
           label="Website URL"
-          type='url'
+          type="url"
           autoComplete="url"
           value={business.websiteURL}
           onChange={handleWebsieteChange}
         />
-        
+
         <TextField
           {...register("image", {
-            required: 'this field is required'
+            required: "this field is required",
           })}
           error={errors.image}
           helperText={errors.image?.message}
@@ -355,12 +405,11 @@ const BusinessSignup = () => {
           id="image"
           label="upload account image"
           // type='file'
-          name='image'
+          name="image"
           InputLabelProps={{ shrink: true }}
           value={business.image}
           onChange={handleImageChange}
         />
-
 
         <TextField
           fullWidth
@@ -368,14 +417,18 @@ const BusinessSignup = () => {
           required
           helperText={errors.industry?.message}
           select
-          {...register("industry", { required: 'this field is required' })}
+          {...register("industry", { required: "this field is required" })}
           error={errors.industry}
           id="industry"
           value={business.industry}
           label="industry"
           onChange={handleIndustryChange}
         >
-          {industryOptions.map(industry => <MenuItem key={industry} value={industry}>{industry}</MenuItem>)}
+          {industryOptions.map((industry) => (
+            <MenuItem key={industry} value={industry}>
+              {industry}
+            </MenuItem>
+          ))}
         </TextField>
 
         <TextField
@@ -383,7 +436,7 @@ const BusinessSignup = () => {
           margin="normal"
           required
           select
-          {...register("size", { required: 'this field is required' })}
+          {...register("size", { required: "this field is required" })}
           error={errors.size}
           helperText={errors.size?.message}
           id="size"
@@ -391,7 +444,11 @@ const BusinessSignup = () => {
           label="company size"
           onChange={handleSizeChange}
         >
-          {sizeOptions.map(size => <MenuItem key={size} value={size}>{size}</MenuItem>)}
+          {sizeOptions.map((size) => (
+            <MenuItem key={size} value={size}>
+              {size}
+            </MenuItem>
+          ))}
         </TextField>
 
         <TextField
@@ -399,7 +456,7 @@ const BusinessSignup = () => {
           margin="normal"
           required
           select
-          {...register("audience", { required: 'this field is required' })}
+          {...register("audience", { required: "this field is required" })}
           error={errors.audience}
           helperText={errors.audience?.message}
           id="audience"
@@ -408,19 +465,21 @@ const BusinessSignup = () => {
           onChange={handleTargetAudienceChange}
           SelectProps={{
             multiple: true,
-            renderValue: (selected) => selected.join(', '),
+            renderValue: (selected) => selected.join(", "),
           }}
         >
-          {audienceOptions.map(audience => (
+          {audienceOptions.map((audience) => (
             <MenuItem key={audience} value={audience}>
-              <Checkbox checked={business.targetAudience.indexOf(audience) > -1} />
+              <Checkbox
+                checked={business.targetAudience.indexOf(audience) > -1}
+              />
               <ListItemText primary={audience} />
             </MenuItem>
           ))}
         </TextField>
 
         <TextField
-          {...register("description", { required: 'this field is required' })}
+          {...register("description", { required: "this field is required" })}
           error={errors.description}
           helperText={errors.description?.message}
           margin="normal"
@@ -448,8 +507,14 @@ const BusinessSignup = () => {
             step={1}
             max={100}
             marks={[
-              { value: business.budgetRange.min, label: business.budgetRange.min },
-              { value: business.budgetRange.max, label: business.budgetRange.max },
+              {
+                value: business.budgetRange.min,
+                label: business.budgetRange.min,
+              },
+              {
+                value: business.budgetRange.max,
+                label: business.budgetRange.max,
+              },
             ]}
           />
         </FormControl>
@@ -460,7 +525,7 @@ const BusinessSignup = () => {
           required
           helperText={errors.industry?.message}
           select
-          {...register("goals", { required: 'this field is required' })}
+          {...register("goals", { required: "this field is required" })}
           error={errors.goals}
           id="goals"
           value={business.campaignGoals}
@@ -468,10 +533,10 @@ const BusinessSignup = () => {
           onChange={handleGoalsChange}
           SelectProps={{
             multiple: true,
-            renderValue: (selected) => selected.join(', '),
+            renderValue: (selected) => selected.join(", "),
           }}
         >
-          {goalsOptions.map(goal => (
+          {goalsOptions.map((goal) => (
             <MenuItem key={goal} value={goal}>
               <Checkbox checked={business.campaignGoals.indexOf(goal) > -1} />
               <ListItemText primary={goal} />
@@ -479,8 +544,7 @@ const BusinessSignup = () => {
           ))}
         </TextField>
 
-        <FormControl
-          fullWidth margin="normal" >
+        <FormControl fullWidth margin="normal">
           <FormLabel>Add general requests</FormLabel>
           <ListForm
             register={register}
@@ -489,11 +553,11 @@ const BusinessSignup = () => {
             handleAdd={handleAddRequest}
             handleDelete={handleDeleteRequest}
             handleChange={handleChangeRequest}
-            label={'request'}
+            label={"request"}
           />
         </FormControl>
 
-        <FormControl fullWidth margin="normal" >
+        <FormControl fullWidth margin="normal">
           <FormLabel>Add social media links</FormLabel>
           <ListForm
             register={register}
@@ -502,10 +566,9 @@ const BusinessSignup = () => {
             handleAdd={handleAddSocialMediaLink}
             handleDelete={handleDeleteSocialMediaLink}
             handleChange={handleChangeSocialMediaLink}
-            label={'link'}
+            label={"link"}
           />
         </FormControl>
-
 
         <Button
           type="submit"
@@ -518,6 +581,6 @@ const BusinessSignup = () => {
       </Box>
     </Box>
   );
-}
+};
 
 export default BusinessSignup;

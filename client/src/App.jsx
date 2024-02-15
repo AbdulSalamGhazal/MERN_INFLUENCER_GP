@@ -1,10 +1,12 @@
 import "bootstrap/dist/css/bootstrap.min.css";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
+import ProtectedRoute from "../context/protectedRoute";
 import Container from "@mui/material/Container";
 import Home from "./pages/Home";
 import Influencers from "./pages/influencers";
 import Login from "./pages/Login";
 import Navbar from "./components/Navbar";
+import Chat from "./pages/Chat";
 import InfluencerSignup from "./pages/InfluencerSignup";
 import BusinessSignup from "./pages/BusinessSignup";
 import Signup from "./pages/Signup";
@@ -16,12 +18,31 @@ function App() {
         <Navbar />
         <Container maxWidth="xl" sx={{ mt: 3, mb: 4 }}>
           <Routes>
-            <Route path="/influencers" element={<Influencers />} />
+            <Route path="/home" element={<Home />} />
+            <Route
+              path="/influencers"
+              element={
+                <ProtectedRoute>
+                  <Influencers />
+                </ProtectedRoute>
+              }
+            />
             <Route
               path="/influencers/:influencerId"
-              element={<InfluencerPage />}
+              element={
+                <ProtectedRoute>
+                  <InfluencerPage />
+                </ProtectedRoute>
+              }
             />
-            <Route path="/home" element={<Home />} />
+            <Route
+              path="/chat"
+              element={
+                <ProtectedRoute>
+                  <Chat />
+                </ProtectedRoute>
+              }
+            />
             <Route path="/login" element={<Login />} />
             <Route path="/signup" element={<Signup />} />
             <Route path="/signup/influencer" element={<InfluencerSignup />} />
