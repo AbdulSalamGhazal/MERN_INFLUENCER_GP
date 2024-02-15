@@ -77,7 +77,6 @@ app.post(
     }
 
     if (user && (await user.matchPassword(password))) {
-      console.log("success");
       res.json({
         _id: user._id,
         token: generateToken(user._id),

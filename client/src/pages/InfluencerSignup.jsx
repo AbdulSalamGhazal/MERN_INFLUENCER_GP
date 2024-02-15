@@ -10,11 +10,11 @@ import PlatformsForm from "../components/signup/PlatformsForm";
 import AudienceInfoForm from "../components/signup/AudienceInfoForm";
 import SpecialRequirementsForm from "../components/signup/SpecialRequirementsForm";
 import axios from "axios";
-import useAuth from "../../context/authContext";
+import useAuth from "../../context/AuthContext";
 import { useNavigate } from "react-router-dom";
 
 const InfluencerSignup = () => {
-  const {login} = useAuth();
+  const { login } = useAuth();
   const navigate = useNavigate();
   const [activeStep, setActiveStep] = useState(0);
   const [password, setPassword] = useState("");
@@ -156,8 +156,8 @@ const InfluencerSignup = () => {
         }
       });
       // setActiveStep((prevActiveStep) => prevActiveStep + 1);
-      login(data)
-      navigate('/home')
+      login(data);
+      navigate("/home");
     } catch (error) {
       console.error("Error fetching data:", error);
     }

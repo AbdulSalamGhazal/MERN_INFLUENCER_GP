@@ -1,8 +1,8 @@
-import useAuth from "../../context/authContext";
+import useAuth from "../../context/AuthContext";
 
 function Home() {
   const { user } = useAuth();
-  console.log(user)
+  console.log(user);
 
   return <h1>Hi: {user.name}</h1>;
 }
