@@ -1,3 +1,6 @@
+if(process.env.NODE_ENV !== 'production') {
+  require('dotenv').config()
+}
 const express = require("express");
 const mongoose = require("mongoose");
 const cors = require("cors");
@@ -9,8 +12,7 @@ const generateToken = require("./config/generateToken");
 const influencer = require("./models/influencer");
 const { storage } = require('./cloudinary')
 const multer = require('multer')
-// const upload = multer({ storage })
-const upload = multer({ dest: 'uploads/' })
+const upload = multer({ storage })
 
 const app = express();
 app.use(express.json());
@@ -29,9 +31,9 @@ app.get("/influencers/:id", async (req, res) => {
 });
 
 // creating influencer
-app.post("/influencers", async (req, res) => {
+app.post("/influencers", upload.single('image'), async (req, res) => {
   console.log(req.body);
-  Influencer.create({ ...req.body })
+  Influencer.create({ ...req.body, iamge: req.file.path })
     .then((influencer) => res.json({
       _id: influencer._id,
       token: generateToken(influencer._id),
@@ -42,9 +44,9 @@ app.post("/influencers", async (req, res) => {
     .catch((err) => res.json(err));
 });
 // creating business
-app.post("/business", async (req, res) => {
+app.post("/business", upload.single('image'), async (req, res) => {
   console.log(req.file);
-  Business.create({ ...req.body })
+  Business.create({ ...req.body, image: req.file.path })
     .then((business) => res.json({
       _id: business._id,
       token: generateToken(business._id),

@@ -134,11 +134,12 @@ const BusinessSignup = () => {
 
   const onSubmit = async () => {
     try {
-      const { data } = await axios.post(
-        "http://localhost:3001/business",
-        business
-      );
-      console.log(data);
+      const { data } = await axios.post("http://localhost:3001/business", business, {
+        headers: {
+          'Content-Type': 'multipart/form-data'
+        }
+      });
+      console.log(data)
       // setBusiness(inintialBusiness);
       login(data);
       navigate("/home");
@@ -147,50 +148,18 @@ const BusinessSignup = () => {
     }
   };
 
-  const handleNameChange = (e) =>
-    setBusiness((oldBusiness) => ({
-      ...oldBusiness,
-      companyName: e.target.value,
-    }));
-  const handleSizeChange = (e) =>
-    setBusiness((oldBusiness) => ({ ...oldBusiness, size: e.target.value }));
-  const handleIndustryChange = (e) =>
-    setBusiness((oldBusiness) => ({
-      ...oldBusiness,
-      industry: e.target.value,
-    }));
-  const handleDescriptionChange = (e) =>
-    setBusiness((oldBusiness) => ({
-      ...oldBusiness,
-      description: e.target.value,
-    }));
-  const handleTargetAudienceChange = (e) =>
-    setBusiness((oldBusiness) => ({
-      ...oldBusiness,
-      targetAudience: e.target.value,
-    }));
-  const handleWebsieteChange = (e) =>
-    setBusiness((oldBusiness) => ({
-      ...oldBusiness,
-      websiteURL: e.target.value,
-    }));
-  const handlePasswordChange = (e) =>
-    setBusiness((oldBusiness) => ({
-      ...oldBusiness,
-      password: e.target.value,
-    }));
-  const handleEmailChange = (e) =>
-    setBusiness((oldBusiness) => ({ ...oldBusiness, email: e.target.value }));
-  const handleAddressChange = (e) =>
-    setBusiness((oldBusiness) => ({ ...oldBusiness, address: e.target.value }));
-  const handleGoalsChange = (e) =>
-    setBusiness((oldBusiness) => ({
-      ...oldBusiness,
-      campaignGoals: e.target.value,
-    }));
-  // const handleImageChange = e => setBusiness(oldBusiness => ({ ...oldBusiness, image: e.target.files[0] }))
-  const handleImageChange = (e) =>
-    setBusiness((oldBusiness) => ({ ...oldBusiness, image: e.target.value }));
+  const handleNameChange = e => setBusiness(oldBusiness => ({ ...oldBusiness, companyName: e.target.value }))
+  const handleSizeChange = e => setBusiness(oldBusiness => ({ ...oldBusiness, size: e.target.value }))
+  const handleIndustryChange = e => setBusiness(oldBusiness => ({ ...oldBusiness, industry: e.target.value }))
+  const handleDescriptionChange = e => setBusiness(oldBusiness => ({ ...oldBusiness, description: e.target.value }))
+  const handleTargetAudienceChange = e => setBusiness(oldBusiness => ({ ...oldBusiness, targetAudience: e.target.value }))
+  const handleWebsieteChange = e => setBusiness(oldBusiness => ({ ...oldBusiness, websiteURL: e.target.value }))
+  const handlePasswordChange = e => setBusiness(oldBusiness => ({ ...oldBusiness, password: e.target.value }))
+  const handleEmailChange = e => setBusiness(oldBusiness => ({ ...oldBusiness, email: e.target.value }))
+  const handleAddressChange = e => setBusiness(oldBusiness => ({ ...oldBusiness, address: e.target.value }))
+  const handleGoalsChange = e => setBusiness(oldBusiness => ({ ...oldBusiness, campaignGoals: e.target.value }))
+  const handleImageChange = e => setBusiness(oldBusiness => ({ ...oldBusiness, image: e.target.files[0] }))
+  // const handleImageChange = e => setBusiness(oldBusiness => ({ ...oldBusiness, image: e.target.value }))
 
   const handleAddSocialMediaLink = () =>
     setBusiness((oldBusiness) => ({
@@ -404,10 +373,10 @@ const BusinessSignup = () => {
           fullWidth
           id="image"
           label="upload account image"
-          // type='file'
-          name="image"
+          type='file'
+          name='image'
           InputLabelProps={{ shrink: true }}
-          value={business.image}
+          // value={business.image}
           onChange={handleImageChange}
         />
 
