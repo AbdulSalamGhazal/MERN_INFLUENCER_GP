@@ -218,7 +218,7 @@ const BusinessSignup = () => {
       <Typography component="h1" variant="h4" align="center">
         Business Sign Up
       </Typography>
-      <Box component="form" onSubmit={handleSubmit(onSubmit)} noValidate sx={{ mt: 1 }} encType="multipart/form-data">
+      <Box component="form" onSubmit={handleSubmit(onSubmit)} noValidate sx={{ mt: 1 }}>
         <TextField
           {...register("companyName", { required: 'this field is required' })}
           error={errors.companyName}

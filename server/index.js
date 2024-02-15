@@ -33,14 +33,14 @@ app.get("/influencers/:id", async (req, res) => {
 // creating influencer
 app.post("/influencers", upload.single('image'), async (req, res) => {
   console.log(req.body);
-  Influencer.create({ ...req.body, iamge: req.file.path })
+  Influencer.create({ ...req.body, image: req.file.path })
     .then((influencer) => res.json({
       _id: influencer._id,
       token: generateToken(influencer._id),
       type: 'influencer',
       name: influencer.name,
       image: influencer.image
-    })) 
+    }))
     .catch((err) => res.json(err));
 });
 // creating business
