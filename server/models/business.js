@@ -9,6 +9,7 @@ const businessSchema = new Schema({
   email: String,
   password: String,
   address: String,
+  image: String,
 
   websiteURL: String,
   socialMediaLinks: [String],

@@ -6,6 +6,12 @@ const Influencer = require("./models/influencer");
 const Business = require("./models/business");
 const asyncHandler = require("express-async-handler");
 const generateToken = require("./config/generateToken");
+const influencer = require("./models/influencer");
+const { storage } = require('./cloudinary')
+const multer = require('multer')
+// const upload = multer({ storage })
+const upload = multer({ dest: 'uploads/' })
+
 const app = express();
 app.use(express.json());
 app.use(cors());
@@ -25,31 +31,57 @@ app.get("/influencers/:id", async (req, res) => {
 // creating influencer
 app.post("/influencers", async (req, res) => {
   console.log(req.body);
-  Influencer.create(req.body)
-    .then((influencer) => res.json(influencer)) // return only _id, token, type
+  Influencer.create({ ...req.body })
+    .then((influencer) => res.json({
+      _id: influencer._id,
+      token: generateToken(influencer._id),
+      type: 'influencer',
+      name: influencer.name,
+      image: influencer.image
+    })) 
     .catch((err) => res.json(err));
 });
 // creating business
 app.post("/business", async (req, res) => {
-  console.log(req.body);
-  Business.create(req.body)
-    .then((business) => res.json(business)) // return only _id, token, type
+  console.log(req.file);
+  Business.create({ ...req.body })
+    .then((business) => res.json({
+      _id: business._id,
+      token: generateToken(business._id),
+      type: 'business',
+      name: business.companyName,
+      image: business.image
+    }))
     .catch((err) => res.json(err));
 });
 
 app.post(
   "/login",
   asyncHandler(async (req, res) => {
-    const { email, password } = req.body; // also will have type as string
-    console.log(email, password);
-    const influencer = await Influencer.findOne({ email });
+    const { email, password, type } = req.body;
+    console.log(email, password, type);
+    let user = undefined;
 
-    if (influencer && (await influencer.matchPassword(password))) {
+    if (type == 'influencer') {
+      user = await Influencer.findOne({ email });
+    }
+    else if (type == 'business') {
+      user = await Business.findOne({ email });
+      console.log('yes')
+      console.log(user)
+    }
+    else {
+      throw new Error("Invalid Type");
+    }
+
+    if (user && (await user.matchPassword(password))) {
       console.log("success");
       res.json({
-        _id: influencer._id,
-        token: generateToken(influencer._id),
-        // also return the type of the user
+        _id: user._id,
+        token: generateToken(user._id),
+        type,
+        name: user.name ? user.name : user.companyName,
+        image: user.image
       });
     } else {
       throw new Error("Invalid Email or Password");

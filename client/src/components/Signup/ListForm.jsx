@@ -18,11 +18,12 @@ const ListForm = ({ list, handleAdd, handleDelete, handleChange, label, register
 
           <Grid xs={11}>
             <TextField
-              {...register(`${label}${index}`, {required: 'this field is required'})}
-              error={errors[`${label}${index}`]}
+              // {...register(`${label}${index}`, {required: 'this field is required'})? null: null}
+              // // {...register(`${label}${index}`, {required: 'this field is required'})}
+              // error={errors? errors[`${label}${index}`]!==undefined : false}
               margin="normal"
               multiline
-              required
+              // required
               fullWidth
               label={label}
               type="text"

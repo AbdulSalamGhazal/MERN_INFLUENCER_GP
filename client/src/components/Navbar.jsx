@@ -8,7 +8,13 @@
 // import { Link } from "react-router-dom";
 import { AppBar, Toolbar, Button, Box } from "@mui/material";
 import { Link as RouterLink } from "react-router-dom";
-
+import Menu from '@mui/material/Menu';
+import MenuItem from '@mui/material/MenuItem';
+import { useState } from "react";
+import useAuth from "../../context/authContext";
+import { useNavigate } from "react-router-dom";
+import Avatar from '@mui/material/Avatar';
+import LogoutDialog from "./LogoutDialog";
 // const LinkTab = (props) => <Tab component={Link} {...props} />;
 
 export default function Navbar() {
@@ -16,6 +22,33 @@ export default function Navbar() {
   // const handleChange = (event, newValue) => {
   //   setValue(newValue);
   // };
+  const { logout, user } = useAuth()
+  const navigate = useNavigate()
+  const [anchorEl, setAnchorEl] = useState(null);
+  const open = Boolean(anchorEl);
+  const handleClick = (event) => {
+    setAnchorEl(event.currentTarget);
+  };
+  const handleClose = () => {
+    setAnchorEl(null);
+  };
+  const [logoutDialogOpen, setLogoutDialogOpen] = useState(false);
+
+  const handleLogoutDialogOpen = () => {
+    setLogoutDialogOpen(true);
+    handleClose()
+  };
+
+  const handleLogoutDialogClose = () => {
+    setLogoutDialogOpen(false);
+  };
+
+  const handleLogout = () => {
+    logout()
+    handleLogoutDialogClose()
+    navigate('/login')
+  }
+
 
   return (
     <AppBar position="static">
@@ -42,9 +75,40 @@ export default function Navbar() {
           </Button>
         </Box>
 
-        <Button color="inherit" component={RouterLink} to="/account">
+        {/* <Button color="inherit" component={RouterLink} to="/account">
           Account
-        </Button>
+        </Button> */}
+        {/* <Button
+          color="inherit"
+          aria-controls={open ? 'basic-menu' : undefined}
+          aria-haspopup="true"
+          aria-expanded={open ? 'true' : undefined}
+          onClick={handleClick}
+        >
+          Account
+        </Button> */}
+        <Avatar 
+          src={user?.image}
+          alt={user?.name}
+          onClick={handleClick}
+          sx={{ cursor: 'pointer' }}
+          />
+        <Menu
+          id="basic-menu"
+          anchorEl={anchorEl}
+          open={open}
+          onClose={handleClose}
+          MenuListProps={{
+            'aria-labelledby': 'basic-button',
+          }}
+        >
+          <MenuItem onClick={handleClose}>Profile</MenuItem>
+          <MenuItem onClick={handleClose}>My account</MenuItem>
+          <MenuItem onClick={handleLogoutDialogOpen}>Logout</MenuItem>
+        </Menu>
+        <LogoutDialog open={logoutDialogOpen}
+          handleClose={handleLogoutDialogClose}
+          handleLogout={handleLogout}/>
       </Toolbar>
     </AppBar>
     // <Tabs

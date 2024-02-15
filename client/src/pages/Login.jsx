@@ -1,5 +1,4 @@
 import Button from "@mui/material/Button";
-import CssBaseline from "@mui/material/CssBaseline";
 import TextField from "@mui/material/TextField";
 import FormControlLabel from "@mui/material/FormControlLabel";
 import Checkbox from "@mui/material/Checkbox";
@@ -7,24 +6,29 @@ import Link from "@mui/material/Link";
 import Grid from "@mui/material/Grid";
 import Box from "@mui/material/Box";
 import Typography from "@mui/material/Typography";
+import Tabs from '@mui/material/Tabs';
+import Tab from '@mui/material/Tab';
 import Container from "@mui/material/Container";
 import { useState } from "react";
 import useAuth from "../../context/authContext";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
 
+
+
 const Login = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [type, setType] = useState('business');
   const { login } = useAuth();
   let navigate = useNavigate();
 
   const handleSubmit = async (event) => {
     event.preventDefault();
-    try {
+  try {
       const { data } = await axios.post(
         "http://localhost:3001/login",
-        { email, password },
+        { email, password, type },
         {
           headers: {
             "Content-Type": "application/json",
@@ -40,11 +44,19 @@ const Login = () => {
 
   return (
     <Container component="main" maxWidth="xs">
-      <CssBaseline />
-      {/* TODO: the title needs some styles */}
       <Typography component="h1" variant="h2" align="center">
         Sign in
       </Typography>
+       <Box sx={{ borderBottom: 1, borderColor: 'divider' }}>
+        <Tabs 
+          value={type} 
+          onChange={(e, newValue) => setType(newValue)} 
+          variant="fullWidth">
+          <Tab label="Business" value={'business'}/>
+          <Tab label="Influencer" value={'influencer'}/>
+        </Tabs>
+      </Box>
+
       <Box component="form" onSubmit={handleSubmit} noValidate sx={{ mt: 1 }}>
         <TextField
           margin="normal"
@@ -97,6 +109,10 @@ const Login = () => {
           </Grid>
         </Grid>
       </Box>
+      
+      {/* <TabPanel value="business"><LoginForm /></TabPanel>
+      <TabPanel value="influencer"><LoginForm /></TabPanel> */}
+      
     </Container>
   );
 };

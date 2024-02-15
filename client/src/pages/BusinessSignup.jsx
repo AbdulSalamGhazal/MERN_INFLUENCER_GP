@@ -13,9 +13,11 @@ import InputAdornment from '@mui/material/InputAdornment';
 import Visibility from '@mui/icons-material/Visibility';
 import VisibilityOff from '@mui/icons-material/VisibilityOff';
 
+
 import { useNavigate } from "react-router-dom";
 import { useState } from 'react';
 import { useForm } from "react-hook-form"
+import useAuth from '../../context/authContext';
 import axios from 'axios';
 
 import ListForm from '../components/signup/ListForm';
@@ -36,7 +38,8 @@ const inintialBusiness = {
   budgetRange: {
     min: 10,
     max: 30
-  }
+  },
+  image: ''
 }
 
 const industryOptions = [
@@ -97,10 +100,10 @@ const urlPattern = /(?:https?:\/\/)?(?:www\.)?(?:[-a-zA-Z0-9]+\.)+[a-zA-Z0-9]{2,
 const emailPattern = /^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?\.(?:[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?)*$/;
 const passwordMinLength = 8;
 const passwordMaxLength = 20;
-const requiredChars = new RegExp(`^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[!@#$%^&*()_+\\-=\\{\\}|;\':",<.>/?])[a-zA-Z0-9!@#$%^&*()_+\\-=\\{\\}|;\':",<.>/?]{${passwordMinLength},${passwordMaxLength}}$`);
+const requiredChars = new RegExp(`^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[!@#$%^&*()_+\\-=\\{\\}|;':",<.>/?])[a-zA-Z0-9!@#$%^&*()_+\\-=\\{\\}|;':",<.>/?]{${passwordMinLength},${passwordMaxLength}}$`);
 
 
-const VisibilityToggler = ({showPassword, setShowPassword}) => {
+const VisibilityToggler = ({ showPassword, setShowPassword }) => {
   return (
     <InputAdornment position="end">
       <IconButton
@@ -117,6 +120,7 @@ const VisibilityToggler = ({showPassword, setShowPassword}) => {
 
 
 const BusinessSignup = () => {
+  const { login } = useAuth()
   const navigate = useNavigate();
   const [business, setBusiness] = useState({ ...inintialBusiness })
   const [showPassword, setShowPassword] = useState(false)
@@ -129,12 +133,12 @@ const BusinessSignup = () => {
 
 
   const onSubmit = async () => {
-    // e.preventDefault();
     try {
-      const response = await axios.post("http://localhost:3001/business", business);
-      console.log(response)
-      setBusiness(inintialBusiness);
-      navigate('/login')
+      const { data } = await axios.post("http://localhost:3001/business", business);
+      console.log(data)
+      // setBusiness(inintialBusiness);
+      login(data)
+      navigate('/home')
     } catch (error) {
       console.error("Error fetching data:", error);
     }
@@ -151,6 +155,8 @@ const BusinessSignup = () => {
   const handleEmailChange = e => setBusiness(oldBusiness => ({ ...oldBusiness, email: e.target.value }))
   const handleAddressChange = e => setBusiness(oldBusiness => ({ ...oldBusiness, address: e.target.value }))
   const handleGoalsChange = e => setBusiness(oldBusiness => ({ ...oldBusiness, campaignGoals: e.target.value }))
+  // const handleImageChange = e => setBusiness(oldBusiness => ({ ...oldBusiness, image: e.target.files[0] }))
+  const handleImageChange = e => setBusiness(oldBusiness => ({ ...oldBusiness, image: e.target.value }))
 
   const handleAddSocialMediaLink = () => setBusiness(oldBusiness => (
     { ...oldBusiness, socialMediaLinks: [...oldBusiness.socialMediaLinks, ''] }
@@ -208,7 +214,7 @@ const BusinessSignup = () => {
       <Typography component="h1" variant="h4" align="center">
         Business Sign Up
       </Typography>
-      <Box component="form" onSubmit={handleSubmit(onSubmit)} noValidate sx={{ mt: 1 }}>
+      <Box component="form" onSubmit={handleSubmit(onSubmit)} noValidate sx={{ mt: 1 }} encType="multipart/form-data">
         <TextField
           {...register("companyName", { required: 'this field is required' })}
           error={errors.companyName}
@@ -243,41 +249,6 @@ const BusinessSignup = () => {
           autoComplete="email"
           value={business.email}
           onChange={handleEmailChange}
-        />
-
-        <TextField
-          {...register("address", { required: 'this field is required' })}
-          error={errors.address}
-          helperText={errors.address?.message}
-          margin="normal"
-          required
-          fullWidth
-          id="address"
-          label="Company address"
-          type='text'
-          autoComplete="address-level2"
-          value={business.address}
-          onChange={handleAddressChange}
-        />
-
-        <TextField
-          {...register("website", {
-            required: 'this field is required', pattern: {
-              value: urlPattern,
-              message: 'Please enter a valid URL.',
-            }
-          })}
-          error={errors.website}
-          helperText={errors.website?.message}
-          margin="normal"
-          required
-          fullWidth
-          id="website"
-          label="Website URL"
-          type='url'
-          autoComplete="url"
-          value={business.websiteURL}
-          onChange={handleWebsieteChange}
         />
 
         <TextField
@@ -337,6 +308,59 @@ const BusinessSignup = () => {
         // value={business.confirmPassword}
         // onChange={handleconfirmPasswordChange}
         />
+        <TextField
+          {...register("address", { required: 'this field is required' })}
+          error={errors.address}
+          helperText={errors.address?.message}
+          margin="normal"
+          required
+          fullWidth
+          id="address"
+          label="Company address"
+          type='text'
+          autoComplete="address-level2"
+          value={business.address}
+          onChange={handleAddressChange}
+        />
+
+        <TextField
+          {...register("website", {
+            required: 'this field is required', pattern: {
+              value: urlPattern,
+              message: 'Please enter a valid URL.',
+            }
+          })}
+          error={errors.website}
+          helperText={errors.website?.message}
+          margin="normal"
+          required
+          fullWidth
+          id="website"
+          label="Website URL"
+          type='url'
+          autoComplete="url"
+          value={business.websiteURL}
+          onChange={handleWebsieteChange}
+        />
+        
+        <TextField
+          {...register("image", {
+            required: 'this field is required'
+          })}
+          error={errors.image}
+          helperText={errors.image?.message}
+          margin="normal"
+          required
+          fullWidth
+          id="image"
+          label="upload account image"
+          // type='file'
+          name='image'
+          InputLabelProps={{ shrink: true }}
+          value={business.image}
+          onChange={handleImageChange}
+        />
+
 
         <TextField
           fullWidth
