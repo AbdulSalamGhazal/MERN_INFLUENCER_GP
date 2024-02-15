@@ -134,7 +134,11 @@ const BusinessSignup = () => {
 
   const onSubmit = async () => {
     try {
-      const { data } = await axios.post("http://localhost:3001/business", business);
+      const { data } = await axios.post("http://localhost:3001/business", business, {
+        headers: {
+          'Content-Type': 'multipart/form-data'
+        }
+      });
       console.log(data)
       // setBusiness(inintialBusiness);
       login(data)
@@ -155,8 +159,8 @@ const BusinessSignup = () => {
   const handleEmailChange = e => setBusiness(oldBusiness => ({ ...oldBusiness, email: e.target.value }))
   const handleAddressChange = e => setBusiness(oldBusiness => ({ ...oldBusiness, address: e.target.value }))
   const handleGoalsChange = e => setBusiness(oldBusiness => ({ ...oldBusiness, campaignGoals: e.target.value }))
-  // const handleImageChange = e => setBusiness(oldBusiness => ({ ...oldBusiness, image: e.target.files[0] }))
-  const handleImageChange = e => setBusiness(oldBusiness => ({ ...oldBusiness, image: e.target.value }))
+  const handleImageChange = e => setBusiness(oldBusiness => ({ ...oldBusiness, image: e.target.files[0] }))
+  // const handleImageChange = e => setBusiness(oldBusiness => ({ ...oldBusiness, image: e.target.value }))
 
   const handleAddSocialMediaLink = () => setBusiness(oldBusiness => (
     { ...oldBusiness, socialMediaLinks: [...oldBusiness.socialMediaLinks, ''] }
@@ -342,7 +346,7 @@ const BusinessSignup = () => {
           value={business.websiteURL}
           onChange={handleWebsieteChange}
         />
-        
+
         <TextField
           {...register("image", {
             required: 'this field is required'
@@ -354,13 +358,12 @@ const BusinessSignup = () => {
           fullWidth
           id="image"
           label="upload account image"
-          // type='file'
+          type='file'
           name='image'
           InputLabelProps={{ shrink: true }}
-          value={business.image}
+          // value={business.image}
           onChange={handleImageChange}
         />
-
 
         <TextField
           fullWidth
