@@ -37,7 +37,8 @@ const PersonalInfoForm = ({
   gender, setGender,
   email, setEmail,
   location, setLocation,
-  image, setImage,
+  // image, 
+  setImage,
   field, setField,
   description, setDescription,
   interests, setInterests,
@@ -115,12 +116,14 @@ const PersonalInfoForm = ({
         margin="normal"
         required
         fullWidth
-        label="Image URL"
-        type="url"
+        label="uploat account image"
+        type="file"
         id="image"
+        InputLabelProps={{ shrink: true }}
+
         // autoComplete="image"
-        value={image}
-        onChange={e => setImage(e.target.value)}
+        // value={image}
+        onChange={e => setImage(e.target.files[0])}
       />
 
       <FormControl fullWidth margin="normal" required>

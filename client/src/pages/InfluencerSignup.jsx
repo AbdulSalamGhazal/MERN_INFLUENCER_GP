@@ -22,7 +22,7 @@ const InfluencerSignup = () => {
   const [gender, setGender] = useState("");
   const [email, setEmail] = useState("");
   const [location, setLocation] = useState("");
-  const [image, setImage] = useState("");
+  const [image, setImage] = useState(null);
   const [field, setField] = useState("");
   const [description, setDescription] = useState("");
   const [presonalInterests, setPersonalInterests] = useState("");
@@ -150,10 +150,11 @@ const InfluencerSignup = () => {
       avg_comments: commentsNumber,
     };
     try {
-      const { data } = await axios.post(
-        "http://localhost:3001/influencers",
-        influencer
-      );
+      const {data} = await axios.post("http://localhost:3001/influencers", influencer, {
+        headers: {
+          'Content-Type': 'multipart/form-data'
+        }
+      });
       // setActiveStep((prevActiveStep) => prevActiveStep + 1);
       login(data);
       navigate("/home");
@@ -200,6 +201,7 @@ const InfluencerSignup = () => {
               onSubmit={(e) => e.preventDefault()}
               noValidate
               sx={{ mt: 3 }}
+             
             >
               {getStepContent(activeStep)}
             </Box>
