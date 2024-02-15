@@ -1,5 +1,5 @@
-if(process.env.NODE_ENV !== 'production') {
-  require('dotenv').config()
+if (process.env.NODE_ENV !== "production") {
+  require("dotenv").config();
 }
 const express = require("express");
 const mongoose = require("mongoose");
@@ -10,9 +10,9 @@ const Business = require("./models/business");
 const asyncHandler = require("express-async-handler");
 const generateToken = require("./config/generateToken");
 const influencer = require("./models/influencer");
-const { storage } = require('./cloudinary')
-const multer = require('multer')
-const upload = multer({ storage })
+const { storage } = require("./cloudinary");
+const multer = require("multer");
+const upload = multer({ storage });
 
 const app = express();
 app.use(express.json());
@@ -31,29 +31,33 @@ app.get("/influencers/:id", async (req, res) => {
 });
 
 // creating influencer
-app.post("/influencers", upload.single('image'), async (req, res) => {
+app.post("/influencers", upload.single("image"), async (req, res) => {
   console.log(req.body);
   Influencer.create({ ...req.body, iamge: req.file.path })
-    .then((influencer) => res.json({
-      _id: influencer._id,
-      token: generateToken(influencer._id),
-      type: 'influencer',
-      name: influencer.name,
-      image: influencer.image
-    })) 
+    .then((influencer) =>
+      res.json({
+        _id: influencer._id,
+        token: generateToken(influencer._id),
+        type: "influencer",
+        name: influencer.name,
+        image: influencer.image,
+      })
+    )
     .catch((err) => res.json(err));
 });
 // creating business
-app.post("/business", upload.single('image'), async (req, res) => {
+app.post("/business", upload.single("image"), async (req, res) => {
   console.log(req.file);
   Business.create({ ...req.body, image: req.file.path })
-    .then((business) => res.json({
-      _id: business._id,
-      token: generateToken(business._id),
-      type: 'business',
-      name: business.companyName,
-      image: business.image
-    }))
+    .then((business) =>
+      res.json({
+        _id: business._id,
+        token: generateToken(business._id),
+        type: "business",
+        name: business.companyName,
+        image: business.image,
+      })
+    )
     .catch((err) => res.json(err));
 });
 
@@ -64,15 +68,13 @@ app.post(
     console.log(email, password, type);
     let user = undefined;
 
-    if (type == 'influencer') {
+    if (type == "influencer") {
       user = await Influencer.findOne({ email });
-    }
-    else if (type == 'business') {
+    } else if (type == "business") {
       user = await Business.findOne({ email });
-      console.log('yes')
-      console.log(user)
-    }
-    else {
+      console.log("yes");
+      console.log(user);
+    } else {
       throw new Error("Invalid Type");
     }
 
@@ -82,7 +84,7 @@ app.post(
         token: generateToken(user._id),
         type,
         name: user.name ? user.name : user.companyName,
-        image: user.image
+        image: user.image,
       });
     } else {
       throw new Error("Invalid Email or Password");
