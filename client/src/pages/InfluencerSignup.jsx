@@ -5,6 +5,7 @@ import Step from "@mui/material/Step";
 import StepLabel from "@mui/material/StepLabel";
 import Button from "@mui/material/Button";
 import Typography from "@mui/material/Typography";
+import Alert from "@mui/material/Alert";
 import PersonalInfoForm from "../components/signup/PersonalInfoForm";
 import PlatformsForm from "../components/signup/PlatformsForm";
 import AudienceInfoForm from "../components/signup/AudienceInfoForm";
@@ -16,6 +17,8 @@ import { useNavigate } from "react-router-dom";
 const InfluencerSignup = () => {
   const { login } = useAuth();
   const navigate = useNavigate();
+  const [errorAlert, setErrorAlert] = useState(null);
+
   const [activeStep, setActiveStep] = useState(0);
   const [password, setPassword] = useState("");
   const [name, setName] = useState("");
@@ -160,11 +163,19 @@ const InfluencerSignup = () => {
       navigate("/home");
     } catch (error) {
       console.error("Error fetching data:", error);
+      setErrorAlert(error.message)
+      setTimeout(() => {
+        setErrorAlert(null)
+      }, 3000);
     }
   };
 
   return (
     <Box>
+       {errorAlert && 
+        <Alert severity="error">
+          {errorAlert}
+        </Alert>}
       <Typography
         component="h1"
         variant="h3"

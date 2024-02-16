@@ -12,6 +12,7 @@ import IconButton from "@mui/material/IconButton";
 import InputAdornment from "@mui/material/InputAdornment";
 import Visibility from "@mui/icons-material/Visibility";
 import VisibilityOff from "@mui/icons-material/VisibilityOff";
+import Alert from "@mui/material/Alert";
 
 import { useNavigate } from "react-router-dom";
 import { useState } from "react";
@@ -123,6 +124,8 @@ const VisibilityToggler = ({ showPassword, setShowPassword }) => {
 const BusinessSignup = () => {
   const { login } = useAuth();
   const navigate = useNavigate();
+  const [errorAlert, setErrorAlert] = useState(null);
+
   const [business, setBusiness] = useState({ ...inintialBusiness });
   const [showPassword, setShowPassword] = useState(false);
   const [showPassword2, setShowPassword2] = useState(false);
@@ -145,6 +148,10 @@ const BusinessSignup = () => {
       navigate("/home");
     } catch (error) {
       console.error("Error fetching data:", error);
+      setErrorAlert(error.message)
+      setTimeout(() => {
+        setErrorAlert(null)
+      }, 3000);
     }
   };
 
@@ -289,7 +296,7 @@ const BusinessSignup = () => {
                 showPassword={showPassword}
                 setShowPassword={setShowPassword}
               />
-            ),
+              ),
           }}
         />
         <TextField
@@ -315,7 +322,7 @@ const BusinessSignup = () => {
                 showPassword={showPassword2}
                 setShowPassword={setShowPassword2}
               />
-            ),
+              ),
           }}
           // value={business.confirmPassword}
           // onChange={handleconfirmPasswordChange}
@@ -533,6 +540,10 @@ const BusinessSignup = () => {
           />
         </FormControl>
 
+        {errorAlert && 
+        <Alert severity="error">
+          {errorAlert}
+        </Alert>}
         <Button
           type="submit"
           fullWidth

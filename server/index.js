@@ -36,31 +36,29 @@ app.get("/influencers/:id", async (req, res) => {
 // creating influencer
 app.post("/influencers", upload.single("image"), async (req, res) => {
   console.log(req.body);
-  Influencer.create({ ...req.body, image: req.file.path })
-    .then((influencer) =>
-      res.json({
-        _id: influencer._id,
-        token: generateToken(influencer._id),
-        type: "influencer",
-        name: influencer.name,
-        image: influencer.image,
-      })
-    )
+  Influencer.create({ ...req.body, image: req.file?.path })
+    .then((influencer) => res.json({
+      _id: influencer._id,
+      token: generateToken(influencer._id),
+      type: 'influencer',
+      name: influencer.name,
+      image: influencer.image,
+      description: influencer.description
+    }))
     .catch((err) => res.json(err));
 });
 // creating business
 app.post("/business", upload.single("image"), async (req, res) => {
   console.log(req.file);
   Business.create({ ...req.body, image: req.file.path })
-    .then((business) =>
-      res.json({
-        _id: business._id,
-        token: generateToken(business._id),
-        type: "business",
-        name: business.companyName,
-        image: business.image,
-      })
-    )
+    .then((business) => res.json({
+      _id: business._id,
+      token: generateToken(business._id),
+      type: 'business',
+      name: business.companyName,
+      image: business.image,
+      description: business.description
+    }))
     .catch((err) => res.json(err));
 });
 
@@ -88,6 +86,7 @@ app.post(
         type,
         name: user.name ? user.name : user.companyName,
         image: user.image,
+        description: user.description
       });
     } else {
       throw new Error("Invalid Email or Password");
