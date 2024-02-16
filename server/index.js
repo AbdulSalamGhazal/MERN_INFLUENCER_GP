@@ -1,5 +1,5 @@
-if(process.env.NODE_ENV !== 'production') {
-  require('dotenv').config()
+if (process.env.NODE_ENV !== "production") {
+  require("dotenv").config();
 }
 const express = require("express");
 const mongoose = require("mongoose");
@@ -10,9 +10,9 @@ const Business = require("./models/business");
 const asyncHandler = require("express-async-handler");
 const generateToken = require("./config/generateToken");
 const influencer = require("./models/influencer");
-const { storage } = require('./cloudinary')
-const multer = require('multer')
-const upload = multer({ storage })
+const { storage } = require("./cloudinary");
+const multer = require("multer");
+const upload = multer({ storage });
 
 const app = express();
 app.use(express.json());
@@ -31,7 +31,7 @@ app.get("/influencers/:id", async (req, res) => {
 });
 
 // creating influencer
-app.post("/influencers", upload.single('image'), async (req, res) => {
+app.post("/influencers", upload.single("image"), async (req, res) => {
   console.log(req.body);
   Influencer.create({ ...req.body, image: req.file?.path })
     .then((influencer) => res.json({
@@ -45,7 +45,7 @@ app.post("/influencers", upload.single('image'), async (req, res) => {
     .catch((err) => res.json(err));
 });
 // creating business
-app.post("/business", upload.single('image'), async (req, res) => {
+app.post("/business", upload.single("image"), async (req, res) => {
   console.log(req.file);
   Business.create({ ...req.body, image: req.file.path })
     .then((business) => res.json({
@@ -66,15 +66,13 @@ app.post(
     console.log(email, password, type);
     let user = undefined;
 
-    if (type == 'influencer') {
+    if (type == "influencer") {
       user = await Influencer.findOne({ email });
-    }
-    else if (type == 'business') {
+    } else if (type == "business") {
       user = await Business.findOne({ email });
-      console.log('yes')
-      console.log(user)
-    }
-    else {
+      console.log("yes");
+      console.log(user);
+    } else {
       throw new Error("Invalid Type");
     }
 
