@@ -33,13 +33,14 @@ app.get("/influencers/:id", async (req, res) => {
 // creating influencer
 app.post("/influencers", upload.single('image'), async (req, res) => {
   console.log(req.body);
-  Influencer.create({ ...req.body, image: req.file.path })
+  Influencer.create({ ...req.body, image: req.file?.path })
     .then((influencer) => res.json({
       _id: influencer._id,
       token: generateToken(influencer._id),
       type: 'influencer',
       name: influencer.name,
-      image: influencer.image
+      image: influencer.image,
+      description: influencer.description
     }))
     .catch((err) => res.json(err));
 });
@@ -52,7 +53,8 @@ app.post("/business", upload.single('image'), async (req, res) => {
       token: generateToken(business._id),
       type: 'business',
       name: business.companyName,
-      image: business.image
+      image: business.image,
+      description: business.description
     }))
     .catch((err) => res.json(err));
 });
@@ -82,7 +84,8 @@ app.post(
         token: generateToken(user._id),
         type,
         name: user.name ? user.name : user.companyName,
-        image: user.image
+        image: user.image,
+        description: user.description
       });
     } else {
       throw new Error("Invalid Email or Password");

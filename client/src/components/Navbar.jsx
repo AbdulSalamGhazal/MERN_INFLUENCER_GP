@@ -15,6 +15,7 @@ import { useNavigate } from "react-router-dom";
 import Avatar from "@mui/material/Avatar";
 import LogoutDialog from "./LogoutDialog";
 import useAuth from "../../context/AuthContext";
+import ProfileDialog from "./ProfileDialog";
 
 // const LinkTab = (props) => <Tab component={Link} {...props} />;
 
@@ -25,6 +26,7 @@ export default function Navbar() {
   // };
   const { logout, user } = useAuth();
   const navigate = useNavigate();
+  const [profileDialogOpen, setProfileDialogOpen] = useState(false);
   const [anchorEl, setAnchorEl] = useState(null);
   const open = Boolean(anchorEl);
   const handleClick = (event) => {
@@ -49,6 +51,10 @@ export default function Navbar() {
     handleLogoutDialogClose();
     navigate("/login");
   };
+  const handleProfileDialogOpen = () => {
+    setProfileDialogOpen(true);
+    handleClose()
+  }
 
   return (
     <AppBar position="static">
@@ -63,6 +69,7 @@ export default function Navbar() {
           My Website
         </Button>
 
+        {user && 
         <Box sx={{ display: "flex", flexGrow: 1, justifyContent: "center" }}>
           <Button color="inherit" component={RouterLink} to="/influencers">
             Influencer
@@ -74,19 +81,10 @@ export default function Navbar() {
             Campaign
           </Button>
         </Box>
+        }
 
-        {/* <Button color="inherit" component={RouterLink} to="/account">
-          Account
-        </Button> */}
-        {/* <Button
-          color="inherit"
-          aria-controls={open ? 'basic-menu' : undefined}
-          aria-haspopup="true"
-          aria-expanded={open ? 'true' : undefined}
-          onClick={handleClick}
-        >
-          Account
-        </Button> */}
+        {user?
+        <>
         <Avatar
           src={user?.image}
           alt={user?.name}
@@ -102,7 +100,7 @@ export default function Navbar() {
             "aria-labelledby": "basic-button",
           }}
         >
-          <MenuItem onClick={handleClose}>Profile</MenuItem>
+          <MenuItem onClick={handleProfileDialogOpen}>Profile</MenuItem>
           <MenuItem onClick={handleClose}>My account</MenuItem>
           <MenuItem onClick={handleLogoutDialogOpen}>Logout</MenuItem>
         </Menu>
@@ -111,6 +109,22 @@ export default function Navbar() {
           handleClose={handleLogoutDialogClose}
           handleLogout={handleLogout}
         />
+        <ProfileDialog 
+          user={user} 
+          open={profileDialogOpen} 
+          setOpen={setProfileDialogOpen} />
+        </>
+        :
+        <Box sx={{ display: "flex", justifyContent: "flex-end" }}>
+          <Button color="inherit" component={RouterLink} to="/signup">
+            Sign Up
+          </Button>
+          <Button color="inherit" component={RouterLink} to="/login">
+            Log In
+          </Button>
+        </Box>
+        }
+
       </Toolbar>
     </AppBar>
     // <Tabs

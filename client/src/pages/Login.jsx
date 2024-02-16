@@ -1,4 +1,5 @@
 import Button from "@mui/material/Button";
+import Alert from '@mui/material/Alert'
 import TextField from "@mui/material/TextField";
 import FormControlLabel from "@mui/material/FormControlLabel";
 import Checkbox from "@mui/material/Checkbox";
@@ -15,6 +16,8 @@ import axios from "axios";
 import { useNavigate } from "react-router-dom";
 
 const Login = () => {
+  const [errorAlert, setErrorAlert] = useState(null);
+
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [type, setType] = useState("business");
@@ -37,11 +40,19 @@ const Login = () => {
       navigate("/home");
     } catch (error) {
       console.error("Login error:", error);
+      setErrorAlert(error.message)
+      setTimeout(() => {
+        setErrorAlert(null)
+      }, 3000);
     }
   };
 
   return (
     <Container component="main" maxWidth="xs">
+       {errorAlert && 
+        <Alert severity="error">
+          {errorAlert}
+        </Alert>}
       <Typography component="h1" variant="h2" align="center">
         Sign in
       </Typography>
