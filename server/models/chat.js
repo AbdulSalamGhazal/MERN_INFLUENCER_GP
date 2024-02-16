@@ -4,10 +4,7 @@ const chatSchema = mongoose.Schema(
   {
     influencerId: { type: mongoose.Schema.Types.ObjectId, ref: "Influencer" },
     businessId: { type: mongoose.Schema.Types.ObjectId, ref: "Business" },
-    lastMessage: {
-      type: mongoose.Schema.Types.ObjectId,
-      ref: "Message",
-    },
+    lastMessage: String,
     messages: [{ type: mongoose.Schema.Types.ObjectId, ref: "Message" }],
   },
   { timestamps: true }

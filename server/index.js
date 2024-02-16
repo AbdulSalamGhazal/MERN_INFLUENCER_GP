@@ -12,7 +12,6 @@ const Chat = require("./models/chat");
 const Message = require("./models/message");
 const asyncHandler = require("express-async-handler");
 const generateToken = require("./config/generateToken");
-const influencer = require("./models/influencer");
 const { storage } = require("./cloudinary");
 const multer = require("multer");
 const upload = multer({ storage });
@@ -37,28 +36,32 @@ app.get("/influencers/:id", async (req, res) => {
 app.post("/influencers", upload.single("image"), async (req, res) => {
   console.log(req.body);
   Influencer.create({ ...req.body, image: req.file?.path })
-    .then((influencer) => res.json({
-      _id: influencer._id,
-      token: generateToken(influencer._id),
-      type: 'influencer',
-      name: influencer.name,
-      image: influencer.image,
-      description: influencer.description
-    }))
+    .then((influencer) =>
+      res.json({
+        _id: influencer._id,
+        token: generateToken(influencer._id),
+        type: "influencer",
+        name: influencer.name,
+        image: influencer.image,
+        description: influencer.description,
+      })
+    )
     .catch((err) => res.json(err));
 });
 // creating business
 app.post("/business", upload.single("image"), async (req, res) => {
   console.log(req.file);
   Business.create({ ...req.body, image: req.file.path })
-    .then((business) => res.json({
-      _id: business._id,
-      token: generateToken(business._id),
-      type: 'business',
-      name: business.companyName,
-      image: business.image,
-      description: business.description
-    }))
+    .then((business) =>
+      res.json({
+        _id: business._id,
+        token: generateToken(business._id),
+        type: "business",
+        name: business.companyName,
+        image: business.image,
+        description: business.description,
+      })
+    )
     .catch((err) => res.json(err));
 });
 
@@ -86,7 +89,7 @@ app.post(
         type,
         name: user.name ? user.name : user.companyName,
         image: user.image,
-        description: user.description
+        description: user.description,
       });
     } else {
       throw new Error("Invalid Email or Password");
@@ -133,9 +136,7 @@ app.get(
         ? { influencerId: userId }
         : { businessId: userId };
 
-    const chats = await Chat.find(query)
-      .populate("lastMessage")
-      .populate("messages");
+    const chats = await Chat.find(query).populate("messages");
 
     if (chats.length > 0) {
       res.json(chats);
@@ -194,7 +195,7 @@ app.post(
     });
 
     chat.messages.push(message._id);
-    chat.lastMessage = message._id;
+    chat.lastMessage = message.content;
     await chat.save();
 
     res.json(message);
