@@ -17,7 +17,7 @@ import Alert from "@mui/material/Alert";
 import { useNavigate } from "react-router-dom";
 import { useState } from "react";
 import { useForm } from "react-hook-form";
-import useAuth from "../../context/AuthContextReact";
+import useAuth from "../../context/AuthContext";
 import axios from "axios";
 
 import ListForm from "../components/signup/ListForm";

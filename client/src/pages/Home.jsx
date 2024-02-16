@@ -1,4 +1,4 @@
-import useAuth from "../../context/AuthContextReact";
+import useAuth from "../../context/AuthContext";
 
 function Home() {
   const { user } = useAuth();

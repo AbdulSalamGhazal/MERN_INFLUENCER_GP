@@ -11,7 +11,7 @@ import Tabs from "@mui/material/Tabs";
 import Tab from "@mui/material/Tab";
 import Container from "@mui/material/Container";
 import { useState } from "react";
-import useAuth from "../../context/AuthContextReact";
+import useAuth from "../../context/AuthContext";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
 

@@ -14,7 +14,7 @@ import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import Avatar from "@mui/material/Avatar";
 import LogoutDialog from "./LogoutDialog";
-import useAuth from "../../context/AuthContextReact";
+import useAuth from "../../context/AuthContext";
 import ProfileDialog from "./ProfileDialog";
 
 // const LinkTab = (props) => <Tab component={Link} {...props} />;
@@ -53,8 +53,8 @@ export default function Navbar() {
   };
   const handleProfileDialogOpen = () => {
     setProfileDialogOpen(true);
-    handleClose()
-  }
+    handleClose();
+  };
 
   return (
     <AppBar position="static">
@@ -69,62 +69,62 @@ export default function Navbar() {
           My Website
         </Button>
 
-        {user && 
-        <Box sx={{ display: "flex", flexGrow: 1, justifyContent: "center" }}>
-          <Button color="inherit" component={RouterLink} to="/influencers">
-            Influencer
-          </Button>
-          <Button color="inherit" component={RouterLink} to="/chat">
-            Chat
-          </Button>
-          <Button color="inherit" component={RouterLink} to="/campaign">
-            Campaign
-          </Button>
-        </Box>
-        }
+        {user && (
+          <Box sx={{ display: "flex", flexGrow: 1, justifyContent: "center" }}>
+            <Button color="inherit" component={RouterLink} to="/influencers">
+              Influencer
+            </Button>
+            <Button color="inherit" component={RouterLink} to="/chat">
+              Chat
+            </Button>
+            <Button color="inherit" component={RouterLink} to="/campaign">
+              Campaign
+            </Button>
+          </Box>
+        )}
 
-        {user?
-        <>
-        <Avatar
-          src={user?.image}
-          alt={user?.name}
-          onClick={handleClick}
-          sx={{ cursor: "pointer" }}
-        />
-        <Menu
-          id="basic-menu"
-          anchorEl={anchorEl}
-          open={open}
-          onClose={handleClose}
-          MenuListProps={{
-            "aria-labelledby": "basic-button",
-          }}
-        >
-          <MenuItem onClick={handleProfileDialogOpen}>Profile</MenuItem>
-          <MenuItem onClick={handleClose}>My account</MenuItem>
-          <MenuItem onClick={handleLogoutDialogOpen}>Logout</MenuItem>
-        </Menu>
-        <LogoutDialog
-          open={logoutDialogOpen}
-          handleClose={handleLogoutDialogClose}
-          handleLogout={handleLogout}
-        />
-        <ProfileDialog 
-          user={user} 
-          open={profileDialogOpen} 
-          setOpen={setProfileDialogOpen} />
-        </>
-        :
-        <Box sx={{ display: "flex", justifyContent: "flex-end" }}>
-          <Button color="inherit" component={RouterLink} to="/signup">
-            Sign Up
-          </Button>
-          <Button color="inherit" component={RouterLink} to="/login">
-            Log In
-          </Button>
-        </Box>
-        }
-
+        {user ? (
+          <>
+            <Avatar
+              src={user?.image}
+              alt={user?.name}
+              onClick={handleClick}
+              sx={{ cursor: "pointer" }}
+            />
+            <Menu
+              id="basic-menu"
+              anchorEl={anchorEl}
+              open={open}
+              onClose={handleClose}
+              MenuListProps={{
+                "aria-labelledby": "basic-button",
+              }}
+            >
+              <MenuItem onClick={handleProfileDialogOpen}>Profile</MenuItem>
+              <MenuItem onClick={handleClose}>My account</MenuItem>
+              <MenuItem onClick={handleLogoutDialogOpen}>Logout</MenuItem>
+            </Menu>
+            <LogoutDialog
+              open={logoutDialogOpen}
+              handleClose={handleLogoutDialogClose}
+              handleLogout={handleLogout}
+            />
+            <ProfileDialog
+              user={user}
+              open={profileDialogOpen}
+              setOpen={setProfileDialogOpen}
+            />
+          </>
+        ) : (
+          <Box sx={{ display: "flex", justifyContent: "flex-end" }}>
+            <Button color="inherit" component={RouterLink} to="/signup">
+              Sign Up
+            </Button>
+            <Button color="inherit" component={RouterLink} to="/login">
+              Log In
+            </Button>
+          </Box>
+        )}
       </Toolbar>
     </AppBar>
     // <Tabs

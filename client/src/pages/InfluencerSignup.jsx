@@ -11,7 +11,7 @@ import PlatformsForm from "../components/signup/PlatformsForm";
 import AudienceInfoForm from "../components/signup/AudienceInfoForm";
 import SpecialRequirementsForm from "../components/signup/SpecialRequirementsForm";
 import axios from "axios";
-import useAuth from "../../context/AuthContextReact";
+import useAuth from "../../context/AuthContext";
 import { useNavigate } from "react-router-dom";
 
 const InfluencerSignup = () => {
