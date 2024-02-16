@@ -14,7 +14,7 @@ import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import Avatar from "@mui/material/Avatar";
 import LogoutDialog from "./LogoutDialog";
-import useAuth from "../../context/AuthContext";
+import useAuth from "../../context/AuthContextReact";
 import ProfileDialog from "./ProfileDialog";
 
 // const LinkTab = (props) => <Tab component={Link} {...props} />;

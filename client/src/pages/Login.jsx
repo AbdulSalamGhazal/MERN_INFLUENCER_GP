@@ -1,5 +1,5 @@
 import Button from "@mui/material/Button";
-import Alert from '@mui/material/Alert'
+import Alert from "@mui/material/Alert";
 import TextField from "@mui/material/TextField";
 import FormControlLabel from "@mui/material/FormControlLabel";
 import Checkbox from "@mui/material/Checkbox";
@@ -11,7 +11,7 @@ import Tabs from "@mui/material/Tabs";
 import Tab from "@mui/material/Tab";
 import Container from "@mui/material/Container";
 import { useState } from "react";
-import useAuth from "../../context/AuthContext";
+import useAuth from "../../context/AuthContextReact";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
 
@@ -37,22 +37,20 @@ const Login = () => {
         }
       );
       login(data);
+      localStorage.setItem("userInfo", JSON.stringify(data));
       navigate("/home");
     } catch (error) {
       console.error("Login error:", error);
-      setErrorAlert(error.message)
+      setErrorAlert(error.message);
       setTimeout(() => {
-        setErrorAlert(null)
+        setErrorAlert(null);
       }, 3000);
     }
   };
 
   return (
     <Container component="main" maxWidth="xs">
-       {errorAlert && 
-        <Alert severity="error">
-          {errorAlert}
-        </Alert>}
+      {errorAlert && <Alert severity="error">{errorAlert}</Alert>}
       <Typography component="h1" variant="h2" align="center">
         Sign in
       </Typography>
