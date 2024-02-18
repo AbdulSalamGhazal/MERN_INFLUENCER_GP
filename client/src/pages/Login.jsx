@@ -20,7 +20,7 @@ const Login = () => {
 
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const [type, setType] = useState("business");
+  const [type, setType] = useState("Business");
   const { login } = useAuth();
   let navigate = useNavigate();
 
@@ -60,8 +60,8 @@ const Login = () => {
           onChange={(e, newValue) => setType(newValue)}
           variant="fullWidth"
         >
-          <Tab label="Business" value={"business"} />
-          <Tab label="Influencer" value={"influencer"} />
+          <Tab label="Business" value={"Business"} />
+          <Tab label="Influencer" value={"Influencer"} />
         </Tabs>
       </Box>
 

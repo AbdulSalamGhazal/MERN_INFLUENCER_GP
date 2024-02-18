@@ -40,7 +40,7 @@ app.post("/influencers", upload.single("image"), async (req, res) => {
       res.json({
         _id: influencer._id,
         token: generateToken(influencer._id),
-        type: "influencer",
+        type: "Influencer",
         name: influencer.name,
         image: influencer.image,
         description: influencer.description,
@@ -56,7 +56,7 @@ app.post("/business", upload.single("image"), async (req, res) => {
       res.json({
         _id: business._id,
         token: generateToken(business._id),
-        type: "business",
+        type: "Business",
         name: business.companyName,
         image: business.image,
         description: business.description,
@@ -72,16 +72,13 @@ app.post(
     console.log(email, password, type);
     let user = undefined;
 
-    if (type == "influencer") {
+    if (type == "Influencer") {
       user = await Influencer.findOne({ email });
-    } else if (type == "business") {
+    } else if (type == "Business") {
       user = await Business.findOne({ email });
-      console.log("yes");
-      console.log(user);
     } else {
       throw new Error("Invalid Type");
     }
-
     if (user && (await user.matchPassword(password))) {
       res.json({
         _id: user._id,
@@ -106,7 +103,7 @@ app.post(
     const { sender_id, userType } = req.body; // for postman testing...
 
     const searchCriteria =
-      userType === "influencer"
+      userType === "Influencer"
         ? { influencerId: sender_id, businessId: receiver_id }
         : { influencerId: receiver_id, businessId: sender_id };
 
@@ -114,8 +111,8 @@ app.post(
 
     if (!chat) {
       chat = await Chat.create({
-        influencerId: userType === "influencer" ? sender_id : receiver_id,
-        businessId: userType === "business" ? sender_id : receiver_id,
+        influencerId: userType === "Influencer" ? sender_id : receiver_id,
+        businessId: userType === "Business" ? sender_id : receiver_id,
         messages: [],
       });
     }
@@ -127,21 +124,43 @@ app.post(
 app.get(
   "/chat",
   asyncHandler(async (req, res) => {
-    // const userId = req.user._id;
-    // const userType = req.user.type;
-    const { userId, userType } = req.body; // for postman testing...
-
-    let query =
-      userType === "influencer"
-        ? { influencerId: userId }
-        : { businessId: userId };
-
-    const chats = await Chat.find(query).populate("messages");
+    const { userId, userType } = req.query;
+    let query = {};
+    let populateOptions = {};
+    if (userType === "Influencer") {
+      query = { influencerId: userId };
+      populateOptions = {
+        path: "businessId",
+        select: "companyName",
+      };
+    } else if (userType === "Business") {
+      query = { businessId: userId };
+      populateOptions = {
+        path: "influencerId",
+        select: "name",
+      };
+    } else {
+      return res.status(400).json({ message: "Invalid user type" });
+    }
+    const chats = await Chat.find(query)
+      .populate(populateOptions)
+      .populate("messages");
 
     if (chats.length > 0) {
-      res.json(chats);
+      const formattedChats = chats.map((chat) => {
+        const receiverName =
+          userType === "Influencer"
+            ? chat.businessId.companyName
+            : chat.influencerId.name;
+        return {
+          ...chat._doc,
+          receiverName,
+        };
+      });
+
+      res.json(formattedChats);
     } else {
-      res.json({ message: "No chats found for the user." });
+      res.json([]);
     }
   })
 );

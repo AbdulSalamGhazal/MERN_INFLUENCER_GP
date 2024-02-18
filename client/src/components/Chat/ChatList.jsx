@@ -7,12 +7,7 @@ import {
   Typography,
 } from "@mui/material";
 
-function ChatList({ setSelectedChat }) {
-  const chats = [
-    { name: "John Doe", message: "Let's meet someday" },
-    { name: "Testing", message: "Yo guys, all good?" },
-  ];
-
+function ChatList({ setSelectedChat, chats }) {
   return (
     <List sx={{ bgcolor: "lightgray", height: "100%", overflowY: "auto" }}>
       <AppBar position="static" sx={{ bgcolor: "white", mb: 2 }}>
@@ -22,16 +17,25 @@ function ChatList({ setSelectedChat }) {
           </Typography>
         </Toolbar>
       </AppBar>
-      {chats.map((chat, index) => (
-        <ListItem
-          button
-          key={index}
-          onClick={() => setSelectedChat(chat)}
-          sx={{ bgcolor: "white", mb: 1, boxShadow: 1 }}
-        >
-          <ListItemText primary={chat.name} secondary={chat.message} />
-        </ListItem>
-      ))}
+      {chats.length > 0 ? (
+        chats.map((chat, index) => (
+          <ListItem
+            button
+            key={index}
+            onClick={() => setSelectedChat(chat)}
+            sx={{ bgcolor: "white", mb: 1, boxShadow: 1 }}
+          >
+            <ListItemText
+              primary={chat.receiverName}
+              secondary={chat.lastMessage || "No messages yet"}
+            />
+          </ListItem>
+        ))
+      ) : (
+        <Typography sx={{ p: 2, textAlign: "center" }}>
+          No chats found
+        </Typography>
+      )}
     </List>
   );
 }

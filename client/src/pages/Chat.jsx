@@ -1,11 +1,33 @@
-import { useState } from "react";
+import axios from "axios";
+import { useState, useEffect } from "react";
 import { Box, Grid, Paper } from "@mui/material";
 import ChatList from "../components/Chat/ChatList";
 import ChatView from "../components/Chat/ChatView";
+import useAuth from "../../context/AuthContext";
 
-function App() {
+function Chat() {
+  const { user } = useAuth();
+  const [chats, setChats] = useState([]);
   const [selectedChat, setSelectedChat] = useState(null);
+  useEffect(() => {
+    const fetchChats = async () => {
+      try {
+        const response = await axios.get("http://localhost:3001/chat", {
+          params: {
+            userId: user._id,
+            userType: user.type,
+          },
+        });
+        setChats(response.data);
+      } catch (error) {
+        console.error("Error fetching chats:", error);
+      }
+    };
 
+    if (user._id) {
+      fetchChats();
+    }
+  }, [user._id, user.type]);
   return (
     <Box
       sx={{
@@ -24,7 +46,7 @@ function App() {
               flexDirection: "column",
             }}
           >
-            <ChatList setSelectedChat={setSelectedChat} />
+            <ChatList setSelectedChat={setSelectedChat} chats={chats} />
           </Paper>
         </Grid>
         <Grid item xs={8} sx={{ bgcolor: "lightgray" }}>
@@ -45,4 +67,4 @@ function App() {
   );
 }
 
-export default App;
+export default Chat;
