@@ -153,29 +153,31 @@ const InfluencerSignup = () => {
       avg_comments: commentsNumber,
     };
     try {
-      const {data} = await axios.post("http://localhost:3001/influencers", influencer, {
-        headers: {
-          'Content-Type': 'multipart/form-data'
+      const { data } = await axios.post(
+        "http://localhost:3001/influencers",
+        influencer,
+        {
+          headers: {
+            "Content-Type": "multipart/form-data",
+          },
         }
-      });
+      );
       // setActiveStep((prevActiveStep) => prevActiveStep + 1);
       login(data);
+      localStorage.setItem("userInfo", JSON.stringify(data));
       navigate("/home");
     } catch (error) {
       console.error("Error fetching data:", error);
-      setErrorAlert(error.message)
+      setErrorAlert(error.message);
       setTimeout(() => {
-        setErrorAlert(null)
+        setErrorAlert(null);
       }, 3000);
     }
   };
 
   return (
     <Box>
-       {errorAlert && 
-        <Alert severity="error">
-          {errorAlert}
-        </Alert>}
+      {errorAlert && <Alert severity="error">{errorAlert}</Alert>}
       <Typography
         component="h1"
         variant="h3"
@@ -212,7 +214,6 @@ const InfluencerSignup = () => {
               onSubmit={(e) => e.preventDefault()}
               noValidate
               sx={{ mt: 3 }}
-             
             >
               {getStepContent(activeStep)}
             </Box>

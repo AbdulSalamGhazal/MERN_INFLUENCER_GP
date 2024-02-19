@@ -137,35 +137,74 @@ const BusinessSignup = () => {
 
   const onSubmit = async () => {
     try {
-      const { data } = await axios.post("http://localhost:3001/business", business, {
-        headers: {
-          'Content-Type': 'multipart/form-data'
+      const { data } = await axios.post(
+        "http://localhost:3001/business",
+        business,
+        {
+          headers: {
+            "Content-Type": "multipart/form-data",
+          },
         }
-      });
-      console.log(data)
+      );
       // setBusiness(inintialBusiness);
       login(data);
+      localStorage.setItem("userInfo", JSON.stringify(data));
       navigate("/home");
     } catch (error) {
       console.error("Error fetching data:", error);
-      setErrorAlert(error.message)
+      setErrorAlert(error.message);
       setTimeout(() => {
-        setErrorAlert(null)
+        setErrorAlert(null);
       }, 3000);
     }
   };
 
-  const handleNameChange = e => setBusiness(oldBusiness => ({ ...oldBusiness, companyName: e.target.value }))
-  const handleSizeChange = e => setBusiness(oldBusiness => ({ ...oldBusiness, size: e.target.value }))
-  const handleIndustryChange = e => setBusiness(oldBusiness => ({ ...oldBusiness, industry: e.target.value }))
-  const handleDescriptionChange = e => setBusiness(oldBusiness => ({ ...oldBusiness, description: e.target.value }))
-  const handleTargetAudienceChange = e => setBusiness(oldBusiness => ({ ...oldBusiness, targetAudience: e.target.value }))
-  const handleWebsieteChange = e => setBusiness(oldBusiness => ({ ...oldBusiness, websiteURL: e.target.value }))
-  const handlePasswordChange = e => setBusiness(oldBusiness => ({ ...oldBusiness, password: e.target.value }))
-  const handleEmailChange = e => setBusiness(oldBusiness => ({ ...oldBusiness, email: e.target.value }))
-  const handleAddressChange = e => setBusiness(oldBusiness => ({ ...oldBusiness, address: e.target.value }))
-  const handleGoalsChange = e => setBusiness(oldBusiness => ({ ...oldBusiness, campaignGoals: e.target.value }))
-  const handleImageChange = e => setBusiness(oldBusiness => ({ ...oldBusiness, image: e.target.files[0] }))
+  const handleNameChange = (e) =>
+    setBusiness((oldBusiness) => ({
+      ...oldBusiness,
+      companyName: e.target.value,
+    }));
+  const handleSizeChange = (e) =>
+    setBusiness((oldBusiness) => ({ ...oldBusiness, size: e.target.value }));
+  const handleIndustryChange = (e) =>
+    setBusiness((oldBusiness) => ({
+      ...oldBusiness,
+      industry: e.target.value,
+    }));
+  const handleDescriptionChange = (e) =>
+    setBusiness((oldBusiness) => ({
+      ...oldBusiness,
+      description: e.target.value,
+    }));
+  const handleTargetAudienceChange = (e) =>
+    setBusiness((oldBusiness) => ({
+      ...oldBusiness,
+      targetAudience: e.target.value,
+    }));
+  const handleWebsieteChange = (e) =>
+    setBusiness((oldBusiness) => ({
+      ...oldBusiness,
+      websiteURL: e.target.value,
+    }));
+  const handlePasswordChange = (e) =>
+    setBusiness((oldBusiness) => ({
+      ...oldBusiness,
+      password: e.target.value,
+    }));
+  const handleEmailChange = (e) =>
+    setBusiness((oldBusiness) => ({ ...oldBusiness, email: e.target.value }));
+  const handleAddressChange = (e) =>
+    setBusiness((oldBusiness) => ({ ...oldBusiness, address: e.target.value }));
+  const handleGoalsChange = (e) =>
+    setBusiness((oldBusiness) => ({
+      ...oldBusiness,
+      campaignGoals: e.target.value,
+    }));
+  const handleImageChange = (e) =>
+    setBusiness((oldBusiness) => ({
+      ...oldBusiness,
+      image: e.target.files[0],
+    }));
   // const handleImageChange = e => setBusiness(oldBusiness => ({ ...oldBusiness, image: e.target.value }))
 
   const handleAddSocialMediaLink = () =>
@@ -224,7 +263,12 @@ const BusinessSignup = () => {
       <Typography component="h1" variant="h4" align="center">
         Business Sign Up
       </Typography>
-      <Box component="form" onSubmit={handleSubmit(onSubmit)} noValidate sx={{ mt: 1 }}>
+      <Box
+        component="form"
+        onSubmit={handleSubmit(onSubmit)}
+        noValidate
+        sx={{ mt: 1 }}
+      >
         <TextField
           {...register("companyName", { required: "this field is required" })}
           error={errors.companyName}
@@ -296,7 +340,7 @@ const BusinessSignup = () => {
                 showPassword={showPassword}
                 setShowPassword={setShowPassword}
               />
-              ),
+            ),
           }}
         />
         <TextField
@@ -322,7 +366,7 @@ const BusinessSignup = () => {
                 showPassword={showPassword2}
                 setShowPassword={setShowPassword2}
               />
-              ),
+            ),
           }}
           // value={business.confirmPassword}
           // onChange={handleconfirmPasswordChange}
@@ -374,8 +418,8 @@ const BusinessSignup = () => {
           fullWidth
           id="image"
           label="upload account image"
-          type='file'
-          name='image'
+          type="file"
+          name="image"
           InputLabelProps={{ shrink: true }}
           // value={business.image}
           onChange={handleImageChange}
@@ -540,10 +584,7 @@ const BusinessSignup = () => {
           />
         </FormControl>
 
-        {errorAlert && 
-        <Alert severity="error">
-          {errorAlert}
-        </Alert>}
+        {errorAlert && <Alert severity="error">{errorAlert}</Alert>}
         <Button
           type="submit"
           fullWidth

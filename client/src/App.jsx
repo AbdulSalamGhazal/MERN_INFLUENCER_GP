@@ -1,5 +1,5 @@
 import "bootstrap/dist/css/bootstrap.min.css";
-import { BrowserRouter, Routes, Route } from "react-router-dom";
+import { Routes, Route } from "react-router-dom";
 import ProtectedRoute from "../context/protectedRoute";
 import Container from "@mui/material/Container";
 import Home from "./pages/Home";
@@ -14,42 +14,40 @@ import InfluencerPage from "./pages/InfluencerPage";
 function App() {
   return (
     <>
-      <BrowserRouter>
-        <Navbar />
-        <Container maxWidth="xl" sx={{ mt: 3, mb: 4 }}>
-          <Routes>
-            <Route path="/home" element={<Home />} />
-            <Route
-              path="/influencers"
-              element={
-                <ProtectedRoute>
-                  <Influencers />
-                </ProtectedRoute>
-              }
-            />
-            <Route
-              path="/influencers/:influencerId"
-              element={
-                <ProtectedRoute>
-                  <InfluencerPage />
-                </ProtectedRoute>
-              }
-            />
-            <Route
-              path="/chat"
-              element={
-                <ProtectedRoute>
-                  <Chat />
-                </ProtectedRoute>
-              }
-            />
-            <Route path="/login" element={<Login />} />
-            <Route path="/signup" element={<Signup />} />
-            <Route path="/signup/influencer" element={<InfluencerSignup />} />
-            <Route path="/signup/business" element={<BusinessSignup />} />
-          </Routes>
-        </Container>
-      </BrowserRouter>
+      <Navbar />
+      <Container maxWidth="xl" sx={{ mt: 3, mb: 4 }}>
+        <Routes>
+          <Route path="/home" element={<Home />} />
+          <Route
+            path="/influencers"
+            element={
+              <ProtectedRoute>
+                <Influencers />
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="/influencers/:influencerId"
+            element={
+              <ProtectedRoute>
+                <InfluencerPage />
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="/chat"
+            element={
+              <ProtectedRoute>
+                <Chat />
+              </ProtectedRoute>
+            }
+          />
+          <Route path="/login" element={<Login />} />
+          <Route path="/signup" element={<Signup />} />
+          <Route path="/signup/influencer" element={<InfluencerSignup />} />
+          <Route path="/signup/business" element={<BusinessSignup />} />
+        </Routes>
+      </Container>
     </>
   );
 }
