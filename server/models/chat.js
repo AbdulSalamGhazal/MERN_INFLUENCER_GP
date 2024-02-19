@@ -6,6 +6,7 @@ const chatSchema = mongoose.Schema(
     businessId: { type: mongoose.Schema.Types.ObjectId, ref: "Business" },
     lastMessage: String,
     messages: [{ type: mongoose.Schema.Types.ObjectId, ref: "Message" }],
+    // isSeen: Boolean, to be added
   },
   { timestamps: true }
 );

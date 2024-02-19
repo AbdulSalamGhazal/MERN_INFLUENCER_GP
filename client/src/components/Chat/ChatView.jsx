@@ -1,5 +1,5 @@
-import { Box, Typography, Paper } from "@mui/material";
-import useAuth from "../../../context/AuthContext";
+import { AppBar, Box, Paper, Toolbar, Typography } from "@mui/material";
+import useAuth from "../../../context/AuthContext"; // Adjust the import path as necessary
 
 function ChatView({ chat }) {
   const { user } = useAuth();
@@ -7,26 +7,42 @@ function ChatView({ chat }) {
   return (
     <Box
       sx={{
-        bgcolor: "lightgray",
+        bgcolor: "#f0f0f0",
         height: "100%",
-        overflowY: "auto", // To handle scrolling
+        overflowY: "auto",
         display: "flex",
         flexDirection: "column",
-        justifyContent: "flex-start", // Messages start from the top
-        p: 3, // Padding around the entire chat area
-        width: "100%", // Ensure this Box takes the full width
       }}
     >
-      {!chat ? (
-        <Typography variant="h5" color="textSecondary">
-          Click on a user to start chatting
-        </Typography>
-      ) : (
-        <Box sx={{ width: "100%" }}>
-          <Typography variant="h4" sx={{ mb: 2 }}>
-            Chat with {chat.receiverName}
-          </Typography>
-          {/* Iterate over messages */}
+      <AppBar position="static" color="primary" elevation={0}>
+        <Toolbar
+          variant="dense"
+          sx={{ minHeight: "48px", paddingRight: "16px", paddingLeft: "16px" }}
+        >
+          {chat ? (
+            <Typography variant="h6" color="inherit">
+              Chat with {chat.receiverName}
+            </Typography>
+          ) : (
+            <Typography
+              variant="h6"
+              color="inherit"
+              sx={{ visibility: "hidden" }}
+            >
+              Placeholder
+            </Typography>
+          )}
+        </Toolbar>
+      </AppBar>
+      {chat ? (
+        <Box
+          sx={{
+            flexGrow: 1,
+            display: "flex",
+            flexDirection: "column",
+            p: 3,
+          }}
+        >
           {chat.messages.map((message, index) => (
             <Box
               key={index}
@@ -35,7 +51,6 @@ function ChatView({ chat }) {
                 justifyContent:
                   message.sender === user.type ? "flex-end" : "flex-start",
                 mb: 1,
-                width: "100%", // Ensure each message Box also takes the full width
               }}
             >
               <Paper
@@ -43,13 +58,26 @@ function ChatView({ chat }) {
                 sx={{
                   maxWidth: "80%",
                   padding: 1,
-                  bgcolor: message.sender === user.type ? "#f0f0f0" : "#e0e0e0",
+                  bgcolor: message.sender === user.type ? "#ADD8E6" : "#90EE90",
                 }}
               >
                 <Typography variant="body1">{message.content}</Typography>
               </Paper>
             </Box>
           ))}
+        </Box>
+      ) : (
+        <Box
+          sx={{
+            flexGrow: 1,
+            display: "flex",
+            justifyContent: "center",
+            alignItems: "center",
+          }}
+        >
+          <Typography variant="h5" color="textSecondary">
+            Click on a user to start chatting
+          </Typography>
         </Box>
       )}
     </Box>

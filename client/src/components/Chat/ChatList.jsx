@@ -7,12 +7,16 @@ import {
   Typography,
 } from "@mui/material";
 
-function ChatList({ setSelectedChat, chats }) {
+function ChatList({ setSelectedChat, chats, selectedChat }) {
   return (
-    <List sx={{ bgcolor: "lightgray", height: "100%", overflowY: "auto" }}>
-      <AppBar position="static" sx={{ bgcolor: "white", mb: 2 }}>
-        <Toolbar>
-          <Typography variant="h6" color="primary" sx={{ flexGrow: 1 }}>
+    <List sx={{ bgcolor: "#f7f7f7", height: "100%", overflowY: "auto", pt: 0 }}>
+      <AppBar position="static" color="primary" elevation={0}>
+        <Toolbar variant="dense">
+          <Typography
+            variant="h6"
+            color="inherit"
+            sx={{ flexGrow: 1, textAlign: "center" }}
+          >
             My Chats
           </Typography>
         </Toolbar>
@@ -23,7 +27,14 @@ function ChatList({ setSelectedChat, chats }) {
             button
             key={index}
             onClick={() => setSelectedChat(chat)}
-            sx={{ bgcolor: "white", mb: 1, boxShadow: 1 }}
+            sx={{
+              bgcolor:
+                selectedChat && selectedChat._id === chat._id
+                  ? "lightblue"
+                  : "white",
+              my: 1,
+              boxShadow: 1,
+            }}
           >
             <ListItemText
               primary={chat.receiverName}
