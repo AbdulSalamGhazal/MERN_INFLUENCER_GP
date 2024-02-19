@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect, useRef } from "react";
 import Box from "@mui/material/Box";
 import Stepper from "@mui/material/Stepper";
 import Step from "@mui/material/Step";
@@ -18,6 +18,8 @@ const InfluencerSignup = () => {
   const { login } = useAuth();
   const navigate = useNavigate();
   const [errorAlert, setErrorAlert] = useState(null);
+  const stepperRef = useRef(null);
+  const titleRef = useRef(null);
 
   const [activeStep, setActiveStep] = useState(0);
   const [password, setPassword] = useState("");
@@ -42,6 +44,18 @@ const InfluencerSignup = () => {
 
   const [avgCost, setAvgCost] = useState();
   const [requirements, setRequirements] = useState([""]);
+
+  useEffect(() => {
+    const targetTop = titleRef.current?.offsetTop || 0; // Handle potential undefined ref
+    const windowBottom = window.scrollY + window.innerHeight;
+    console.log(windowBottom)
+  
+    // Scroll only if window is below the target component
+    if (windowBottom > targetTop) {
+      window.scrollTo({ top: targetTop, behavior: 'smooth' });
+    }
+  }, [activeStep]); // Re-run on step change or target ID change
+  
 
   const steps = [
     "presonal info",
@@ -182,13 +196,18 @@ const InfluencerSignup = () => {
         component="h1"
         variant="h3"
         align="center"
+        ref={titleRef}
         sx={{ mt: "5px", mb: "30px" }}
       >
         Influencer Sign Up
       </Typography>
 
       <Box>
-        <Stepper activeStep={activeStep} alternativeLabel>
+        <Stepper 
+          activeStep={activeStep} 
+          alternativeLabel
+          ref={stepperRef}
+          sx={{maxWidth: '700px', mx: 'auto', my: 2}}>
           {steps.map((label) => {
             return (
               <Step key={label}>
@@ -213,11 +232,11 @@ const InfluencerSignup = () => {
               component="form"
               onSubmit={(e) => e.preventDefault()}
               noValidate
-              sx={{ mt: 3 }}
+              sx={{ mt: 3, maxWidth: '500px', margin: 'auto'}}
             >
               {getStepContent(activeStep)}
             </Box>
-            <Box sx={{ display: "flex", flexDirection: "row", pt: 2 }}>
+            <Box sx={{ display: "flex", flexDirection: "row", pt: 2, maxWidth: '500px', margin: 'auto' }}>
               <Button
                 color="inherit"
                 disabled={activeStep === 0}
@@ -229,7 +248,7 @@ const InfluencerSignup = () => {
               <Box sx={{ flex: "1 1 auto" }} />
 
               {activeStep === steps.length - 1 ? (
-                <Button onClick={handleSubmit}>Sumbit</Button>
+                <Button onClick={handleSubmit} variant="contained">Sumbit</Button>
               ) : (
                 <Button onClick={handleNext}>Next</Button>
               )}
