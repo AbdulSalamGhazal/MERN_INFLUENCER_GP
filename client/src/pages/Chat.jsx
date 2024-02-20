@@ -1,9 +1,9 @@
 import { useEffect, useState } from "react";
 import { Box, Grid, Paper } from "@mui/material";
 import axios from "axios";
-import ChatList from "../components/Chat/ChatList"; // Adjust the import path as necessary
-import ChatView from "../components/Chat/ChatView"; // Adjust the import path as necessary
-import useAuth from "../../context/AuthContext"; // Adjust the import path as necessary
+import ChatList from "../components/Chat/ChatList";
+import ChatView from "../components/Chat/ChatView";
+import useAuth from "../../context/AuthContext";
 
 function Chat() {
   const { user } = useAuth();
@@ -14,9 +14,8 @@ function Chat() {
     const fetchChats = async () => {
       try {
         const response = await axios.get("http://localhost:3001/chat", {
-          params: {
-            userId: user._id,
-            userType: user.type,
+          headers: {
+            Authorization: `Bearer ${user.token} ${user.type}`,
           },
         });
         setChats(response.data);
@@ -28,7 +27,7 @@ function Chat() {
     if (user._id) {
       fetchChats();
     }
-  }, [user._id, user.type]);
+  },);
 
   return (
     <Box
@@ -38,7 +37,7 @@ function Chat() {
         overflow: "hidden",
       }}
     >
-      <Grid container sx={{ height: "100vh", overflow: "hidden" }}>
+      <Grid container sx={{ height: "90vh", overflow: "hidden" }}>
         <Grid item xs={4} sx={{ bgcolor: "#f7f7f7", pr: 0 }}>
           <Paper
             elevation={3}

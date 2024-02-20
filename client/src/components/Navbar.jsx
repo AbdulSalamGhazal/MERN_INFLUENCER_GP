@@ -127,54 +127,5 @@ export default function Navbar() {
         )}
       </Toolbar>
     </AppBar>
-    // <Tabs
-    //   value={value}
-    //   onChange={handleChange}
-    //   centered
-    //   sx={{
-    //     "& .MuiTabs-flexContainer": {
-    //       justifyContent: "space-between",
-    //     },
-    //     mb: 3,
-    //   }}
-    // >
-    //   <LinkTab
-    //     icon={<HomeIcon />}
-    //     label="Home"
-    //     to="/home"
-    //     value={0}
-    //     sx={{ flex: 1, maxWidth: "none" }}
-    //   />
-
-    //   <LinkTab
-    //     icon={<PersonSearchIcon />}
-    //     label="Influencer"
-    //     to="/influencers"
-    //     value={1}
-    //     sx={{ flex: 1, maxWidth: "none" }}
-    //   />
-    //   <LinkTab
-    //     icon={<ChatIcon />}
-    //     label="Chat"
-    //     to="/chat"
-    //     value={2}
-    //     sx={{ flex: 1, maxWidth: "none" }}
-    //   />
-    //   <LinkTab
-    //     icon={<CampaignIcon />}
-    //     label="Campaign"
-    //     to="/campaign"
-    //     value={3}
-    //     sx={{ flex: 1, maxWidth: "none" }}
-    //   />
-
-    //   <LinkTab
-    //     icon={<AccountBoxIcon />}
-    //     label="Account"
-    //     to="/account"
-    //     value={4}
-    //     sx={{ flex: 1, maxWidth: "none" }}
-    //   />
-    // </Tabs>
   );
 }

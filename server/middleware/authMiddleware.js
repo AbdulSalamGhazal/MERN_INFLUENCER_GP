@@ -15,10 +15,12 @@ const protect = asyncHandler(async (req, res, next) => {
       type = req.headers.authorization.split(" ")[2];
 
       const decoded = jwt.verify(token, "MySuperSecretKeyHere");
-      if (type === "influencer") {
+      if (type === "Influencer") {
         req.user = await Influencer.findById(decoded.id).select("-password");
+        req.user.type = "Influencer";
       } else {
         req.user = await Business.findById(decoded.id).select("-password");
+        req.user.type = "Business";
       }
       next();
     } catch (error) {
