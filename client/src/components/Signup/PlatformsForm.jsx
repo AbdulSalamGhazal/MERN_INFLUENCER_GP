@@ -8,7 +8,7 @@ import FormLabel from '@mui/material/FormLabel';
 import MenuItem from '@mui/material/MenuItem';
 import FormControl from '@mui/material/FormControl';
 import Select from '@mui/material/Select';
-import Grid from '@mui/material/Unstable_Grid2/Grid2';
+import Grid from '@mui/material/Unstable_Grid2';
 
 const platformOptions = [
   'YouTube',
@@ -34,18 +34,21 @@ const PlatformRow = ({
   return (
     <Grid container spacing={1} alignItems={'center'} justifyContent={'space-around'}>
       <Grid xs={3}>
-        <FormControl required fullWidth>
-          <InputLabel id="platform">Platform</InputLabel>
-          <Select
-            labelId="platform"
+        {/* <FormControl required fullWidth> */}
+          {/* <InputLabel id="platform">Platform</InputLabel> */}
+          <TextField
+            margin='normal'
+            fullWidth
+            required
+            select
             id="platform"
             value={platformName}
             label="Platform"
             onChange={e => handleNameChange(index, e.target.value)}
           >
             {platformOptions.map(field => <MenuItem key={field} value={field}>{field}</MenuItem>)}
-          </Select>
-        </FormControl>
+          </TextField>
+        {/* </FormControl> */}
       </Grid>
       <Grid xs={8}>
         <TextField
@@ -61,8 +64,8 @@ const PlatformRow = ({
         />
       </Grid>
       {removable &&
-        <Grid>
-          <IconButton onClick={() => handleRemovePlatform(index)} color="primary" aria-label="remove-platform">
+        <Grid xs={1}>
+          <IconButton onClick={() => handleRemovePlatform(index)} color="primary" aria-label="remove-platform" sx={{mt: 1}}>
             <RemoveCircleIcon />
           </IconButton>
         </Grid>

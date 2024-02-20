@@ -267,7 +267,7 @@ const BusinessSignup = () => {
         component="form"
         onSubmit={handleSubmit(onSubmit)}
         noValidate
-        sx={{ mt: 1 }}
+        sx={{ mt: 1, maxWidth: '500px', mx: 'auto'}}
       >
         <TextField
           {...register("companyName", { required: "this field is required" })}

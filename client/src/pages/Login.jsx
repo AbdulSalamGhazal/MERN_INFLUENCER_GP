@@ -1,15 +1,14 @@
 import Button from "@mui/material/Button";
 import Alert from "@mui/material/Alert";
 import TextField from "@mui/material/TextField";
-import FormControlLabel from "@mui/material/FormControlLabel";
-import Checkbox from "@mui/material/Checkbox";
+// import FormControlLabel from "@mui/material/FormControlLabel";
+// import Checkbox from "@mui/material/Checkbox";
 import Link from "@mui/material/Link";
-import Grid from "@mui/material/Grid";
+import Grid from "@mui/material/Unstable_Grid2";
 import Box from "@mui/material/Box";
 import Typography from "@mui/material/Typography";
 import Tabs from "@mui/material/Tabs";
 import Tab from "@mui/material/Tab";
-import Container from "@mui/material/Container";
 import { useState } from "react";
 import useAuth from "../../context/AuthContext";
 import axios from "axios";
@@ -49,7 +48,7 @@ const Login = () => {
   };
 
   return (
-    <Container component="main" maxWidth="xs">
+    <Box component="main" align='center' sx={{maxWidth: '500px', margin: 'auto'}}>
       {errorAlert && <Alert severity="error">{errorAlert}</Alert>}
       <Typography component="h1" variant="h2" align="center">
         Sign in
@@ -91,10 +90,10 @@ const Login = () => {
           onChange={(e) => setPassword(e.target.value)}
         />
         {/* should keep it? */}
-        <FormControlLabel
+        {/* <FormControlLabel
           control={<Checkbox value="remember" color="primary" />}
           label="Remember me"
-        />
+        /> */}
         <Button
           type="submit"
           fullWidth
@@ -104,13 +103,13 @@ const Login = () => {
           Sign In
         </Button>
         {/* TODO: correct Link should be added in both links */}
-        <Grid container>
-          <Grid item xs>
+        <Grid container justifyContent={'space-between'}>
+          <Grid >
             <Link href="#" variant="body2">
               Forgot password?
             </Link>
           </Grid>
-          <Grid item>
+          <Grid >
             <Link href="/signup" variant="body2">
               {"Don't have an account? Sign Up"}
             </Link>
@@ -120,7 +119,7 @@ const Login = () => {
 
       {/* <TabPanel value="business"><LoginForm /></TabPanel>
       <TabPanel value="influencer"><LoginForm /></TabPanel> */}
-    </Container>
+    </Box>
   );
 };
 
