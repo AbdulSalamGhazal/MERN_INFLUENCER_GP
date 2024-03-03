@@ -66,19 +66,19 @@ export default function Navbar() {
           to="/"
           sx={{ fontWeight: "bold" }}
         >
-          My Website
+          مشهوري
         </Button>
 
         {user && (
           <Box sx={{ display: "flex", flexGrow: 1, justifyContent: "center" }}>
             <Button color="inherit" component={RouterLink} to="/influencers">
-              Influencer
+              المشاهير
             </Button>
             <Button color="inherit" component={RouterLink} to="/chat">
-              Chat
+              المحادثات
             </Button>
             <Button color="inherit" component={RouterLink} to="/campaign">
-              Campaign
+              الحملات
             </Button>
           </Box>
         )}
@@ -118,10 +118,10 @@ export default function Navbar() {
         ) : (
           <Box sx={{ display: "flex", justifyContent: "flex-end" }}>
             <Button color="inherit" component={RouterLink} to="/signup">
-              Sign Up
+              انضم لنا
             </Button>
             <Button color="inherit" component={RouterLink} to="/login">
-              Log In
+              تسجيل الدخول
             </Button>
           </Box>
         )}

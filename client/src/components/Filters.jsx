@@ -114,14 +114,14 @@ function Filters({ setFilters }) {
             <TextField
               value={search}
               id="outlined-basic"
-              label="Search"
+              label="بحث"
               onChange={handleChangeSearch}
               fullWidth
             />
           </Grid>
           <Grid xs={3}>
             <FormControl fullWidth>
-              <InputLabel id="field-label">Field</InputLabel>
+              <InputLabel id="field-label">المجال</InputLabel>
               <Select
                 labelId="field-label"
                 id="field"
@@ -178,10 +178,13 @@ function Filters({ setFilters }) {
               </Select>
             </FormControl>
           </Grid>
-          <Grid xs={3}>
-            <FormControl fullWidth>
-              <InputLabel id="platform-label">Platform</InputLabel>
+          <Grid xs={3} dir="rtl">
+            <FormControl fullWidth dir="rtl">
+              <InputLabel dir="rtl" id="platform-label">
+                المنصة
+              </InputLabel>
               <Select
+                dir="rtl"
                 labelId="platform-label"
                 id="platform"
                 label="Platform"
@@ -201,7 +204,7 @@ function Filters({ setFilters }) {
           </Grid>
           <Grid xs={3}>
             <FormControl fullWidth>
-              <InputLabel id="audience-label">Audience</InputLabel>
+              <InputLabel id="audience-label">الجمهور</InputLabel>
               <Select
                 labelId="audience-label"
                 id="audience"
@@ -241,7 +244,7 @@ function Filters({ setFilters }) {
             </FormControl>
           </Grid>
           <Grid xs={3}>
-            <InputLabel id="cost-label">Cost</InputLabel>
+            <InputLabel id="cost-label">التكلفة</InputLabel>
 
             <Slider
               getAriaLabel={() => "SAR"}
@@ -256,7 +259,7 @@ function Filters({ setFilters }) {
           </Grid>
           <Grid xs={3}>
             <FormControl fullWidth>
-              <InputLabel id="followers-label">Followers</InputLabel>
+              <InputLabel id="followers-label">المتابعين</InputLabel>
               <Select
                 labelId="followers-label"
                 id="followers"
@@ -278,7 +281,7 @@ function Filters({ setFilters }) {
           </Grid>{" "}
           <Grid xs={3}>
             <FormControl fullWidth>
-              <InputLabel id="location-label">Location</InputLabel>
+              <InputLabel id="location-label">الموقع</InputLabel>
               <Select
                 labelId="location-label"
                 id="location"
@@ -305,7 +308,7 @@ function Filters({ setFilters }) {
             </FormControl>
           </Grid>
           <Grid xs={2}>
-            <InputLabel id="check">Verfied?</InputLabel>
+            <InputLabel id="check">موثق؟</InputLabel>
 
             <Switch
               sx={{ ml: 4 }}
@@ -317,10 +320,10 @@ function Filters({ setFilters }) {
             <Button
               sx={{ mt: 2 }}
               variant="outlined"
-              endIcon={<BackspaceIcon />}
+              startIcon={<BackspaceIcon />}
               onClick={handleClearFilters}
             >
-              Clear
+              . حذف
             </Button>
           </Grid>
         </Grid>
