@@ -15,7 +15,7 @@ const generateToken = require("./config/generateToken");
 const { storage } = require("./cloudinary");
 const multer = require("multer");
 const upload = multer({ storage });
-
+const { protect } = require("./middleware/authMiddleware");
 const app = express();
 app.use(express.json());
 app.use(cors());
@@ -34,7 +34,6 @@ app.get("/influencers/:id", async (req, res) => {
 
 // creating influencer
 app.post("/influencers", upload.single("image"), async (req, res) => {
-  console.log(req.body);
   Influencer.create({ ...req.body, image: req.file?.path })
     .then((influencer) =>
       res.json({
@@ -50,7 +49,6 @@ app.post("/influencers", upload.single("image"), async (req, res) => {
 });
 // creating business
 app.post("/business", upload.single("image"), async (req, res) => {
-  console.log(req.file);
   Business.create({ ...req.body, image: req.file.path })
     .then((business) =>
       res.json({
@@ -69,7 +67,6 @@ app.post(
   "/login",
   asyncHandler(async (req, res) => {
     const { email, password, type } = req.body;
-    console.log(email, password, type);
     let user = undefined;
 
     if (type == "Influencer") {
@@ -123,8 +120,10 @@ app.post(
 // get all chats for user
 app.get(
   "/chat",
+  protect,
   asyncHandler(async (req, res) => {
-    const { userId, userType } = req.query;
+    const userId = req.user._id;
+    const userType = req.user.type;
     let query = {};
     let populateOptions = {};
     if (userType === "Influencer") {
@@ -157,47 +156,45 @@ app.get(
           receiverName,
         };
       });
-
       res.json(formattedChats);
     } else {
       res.json([]);
     }
   })
 );
-// get all messages
-app.get(
-  "/chat/message/:receiver_id",
-  asyncHandler(async (req, res) => {
-    const { receiver_id } = req.params;
+// get all messages, no need for this route
+// app.get(
+//   "/chat/message/:receiver_id",
+//   protect,
+//   asyncHandler(async (req, res) => {
+//     const sender_id = req.user._id;
+//     const sender_type = req.user.type;
+//     const { receiver_id } = req.params;
 
-    // const sender_id = req.user._id;
-    // const sender_type = req.user.type;
-    const { userId, userType } = req.body; // for postman testing...
+//     const chatQuery = getChatQuery(sender_id, sender_type, receiver_id);
 
-    const chatQuery = getChatQuery(userId, userType, receiver_id);
+//     const chat = await Chat.findOne(chatQuery).populate({
+//       path: "messages",
+//       model: "Message",
+//     });
 
-    const chat = await Chat.findOne(chatQuery).populate({
-      path: "messages",
-      model: "Message",
-    });
+//     if (!chat) {
+//       return res.json({ message: "Chat not found." });
+//     }
 
-    if (!chat) {
-      return res.json({ message: "Chat not found." });
-    }
-
-    res.json(chat.messages);
-  })
-);
+//     res.json(chat.messages);
+//   })
+// );
 // send a message
 app.post(
   "/chat/message/:receiver_id",
+  protect,
   asyncHandler(async (req, res) => {
     const receiverId = req.params.receiver_id;
     const { content, type } = req.body;
 
-    // const senderId = req.user._id;
-    // const senderType = req.user.type;
-    const { senderId, senderType } = req.body; // for postman testing...
+    const senderId = req.user._id;
+    const senderType = req.user.type;
 
     const chatQuery = getChatQuery(senderId, senderType, receiverId);
 
