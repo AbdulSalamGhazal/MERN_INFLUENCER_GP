@@ -163,29 +163,28 @@ app.get(
     }
   })
 );
-// get all messages, no need for this route
-// app.get(
-//   "/chat/message/:receiver_id",
-//   protect,
-//   asyncHandler(async (req, res) => {
-//     const sender_id = req.user._id;
-//     const sender_type = req.user.type;
-//     const { receiver_id } = req.params;
+// get all messages
+app.get(
+  "/chat/message/:receiver_id",
+  protect,
+  asyncHandler(async (req, res) => {
+    const sender_id = req.user._id;
+    const sender_type = req.user.type;
+    const { receiver_id } = req.params;
 
-//     const chatQuery = getChatQuery(sender_id, sender_type, receiver_id);
+    const chatQuery = getChatQuery(sender_id, sender_type, receiver_id);
 
-//     const chat = await Chat.findOne(chatQuery).populate({
-//       path: "messages",
-//       model: "Message",
-//     });
+    const chat = await Chat.findOne(chatQuery).populate({
+      path: "messages",
+      model: "Message",
+    });
 
-//     if (!chat) {
-//       return res.json({ message: "Chat not found." });
-//     }
-
-//     res.json(chat.messages);
-//   })
-// );
+    if (!chat) {
+      return res.json({ message: "Chat not found." });
+    }
+    res.json(chat.messages);
+  })
+);
 // send a message
 app.post(
   "/chat/message/:receiver_id",

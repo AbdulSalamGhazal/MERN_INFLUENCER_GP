@@ -17,7 +17,7 @@ function ChatList({ setSelectedChat, chats, selectedChat }) {
             color="inherit"
             sx={{ flexGrow: 1, textAlign: "center" }}
           >
-            My Chats
+            محادثاتي
           </Typography>
         </Toolbar>
       </AppBar>
@@ -44,7 +44,7 @@ function ChatList({ setSelectedChat, chats, selectedChat }) {
         ))
       ) : (
         <Typography sx={{ p: 2, textAlign: "center" }}>
-          No chats found
+          لايوجد محادثات!
         </Typography>
       )}
     </List>

@@ -28,7 +28,6 @@ function Chat() {
       fetchChats();
     }
   },);
-
   return (
     <Box
       sx={{
