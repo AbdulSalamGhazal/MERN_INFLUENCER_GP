@@ -83,7 +83,7 @@ const InfluencerSignup = () => {
       {/* TODO: the title needs some styles */}
       {<Alert severity="error" sx={{ visibility: errorAlert == null ? 'hidden' : 'vislible' }}>{errorAlert}</Alert>}
       <Typography component="h1" variant="h4" align="center">
-        Influecer Sign Up
+        انضمام مشهور
       </Typography>
       <Box
         component="form"
@@ -97,11 +97,11 @@ const InfluencerSignup = () => {
           margin="dense"
           required
           fullWidth
-          label="Full Name"
+          label="الاسم الكامل"
           autoComplete="name"
           autoFocus
           {...register('name', {
-            required: 'this field is required',
+            required: 'هذا الحقل مطلوب',
           })}
           error={errors.name != undefined}
           helperText={errors.name?.message}
@@ -112,14 +112,14 @@ const InfluencerSignup = () => {
           margin="dense"
           required
           fullWidth
-          label="Email Address"
+          label="البريد الالكتروني"
           autoComplete="email"
           autoFocus
           {...register('email', {
-            required: 'this field is required',
+            required: 'هذا الحقل مطلوب',
             pattern: {
               value: patterns.emailPattern,
-              message: "Please enter a valid email address."
+              message: "غير صالح"
             }
           })}
           error={errors.email != undefined}
@@ -131,22 +131,22 @@ const InfluencerSignup = () => {
           size="small"
           fullWidth
           required
-          label="Password"
+          label="كلمة المرور"
           autoComplete="new-password"
           {...register("password", {
-            required: "this field is required",
+            required: "هذا الحقل مطلوب",
             minLength: {
               value: patterns.passwordMinLength,
-              message: "Password must be at least 8 characters long.",
+              message: "كلمة المرور يجب الا تقل عن 8 احرف",
             },
             maxLength: {
               value: patterns.passwordMaxLength,
-              message: "Password must be at most 20 characters long.",
+              message: "كلمة المرور يجب الا تتجاوز 20 حرفا",
             },
             pattern: {
               value: patterns.passwordPattern,
               message:
-                "Password must contain at least one lowercase letter, one uppercase letter, one number, and one special character.",
+                "كلمة المرور يجب ان تحتوي على الاقل على: حرف صغير وحرف كبير ورقم ورمز",
             },
           })}
           error={Boolean(errors.password)}
@@ -155,10 +155,10 @@ const InfluencerSignup = () => {
 
         <PasswordInput
           {...register("confirmPassword", {
-            required: "this field is required",
+            required: "هذا الحقل مطلوب",
             validate: {
               samePassword: (e) =>
-                e === watch('password') || "the password is different",
+                e === watch('password') || "كلمة المرور المدخلة مختلفة",
             },
           })}
           error={Boolean(errors.confirmPassword)}
@@ -167,26 +167,27 @@ const InfluencerSignup = () => {
           fullWidth
           size='small'
           required
-          label="Confirm password"
+          label="تأكيد كلمة المرور"
           autoComplete="new-password"
         />
         <Divider sx={{my: 1, fontSize:'.75em'}}>
-           add your social media accounts 
+          اضف حسابات التواصل الاجنماعي خاصتك 
         </Divider> 
         {fields.map((field, index) => (
           <PlatformInput
             key={field.id} // important to include key with field's id
             {...register(`platforms.${index}`, {
-              required: fields.length === 1 ? 'you have to provdie at least one social media link' : 'fill it or remove it',
+              required: fields.length === 1 ? 'يجب ان تضيف حسابا واحدا على الاقل' : 'يجب ملئ هذا الحقل او حذفه',
               pattern: {
                 value: patterns.platformsPattern,
-                message: 'invalid social media account'
+                message: 'غير صالح'
               }
             })}
             error={errors.platforms && Boolean(errors.platforms)}
             helperText={errors.platforms && errors.platforms[index]?.message}
             margin="dense"
             size='small'
+            label='حسابك في احد منصات التواصل الاجتماعي'
             required
             fullWidth
             handleDelete={() => remove(index)}
@@ -205,7 +206,7 @@ const InfluencerSignup = () => {
           variant="contained"
           sx={{ mt: 3, mb: 2 }}
         >
-          {waiting ? <CircularProgress color="inherit" size={23} /> : 'Sign In'}
+          {waiting ? <CircularProgress color="inherit" size={23} /> : 'انضم'}
         </Button>
 
 

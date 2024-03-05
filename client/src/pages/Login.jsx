@@ -75,7 +75,7 @@ const Login = () => {
       {/* {errorAlert && <Alert severity="error">{errorAlert}</Alert>} */}
       {<Alert severity="error" sx={{ visibility: errorAlert == null ? 'hidden' : 'vislible' }}>{errorAlert}</Alert>}
       <Typography component="h1" variant="h3" align="center">
-        Sign in
+        تسجيل الدخول
       </Typography>
       <Box sx={{ borderBottom: 1, borderColor: "divider" }}>
         <Tabs
@@ -83,27 +83,28 @@ const Login = () => {
           onChange={(e, newValue) => setType(newValue)}
           variant="fullWidth"
         >
-          <Tab label="Business" value={"Business"} />
-          <Tab label="Influencer" value={"Influencer"} />
+          <Tab label="صاحب عمل" value={"Business"} />
+          <Tab label="مشهور" value={"Influencer"} />
         </Tabs>
       </Box>
 
       <Box component="form" onSubmit={handleSubmit(onSubmit)} noValidate sx={{ mt: 1 }}>
         <TextField
+          dir="rtl"
           size="small"
           margin="dense"
           required
           fullWidth
-          label="Email Address"
+          label="البريد الإلكتروني"
           autoComplete="email"
           autoFocus
           // onChange={(e) => setEmail(e.target.value)}
           // value={getValues('email')}
           {...register('email', {
-            required: 'this field is required',
+            required: 'هذا الحقل مطلوب',
             pattern: {
               value: patterns.emailPattern,
-              message: "Please enter a valid email address."
+              message: "غير صالح"
             }
           })}
           error={errors.email != undefined}
@@ -114,12 +115,12 @@ const Login = () => {
           margin="dense"
           required
           fullWidth
-          label="Password"
+          label="كلمة المرور"
           type="password"
           autoComplete="current-password"
           // value={password}
           // onChange={(e) => setPassword(e.target.value)}
-          {...register('password', { required: 'this field is required' })}
+          {...register('password', { required: 'هذا الحقل مطلوب' })}
           error={errors.password != undefined}
           helperText={errors.password?.message}
         />
@@ -135,18 +136,18 @@ const Login = () => {
           variant="contained"
           sx={{ mt: 3, mb: 2 }}
         >
-          {waiting? <CircularProgress color="inherit" size={23}/> : 'Sign In'}
+          {waiting? <CircularProgress color="inherit" size={23}/> : 'سجل'}
         </Button>
         {/* TODO: correct Link should be added in both links */}
         <Grid container justifyContent={'space-between'}>
           <Grid >
             <Link href="#" variant="body2">
-              Forgot password?
+              هل نسيت كلمة المرور
             </Link>
           </Grid>
           <Grid >
             <Link href="/signup" variant="body2">
-              {"Don't have an account? Sign Up"}
+              {"ليس لديك حساب؟ انشئ واحدا"}
             </Link>
           </Grid>
         </Grid>

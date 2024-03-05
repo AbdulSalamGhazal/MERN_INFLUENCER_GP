@@ -30,7 +30,6 @@ const PlatformInput = forwardRef(({ removable, handleDelete, link, ...probs }, r
     <TextField
       ref={ref}
       {...probs}
-      label="platform URL"
       type="url"
       autoComplete="url"
       InputProps={{
