@@ -1,170 +1,58 @@
-import { useState, useEffect, useRef } from "react";
-import Box from "@mui/material/Box";
-import Stepper from "@mui/material/Stepper";
-import Step from "@mui/material/Step";
-import StepLabel from "@mui/material/StepLabel";
 import Button from "@mui/material/Button";
+import TextField from "@mui/material/TextField";
+import Box from "@mui/material/Box";
 import Typography from "@mui/material/Typography";
+import IconButton from "@mui/material/IconButton";
 import Alert from "@mui/material/Alert";
-import PersonalInfoForm from "../components/signup/PersonalInfoForm";
-import PlatformsForm from "../components/signup/PlatformsForm";
-import AudienceInfoForm from "../components/signup/AudienceInfoForm";
-import SpecialRequirementsForm from "../components/signup/SpecialRequirementsForm";
-import axios from "axios";
-import useAuth from "../../context/AuthContext";
+import AddCircleOutlineIcon from '@mui/icons-material/AddCircleOutline';
+import CircularProgress from '@mui/material/CircularProgress';
+import Divider from '@mui/material/Divider';
 import { useNavigate } from "react-router-dom";
+import { useState, useEffect } from "react";
+import { useForm, useFieldArray } from "react-hook-form";
+import useAuth from "../../context/AuthContext";
+import axios from "axios";
+import PasswordInput from "../components/signup/PasswordInput";
+import PlatformInput from "../components/signup/PlatformInput";
+import patterns from "../utils/patterns";
+
 
 const InfluencerSignup = () => {
-  const { login } = useAuth();
-  const navigate = useNavigate();
-  const [errorAlert, setErrorAlert] = useState(null);
-  const stepperRef = useRef(null);
-  const titleRef = useRef(null);
-
-  const [activeStep, setActiveStep] = useState(0);
-  const [password, setPassword] = useState("");
-  const [name, setName] = useState("");
-  const [gender, setGender] = useState("");
-  const [email, setEmail] = useState("");
-  const [location, setLocation] = useState("");
-  const [image, setImage] = useState(null);
-  const [field, setField] = useState("");
-  const [description, setDescription] = useState("");
-  const [presonalInterests, setPersonalInterests] = useState("");
-
-  const [flowersLocations, setFollowersLocations] = useState([]);
-  const [totalFollowers, setTotalFollowers] = useState([]);
-  const [audienceAge, setAudienceAge] = useState([10, 30]);
-  const [audienceGender, setAudienceGender] = useState(50);
-  const [likesNumber, setLikesNumber] = useState();
-  const [commentsNumber, setCommentsNumber] = useState();
-  const [audienceInterests, setAudienceInterests] = useState([]);
-
-  const [platforms, setPlatforms] = useState([{ name: "", url: "" }]);
-
-  const [avgCost, setAvgCost] = useState();
-  const [requirements, setRequirements] = useState([""]);
+  const {
+    register,
+    handleSubmit,
+    watch,
+    formState: { errors },
+    control
+  } = useForm({
+    // defaultValues: {
+    //   platforms: ['']
+    // }
+  })
+  const { fields, append, remove } = useFieldArray({
+    control,
+    name: 'platforms', // unique name for your Field Array
+    rules: { minLength: 1 }
+  });
 
   useEffect(() => {
-    const targetTop = titleRef.current?.offsetTop || 0; // Handle potential undefined ref
-    const windowBottom = window.scrollY + window.innerHeight;
-    console.log(windowBottom)
-  
-    // Scroll only if window is below the target component
-    if (windowBottom > targetTop) {
-      window.scrollTo({ top: targetTop, behavior: 'smooth' });
-    }
-  }, [activeStep]); // Re-run on step change or target ID change
-  
+    append('')
+  }, [])
 
-  const steps = [
-    "presonal info",
-    "audience info",
-    "platforms",
-    "special requirements",
-  ];
+  const [errorAlert, setErrorAlert] = useState(null);
+  const [waiting, setWaiting] = useState(false);
 
-  const getStepContent = (step) => {
-    switch (step) {
-      case 0:
-        return (
-          <PersonalInfoForm
-            name={name}
-            setName={setName}
-            gender={gender}
-            setGender={setGender}
-            email={email}
-            setEmail={setEmail}
-            location={location}
-            setLocation={setLocation}
-            image={image}
-            setImage={setImage}
-            field={field}
-            setField={setField}
-            description={description}
-            setDescription={setDescription}
-            interests={presonalInterests}
-            setInterests={setPersonalInterests}
-            password={password}
-            setPassword={setPassword}
-          />
-        );
+  const { login } = useAuth();
+  let navigate = useNavigate();
+  console.log(errors)
 
-      case 1:
-        return (
-          <AudienceInfoForm
-            totalFollowers={totalFollowers}
-            setTotalFollowers={setTotalFollowers}
-            flowersLocations={flowersLocations}
-            setFollowersLocations={setFollowersLocations}
-            age={audienceAge}
-            setAge={setAudienceAge}
-            genderPercent={audienceGender}
-            setGenderPrecent={setAudienceGender}
-            likes={likesNumber}
-            setLikes={setLikesNumber}
-            comments={commentsNumber}
-            setComments={setCommentsNumber}
-            interests={audienceInterests}
-            setInterests={setAudienceInterests}
-          />
-        );
-
-      case 2:
-        return (
-          <PlatformsForm
-            platforms={platforms}
-            setPlatforms={setPlatforms}
-            avgCost={avgCost}
-            setAvgCost={setAvgCost}
-          />
-        );
-
-      case 3:
-        return (
-          <SpecialRequirementsForm
-            requirements={requirements}
-            setRequirements={setRequirements}
-          />
-        );
-
-      default:
-        throw new Error("Unknown step");
-    }
-  };
-
-  const handleNext = () => {
-    setActiveStep((prevActiveStep) => prevActiveStep + 1);
-  };
-
-  const handleBack = () => {
-    setActiveStep((prevActiveStep) => prevActiveStep - 1);
-  };
-
-  const handleReset = () => {
-    setActiveStep(0);
-  };
-
-  const handleSubmit = async () => {
+  const onSubmit = async () => {
+    setWaiting(true)
     const influencer = {
-      name,
-      email,
-      location,
-      image,
-      description,
-      platforms: platforms.map((p) => p.name),
-      field,
-      password,
-      avg_cost: avgCost,
-      special_requriements: requirements,
-      personal_interests: presonalInterests,
-      total_followers: totalFollowers,
-      audience_location: flowersLocations,
-      audience_age_rang: `${audienceAge[0]}-${audienceAge[1]}`,
-      audience_gender: audienceGender,
-      audience_interests: audienceInterests,
-      avg_likes: likesNumber,
-      avg_comments: commentsNumber,
+      name: watch('name'),
+      email: watch('email'),
+      password: watch('password'),
+      platforms: watch('platforms')
     };
     try {
       const { data } = await axios.post(
@@ -181,6 +69,7 @@ const InfluencerSignup = () => {
       localStorage.setItem("userInfo", JSON.stringify(data));
       navigate("/home");
     } catch (error) {
+      setWaiting(false)
       console.error("Error fetching data:", error);
       setErrorAlert(error.message);
       setTimeout(() => {
@@ -191,73 +80,138 @@ const InfluencerSignup = () => {
 
   return (
     <Box>
-      {errorAlert && <Alert severity="error">{errorAlert}</Alert>}
-      <Typography
-        component="h1"
-        variant="h3"
-        align="center"
-        ref={titleRef}
-        sx={{ mt: "5px", mb: "30px" }}
-      >
-        Influencer Sign Up
+      {/* TODO: the title needs some styles */}
+      {<Alert severity="error" sx={{ visibility: errorAlert == null ? 'hidden' : 'vislible' }}>{errorAlert}</Alert>}
+      <Typography component="h1" variant="h4" align="center">
+        Influecer Sign Up
       </Typography>
+      <Box
+        component="form"
+        onSubmit={handleSubmit(onSubmit)}
+        noValidate
+        sx={{ mt: 1, maxWidth: '500px', mx: 'auto' }}
+      >
 
-      <Box>
-        <Stepper 
-          activeStep={activeStep} 
-          alternativeLabel
-          ref={stepperRef}
-          sx={{maxWidth: '700px', mx: 'auto', my: 2}}>
-          {steps.map((label) => {
-            return (
-              <Step key={label}>
-                <StepLabel>{label}</StepLabel>
-              </Step>
-            );
+        <TextField
+          size="small"
+          margin="dense"
+          required
+          fullWidth
+          label="Full Name"
+          autoComplete="name"
+          autoFocus
+          {...register('name', {
+            required: 'this field is required',
           })}
-        </Stepper>
-        {activeStep === steps.length ? (
-          <>
-            <Typography sx={{ mt: 2, mb: 1 }}>
-              All steps completed - you&apos;re finished
-            </Typography>
-            <Box sx={{ display: "flex", flexDirection: "row", pt: 2 }}>
-              <Box sx={{ flex: "1 1 auto" }} />
-              <Button onClick={handleReset}>Reset</Button>
-            </Box>
-          </>
-        ) : (
-          <>
-            <Box
-              component="form"
-              onSubmit={(e) => e.preventDefault()}
-              noValidate
-              sx={{ mt: 3, maxWidth: '500px', margin: 'auto'}}
-            >
-              {getStepContent(activeStep)}
-            </Box>
-            <Box sx={{ display: "flex", flexDirection: "row", pt: 2, maxWidth: '500px', margin: 'auto' }}>
-              <Button
-                color="inherit"
-                disabled={activeStep === 0}
-                onClick={handleBack}
-                sx={{ mr: 1 }}
-              >
-                Back
-              </Button>
-              <Box sx={{ flex: "1 1 auto" }} />
+          error={errors.name != undefined}
+          helperText={errors.name?.message}
+        />
 
-              {activeStep === steps.length - 1 ? (
-                <Button onClick={handleSubmit} variant="contained">Sumbit</Button>
-              ) : (
-                <Button onClick={handleNext}>Next</Button>
-              )}
-            </Box>
-          </>
-        )}
+        <TextField
+          size="small"
+          margin="dense"
+          required
+          fullWidth
+          label="Email Address"
+          autoComplete="email"
+          autoFocus
+          {...register('email', {
+            required: 'this field is required',
+            pattern: {
+              value: patterns.emailPattern,
+              message: "Please enter a valid email address."
+            }
+          })}
+          error={errors.email != undefined}
+          helperText={errors.email?.message}
+        />
+
+        <PasswordInput
+          margin="dense"
+          size="small"
+          fullWidth
+          required
+          label="Password"
+          autoComplete="new-password"
+          {...register("password", {
+            required: "this field is required",
+            minLength: {
+              value: patterns.passwordMinLength,
+              message: "Password must be at least 8 characters long.",
+            },
+            maxLength: {
+              value: patterns.passwordMaxLength,
+              message: "Password must be at most 20 characters long.",
+            },
+            pattern: {
+              value: patterns.passwordPattern,
+              message:
+                "Password must contain at least one lowercase letter, one uppercase letter, one number, and one special character.",
+            },
+          })}
+          error={Boolean(errors.password)}
+          helperText={errors.password?.message}
+        />
+
+        <PasswordInput
+          {...register("confirmPassword", {
+            required: "this field is required",
+            validate: {
+              samePassword: (e) =>
+                e === watch('password') || "the password is different",
+            },
+          })}
+          error={Boolean(errors.confirmPassword)}
+          helperText={errors.confirmPassword?.message}
+          margin="dense"
+          fullWidth
+          size='small'
+          required
+          label="Confirm password"
+          autoComplete="new-password"
+        />
+        <Divider sx={{my: 1, fontSize:'.75em'}}>
+           add your social media accounts 
+        </Divider> 
+        {fields.map((field, index) => (
+          <PlatformInput
+            key={field.id} // important to include key with field's id
+            {...register(`platforms.${index}`, {
+              required: fields.length === 1 ? 'you have to provdie at least one social media link' : 'fill it or remove it',
+              pattern: {
+                value: patterns.platformsPattern,
+                message: 'invalid social media account'
+              }
+            })}
+            error={errors.platforms && Boolean(errors.platforms)}
+            helperText={errors.platforms && errors.platforms[index]?.message}
+            margin="dense"
+            size='small'
+            required
+            fullWidth
+            handleDelete={() => remove(index)}
+            removable={fields.length > 1}
+            link={watch(`platforms.${index}`) || ''}
+          />
+        ))}
+        <IconButton onClick={() => append(' ')} color="primary" aria-label="add field">
+          <AddCircleOutlineIcon />
+        </IconButton>
+
+        <Button
+          size="small"
+          type="submit"
+          fullWidth
+          variant="contained"
+          sx={{ mt: 3, mb: 2 }}
+        >
+          {waiting ? <CircularProgress color="inherit" size={23} /> : 'Sign In'}
+        </Button>
+
+
       </Box>
     </Box>
-  );
-};
+  )
+}
 
 export default InfluencerSignup;

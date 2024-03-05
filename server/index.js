@@ -86,7 +86,8 @@ app.post(
         description: user.description,
       });
     } else {
-      throw new Error("Invalid Email or Password");
+      // throw new Error("Invalid Email or Password");
+      return res.status(401).json({ error: 'Invalid email or password' });
     }
   })
 );
