@@ -42,6 +42,15 @@ function App() {
               </ProtectedRoute>
             }
           />
+          <Route
+            path="/chat/:recieverId"
+            element={
+              <ProtectedRoute>
+                <Chat />
+              </ProtectedRoute>
+            }
+          />
+
           <Route path="/login" element={<Login />} />
           <Route path="/signup" element={<Signup />} />
           <Route path="/signup/influencer" element={<InfluencerSignup />} />

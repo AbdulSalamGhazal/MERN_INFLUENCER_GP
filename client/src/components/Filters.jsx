@@ -131,49 +131,43 @@ function Filters({ setFilters }) {
                 onChange={handleChangeField}
                 input={<OutlinedInput label="Field" />}
               >
-                <MenuItem value={"Gaming"}>Gaming</MenuItem>
-                <MenuItem value={"Beauty and Makeup"}>
-                  Beauty and Makeup
+                <MenuItem value={"الألعاب"}>الألعاب</MenuItem>
+                <MenuItem value={"الجمال والمكياج"}>الجمال والمكياج</MenuItem>
+                <MenuItem value={"الموضة"}>الموضة</MenuItem>
+                <MenuItem value={"اللياقة البدنية والصحة"}>
+                  اللياقة البدنية والصحة
                 </MenuItem>
-                <MenuItem value={"Fashion"}>Fashion</MenuItem>
-                <MenuItem value={"Fitness and Health"}>
-                  Fitness and Health
+                <MenuItem value={"التكنولوجيا والأجهزة"}>
+                  التكنولوجيا والأجهزة
                 </MenuItem>
-                <MenuItem value={"Technology and Gadgets"}>
-                  Technology and Gadgets
+                <MenuItem value={"الطعام والطبخ"}>الطعام والطبخ</MenuItem>
+                <MenuItem value={"السفر"}>السفر</MenuItem>
+                <MenuItem value={"الحرف اليدوية والصناعات اليدوية"}>
+                  الحرف اليدوية والصناعات اليدوية
                 </MenuItem>
-                <MenuItem value={"Food and Cooking"}>Food and Cooking</MenuItem>
-                <MenuItem value={"Travel"}>Travel</MenuItem>
-                <MenuItem value={"DIY and Crafts"}>DIY and Crafts</MenuItem>
-                <MenuItem value={"Parenting and Family"}>
-                  Parenting and Family
+                <MenuItem value={"التربية والأسرة"}>التربية والأسرة</MenuItem>
+                <MenuItem value={"نمط الحياة"}>نمط الحياة</MenuItem>
+                <MenuItem value={"التعليم والتعلم"}>التعليم والتعلم</MenuItem>
+                <MenuItem value={"الأعمال وريادة الأعمال"}>
+                  الأعمال وريادة الأعمال
                 </MenuItem>
-                <MenuItem value={"Lifestyle"}>Lifestyle</MenuItem>
-                <MenuItem value={"Education and Learning"}>
-                  Education and Learning
+                <MenuItem value={"التصوير الفوتوغرافي والتصوير الفيديو"}>
+                  التصوير الفوتوغرافي والتصوير الفيديو
                 </MenuItem>
-                <MenuItem value={"Business and Entrepreneurship"}>
-                  Business and Entrepreneurship
+                <MenuItem value={"الموسيقى والرقص"}>الموسيقى والرقص</MenuItem>
+                <MenuItem value={"الرياضة والألعاب الرياضية"}>
+                  الرياضة والألعاب الرياضية
                 </MenuItem>
-                <MenuItem value={"Photography and Videography"}>
-                  Photography and Videography
+                <MenuItem value={"العافية والصحة العقلية"}>
+                  العافية والصحة العقلية
                 </MenuItem>
-                <MenuItem value={"Music and Dance"}>Music and Dance</MenuItem>
-                <MenuItem value={"Sports and Athletics"}>
-                  Sports and Athletics
+                <MenuItem value={"ديكور المنزل وتصميم الديكور الداخلي"}>
+                  ديكور المنزل وتصميم الديكور الداخلي
                 </MenuItem>
-                <MenuItem value={"Wellness and Mental Health"}>
-                  Wellness and Mental Health
-                </MenuItem>
-                <MenuItem value={"Home Decor and Interior Design"}>
-                  Home Decor and Interior Design
-                </MenuItem>
-                <MenuItem value={"Art and Design"}>Art and Design</MenuItem>
-                <MenuItem value={"Science and Innovation"}>
-                  Science and Innovation
-                </MenuItem>
-                <MenuItem value={"Environmental Sustainability"}>
-                  Environmental Sustainability
+                <MenuItem value={"الفن والتصميم"}>الفن والتصميم</MenuItem>
+                <MenuItem value={"العلوم والابتكار"}>العلوم والابتكار</MenuItem>
+                <MenuItem value={"الاستدامة البيئية"}>
+                  الاستدامة البيئية
                 </MenuItem>
               </Select>
             </FormControl>
@@ -193,12 +187,12 @@ function Filters({ setFilters }) {
                 onChange={handleChangePlatform}
                 input={<OutlinedInput label="Platform" />}
               >
-                <MenuItem value={"YouTube"}>YouTube</MenuItem>
-                <MenuItem value={"X (twitter)"}>X (twitter)</MenuItem>
-                <MenuItem value={"Snapchat"}>Snapchat</MenuItem>
-                <MenuItem value={"Instagram"}>Instagram</MenuItem>
-                <MenuItem value={"Facebook"}>Facebook</MenuItem>
-                <MenuItem value={"TikTok"}>TikTok</MenuItem>
+                <MenuItem value={"يوتيوب"}>يوتيوب</MenuItem>
+                <MenuItem value={"تويتر"}>تويتر</MenuItem>
+                <MenuItem value={"سناب شات"}>سناب شات</MenuItem>
+                <MenuItem value={"إنستجرام"}>إنستجرام</MenuItem>
+                <MenuItem value={"فيس بوك"}>فيس بوك</MenuItem>
+                <MenuItem value={"تيك توك"}>تيك توك</MenuItem>
               </Select>
             </FormControl>
           </Grid>
@@ -214,32 +208,30 @@ function Filters({ setFilters }) {
                 onChange={handleChangeAudience}
                 input={<OutlinedInput label="audience" />}
               >
-                <MenuItem value={"Fashion"}>Fashion</MenuItem>
-                <MenuItem value={"Technology"}>Technology</MenuItem>
-                <MenuItem value={"Fitness"}>Fitness</MenuItem>
-                <MenuItem value={"Gaming"}>Gaming</MenuItem>
-                <MenuItem value={"Travel"}>Travel</MenuItem>
-                <MenuItem value={"Food"}>Food</MenuItem>
-                <MenuItem value={"DIY Projects"}>DIY Projects</MenuItem>
-                <MenuItem value={"Entertainment"}>Entertainment</MenuItem>
-                <MenuItem value={"Education"}>Education</MenuItem>
-                <MenuItem value={"Sustainability"}>Sustainability</MenuItem>
-                <MenuItem value={"Health and Wellness"}>
-                  Health and Wellness
+                <MenuItem value={"الموضة"}>الموضة</MenuItem>
+                <MenuItem value={"التكنولوجيا"}>التكنولوجيا</MenuItem>
+                <MenuItem value={"اللياقة البدنية"}>اللياقة البدنية</MenuItem>
+                <MenuItem value={"الألعاب"}>الألعاب</MenuItem>
+                <MenuItem value={"السفر"}>السفر</MenuItem>
+                <MenuItem value={"الطعام"}>الطعام</MenuItem>
+                <MenuItem value={"مشاريع DIY (افعلها بنفسك)"}>
+                  مشاريع DIY (افعلها بنفسك)
                 </MenuItem>
-                <MenuItem value={"Beauty"}>Beauty</MenuItem>
-                <MenuItem value={"Sports"}>Sports</MenuItem>
-                <MenuItem value={"Music"}>Music</MenuItem>
-                <MenuItem value={"Photography"}>Photography</MenuItem>
-                <MenuItem value={"Art and Design"}>Art and Design</MenuItem>
-                <MenuItem value={"Personal Finance"}>Personal Finance</MenuItem>
-                <MenuItem value={"Parenting"}>Parenting</MenuItem>
-                <MenuItem value={"Outdoor Activities"}>
-                  Outdoor Activities
+                <MenuItem value={"الترفيه"}>الترفيه</MenuItem>
+                <MenuItem value={"التعليم"}>التعليم</MenuItem>
+                <MenuItem value={"الاستدامة"}>الاستدامة</MenuItem>
+                <MenuItem value={"الصحة والعافية"}>الصحة والعافية</MenuItem>
+                <MenuItem value={"الجمال"}>الجمال</MenuItem>
+                <MenuItem value={"الرياضة"}>الرياضة</MenuItem>
+                <MenuItem value={"الموسيقى"}>الموسيقى</MenuItem>
+                <MenuItem value={"التصوير الفوتوغرافي"}>
+                  التصوير الفوتوغرافي
                 </MenuItem>
-                <MenuItem value={"Literature and Reading"}>
-                  Literature and Reading
-                </MenuItem>
+                <MenuItem value={"الفن والتصميم"}>الفن والتصميم</MenuItem>
+                <MenuItem value={"التمويل الشخصي"}>التمويل الشخصي</MenuItem>
+                <MenuItem value={"التربية والأسرة"}>التربية والأسرة</MenuItem>
+                <MenuItem value={"الأنشطة الخارجية"}>الأنشطة الخارجية</MenuItem>
+                <MenuItem value={"الأدب والقراءة"}>الأدب والقراءة</MenuItem>
               </Select>
             </FormControl>
           </Grid>
@@ -247,10 +239,10 @@ function Filters({ setFilters }) {
             <InputLabel id="cost-label">التكلفة</InputLabel>
 
             <Slider
-              getAriaLabel={() => "SAR"}
+              getAriaLabel={() => "ريال"}
               value={cost}
               valueLabelDisplay="auto"
-              valueLabelFormat={(v) => `${v} SR`}
+              valueLabelFormat={(v) => `${v} ريال`}
               onChange={handleChangeCost}
               min={1000}
               step={1000}
@@ -268,14 +260,14 @@ function Filters({ setFilters }) {
                 onChange={handleChangeFollowers}
                 input={<OutlinedInput label="Followers" />}
               >
-                <MenuItem value={50000}> &lt; 50K</MenuItem>
-                <MenuItem value={100000}> &lt; 100K</MenuItem>
-                <MenuItem value={250000}> &lt; 250K</MenuItem>
-                <MenuItem value={500000}> &lt; 500K</MenuItem>
-                <MenuItem value={1000000}> &lt; 1M</MenuItem>
-                <MenuItem value={5000000}> &lt; 5M</MenuItem>
-                <MenuItem value={10000000}> &lt; 10M</MenuItem>
-                <MenuItem value={50000000}> &lt; 50M</MenuItem>
+                <MenuItem value={50000}> &lt; 50 ألف</MenuItem>
+                <MenuItem value={100000}> &lt; 100 ألف</MenuItem>
+                <MenuItem value={250000}> &lt; 250 ألف</MenuItem>
+                <MenuItem value={500000}> &lt; 500 ألف</MenuItem>
+                <MenuItem value={1000000}> &lt; 1 مليون</MenuItem>
+                <MenuItem value={5000000}> &lt; 5 مليون</MenuItem>
+                <MenuItem value={10000000}> &lt; 10 مليون</MenuItem>
+                <MenuItem value={50000000}> &lt; 50 مليون</MenuItem>
               </Select>
             </FormControl>
           </Grid>{" "}
@@ -291,18 +283,20 @@ function Filters({ setFilters }) {
                 onChange={handleChangeLocation}
                 input={<OutlinedInput label="location" />}
               >
-                <MenuItem value={"Central"}>Central (e.g., Riyadh)</MenuItem>
-                <MenuItem value={"Western"}>
-                  Western (e.g., Jeddah, Mecca, Medina)
+                <MenuItem value={"المنطقة الوسطى"}>
+                  المنطقة الوسطى (مثل الرياض)
                 </MenuItem>
-                <MenuItem value={"Eastern"}>
-                  Eastern (e.g., Dammam, Khobar, Al-Ahsa)
+                <MenuItem value={"المنطقة الغربية"}>
+                  المنطقة الغربية (مثل جدة، مكة المكرمة، المدينة المنورة)
                 </MenuItem>
-                <MenuItem value={"Southern"}>
-                  Southern (e.g., Abha, Najran, Jizan)
+                <MenuItem value={"المنطقة الشرقية"}>
+                  المنطقة الشرقية (مثل الدمام، الخبر، الأحساء)
                 </MenuItem>
-                <MenuItem value={"Northern"}>
-                  Northern (e.g., Tabuk, Al-Jouf)
+                <MenuItem value={"المنطقة الجنوبية"}>
+                  المنطقة الجنوبية (مثل أبها، نجران، جيزان)
+                </MenuItem>
+                <MenuItem value={"المنطقة الشمالية"}>
+                  المنطقة الشمالية (مثل تبوك، الجوف)
                 </MenuItem>
               </Select>
             </FormControl>

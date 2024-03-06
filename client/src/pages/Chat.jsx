@@ -1,4 +1,5 @@
 import { useEffect, useState } from "react";
+import { useParams } from "react-router-dom";
 import { Box, Grid, Paper } from "@mui/material";
 import axios from "axios";
 import ChatList from "../components/Chat/ChatList";
@@ -8,7 +9,9 @@ import useAuth from "../../context/AuthContext";
 function Chat() {
   const { user } = useAuth();
   const [chats, setChats] = useState([]);
+  const [isChatLoaded, setIsChatLoaded] = useState(false);
   const [selectedChat, setSelectedChat] = useState(null);
+  let { recieverId } = useParams();
 
   useEffect(() => {
     const fetchChats = async () => {
@@ -19,6 +22,7 @@ function Chat() {
           },
         });
         setChats(response.data);
+        setIsChatLoaded(true);
       } catch (error) {
         console.error("Error fetching chats:", error);
       }
@@ -27,7 +31,43 @@ function Chat() {
     if (user._id) {
       fetchChats();
     }
-  },);
+  }, [user]);
+  useEffect(() => {
+    const selectChat = async () => {
+      if (recieverId && isChatLoaded) {
+        const chatWithReceiver = chats.find(
+          (chat) => chat.receiverId === recieverId
+        );
+        if (chatWithReceiver) {
+          setSelectedChat(chatWithReceiver);
+        } else {
+          try {
+            const response = await axios.post(
+              "http://localhost:3001/chat",
+              {
+                receiver_id: recieverId,
+              },
+              {
+                headers: {
+                  Authorization: `Bearer ${user.token} ${user.type}`,
+                },
+              }
+            );
+            const newChat = response.data;
+            console.log("the new Chat is ", newChat);
+            console.log("all of the chat...", chats);
+            setChats([...chats, newChat]);
+            setSelectedChat(newChat);
+          } catch (error) {
+            console.error("Error fetching chats:", error);
+          }
+        }
+      }
+    };
+    selectChat();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [recieverId, isChatLoaded]);
+
   return (
     <Box
       sx={{

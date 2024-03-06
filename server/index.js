@@ -93,30 +93,61 @@ app.post(
 // access the chat or create the chat
 app.post(
   "/chat",
+  protect,
   asyncHandler(async (req, res) => {
-    const { receiver_id } = req.body;
-    // const sender_id = req.user._id;
-    // const userType = req.user.type;
-    const { sender_id, userType } = req.body; // for postman testing...
+    try {
+      const { receiver_id } = req.body;
+      const sender_id = req.user._id;
+      const userType = req.user.type;
 
-    const searchCriteria =
-      userType === "Influencer"
-        ? { influencerId: sender_id, businessId: receiver_id }
-        : { influencerId: receiver_id, businessId: sender_id };
+      if (!mongoose.isValidObjectId(receiver_id)) {
+        return res.status(400).json({ message: "Invalid receiver_id" });
+      }
+      const searchCriteria =
+        userType === "Influencer"
+          ? { influencerId: sender_id, businessId: receiver_id }
+          : { influencerId: receiver_id, businessId: sender_id };
 
-    let chat = await Chat.findOne(searchCriteria).populate("messages");
-
-    if (!chat) {
-      chat = await Chat.create({
-        influencerId: userType === "Influencer" ? sender_id : receiver_id,
-        businessId: userType === "Business" ? sender_id : receiver_id,
-        messages: [],
+      let chat = await Chat.findOne(searchCriteria).populate({
+        path: userType === "Influencer" ? "businessId" : "influencerId",
+        select: userType === "Influencer" ? "companyName" : "name",
       });
-    }
 
-    res.json(chat);
+      if (!chat) {
+        chat = await Chat.create({
+          influencerId: userType === "Influencer" ? sender_id : receiver_id,
+          businessId: userType === "Business" ? sender_id : receiver_id,
+          messages: [],
+        });
+
+        // Populate the created chat with the receiver's name
+        await chat.populate({
+          path: userType === "Influencer" ? "businessId" : "influencerId",
+          select: userType === "Influencer" ? "companyName" : "name",
+        });
+      }
+
+      const receiverName =
+        userType === "Influencer"
+          ? chat.businessId.companyName
+          : chat.influencerId.name;
+
+      const receiverId = userType === "Influencer" ? receiver_id : sender_id;
+
+      const formattedChat = {
+        ...chat.toObject(),
+        receiverName,
+        receiverId,
+      };
+
+      res.status(200).json(formattedChat);
+    } catch (error) {
+      console.error("Error creating/getting chat:", error);
+      res.status(500).json({ message: "Internal server error" });
+    }
   })
 );
+
 // get all chats for user
 app.get(
   "/chat",
@@ -126,18 +157,21 @@ app.get(
     const userType = req.user.type;
     let query = {};
     let populateOptions = {};
+    let receiverIdField = "";
     if (userType === "Influencer") {
       query = { influencerId: userId };
       populateOptions = {
         path: "businessId",
         select: "companyName",
       };
+      receiverIdField = "businessId";
     } else if (userType === "Business") {
       query = { businessId: userId };
       populateOptions = {
         path: "influencerId",
         select: "name",
       };
+      receiverIdField = "influencerId";
     } else {
       return res.status(400).json({ message: "Invalid user type" });
     }
@@ -151,9 +185,11 @@ app.get(
           userType === "Influencer"
             ? chat.businessId.companyName
             : chat.influencerId.name;
+        const receiverId = chat[receiverIdField] && chat[receiverIdField]._id;
         return {
           ...chat._doc,
           receiverName,
+          receiverId,
         };
       });
       res.json(formattedChats);

@@ -43,7 +43,7 @@ function InfluencerPage() {
     fetchData();
   }, [influencerId]);
   if (!influencer) {
-    return <Typography>Loading...</Typography>;
+    return <Typography>جاري التحميل...</Typography>;
   }
 
   // need to show field, verified, avg_cost,  engagement_rate
@@ -83,7 +83,16 @@ function InfluencerPage() {
                   <EmailIcon />
                 </Avatar>
               </ListItemAvatar>
-              <ListItemText primary="Email" secondary={influencer.email} />
+              <ListItemText
+                primary={
+                  <div style={{ textAlign: "right" }}>
+                    {"البريد الإلكتروني"}
+                  </div>
+                }
+                secondary={
+                  <div style={{ textAlign: "right" }}>{influencer.email}</div>
+                }
+              />
             </ListItem>
             <ListItem>
               <ListItemAvatar>
@@ -92,8 +101,12 @@ function InfluencerPage() {
                 </Avatar>
               </ListItemAvatar>
               <ListItemText
-                primary="Location"
-                secondary={influencer.location}
+                primary={<div style={{ textAlign: "right" }}>{"الموقع"}</div>}
+                secondary={
+                  <div style={{ textAlign: "right" }}>
+                    {influencer.location}
+                  </div>
+                }
               />
             </ListItem>
             <ListItem>
@@ -103,8 +116,14 @@ function InfluencerPage() {
                 </Avatar>
               </ListItemAvatar>
               <ListItemText
-                primary="Total Followers"
-                secondary={`${influencer.total_followers.toLocaleString()}`}
+                primary={
+                  <div style={{ textAlign: "right" }}>{"المتابعين"}</div>
+                }
+                secondary={
+                  <div style={{ textAlign: "right" }}>
+                    {influencer.total_followers.toLocaleString()}
+                  </div>
+                }
               />
             </ListItem>
             <ListItem>
@@ -114,8 +133,14 @@ function InfluencerPage() {
                 </Avatar>
               </ListItemAvatar>
               <ListItemText
-                primary="Average Likes"
-                secondary={`${influencer.avg_likes.toLocaleString()}`}
+                primary={
+                  <div style={{ textAlign: "right" }}>{"متوسط الإعجابات"}</div>
+                }
+                secondary={
+                  <div style={{ textAlign: "right" }}>
+                    {`${influencer.avg_likes.toLocaleString()}`}
+                  </div>
+                }
               />
             </ListItem>
             <ListItem>
@@ -125,15 +150,21 @@ function InfluencerPage() {
                 </Avatar>
               </ListItemAvatar>
               <ListItemText
-                primary="Average Comments"
-                secondary={`${influencer.avg_comments.toLocaleString()}`}
+                primary={
+                  <div style={{ textAlign: "right" }}>{"متوسط التعليقات"}</div>
+                }
+                secondary={
+                  <div style={{ textAlign: "right" }}>
+                    {`${influencer.avg_comments.toLocaleString()}`}
+                  </div>
+                }
               />
             </ListItem>
           </List>
         </Grid>
         <Grid item xs={12}>
-          <Typography variant="h6" gutterBottom>
-            Special Requirements
+          <Typography variant="h4" gutterBottom>
+            شروط خاصة
           </Typography>
           <List>
             {influencer.special_requriements.map((requirement, index) => (
@@ -143,15 +174,19 @@ function InfluencerPage() {
                     <CheckCircleOutlineIcon />
                   </Avatar>
                 </ListItemAvatar>
-                <ListItemText primary={requirement} />
+                <ListItemText
+                  primary={
+                    <div style={{ textAlign: "right" }}>{requirement}</div>
+                  }
+                />
               </ListItem>
             ))}
           </List>
 
           <Divider sx={{ my: 4 }} />
 
-          <Typography variant="h6" gutterBottom>
-            Personal Interests
+          <Typography variant="h4" gutterBottom>
+            اهتمامات شخصية
           </Typography>
           <List>
             <ListItem>
@@ -160,14 +195,20 @@ function InfluencerPage() {
                   <InterestIcon />
                 </Avatar>
               </ListItemAvatar>
-              <ListItemText primary={influencer.personal_interests} />
+              <ListItemText
+                primary={
+                  <div style={{ textAlign: "right" }}>
+                    {influencer.personal_interests}
+                  </div>
+                }
+              />
             </ListItem>
           </List>
 
           <Divider sx={{ my: 4 }} />
 
-          <Typography variant="h6" gutterBottom>
-            Audience Details
+          <Typography variant="h4" gutterBottom>
+            تفاصيل الجمهور
           </Typography>
           <List>
             <ListItem>
@@ -177,8 +218,14 @@ function InfluencerPage() {
                 </Avatar>
               </ListItemAvatar>
               <ListItemText
-                primary="Audience Location"
-                secondary={influencer.audience_location.join(", ")}
+                primary={
+                  <div style={{ textAlign: "right" }}>{"موقع الجمهور"}</div>
+                }
+                secondary={
+                  <div style={{ textAlign: "right" }}>
+                    {influencer.audience_location.join(", ")}
+                  </div>
+                }
               />
             </ListItem>
             <ListItem>
@@ -188,8 +235,14 @@ function InfluencerPage() {
                 </Avatar>
               </ListItemAvatar>
               <ListItemText
-                primary="Audience Age Range"
-                secondary={influencer.audience_age_rang}
+                primary={
+                  <div style={{ textAlign: "right" }}>{"فئة عمر الجمهور"}</div>
+                }
+                secondary={
+                  <div style={{ textAlign: "right" }}>
+                    {influencer.audience_age_rang}
+                  </div>
+                }
               />
             </ListItem>
             <ListItem>
@@ -199,8 +252,14 @@ function InfluencerPage() {
                 </Avatar>
               </ListItemAvatar>
               <ListItemText
-                primary="Audience Gender Ratio"
-                secondary={`${influencer.audience_gender * 100}% Male`}
+                primary={
+                  <div style={{ textAlign: "right" }}>{"نسبة نوع الجمهور"}</div>
+                }
+                secondary={
+                  <div style={{ textAlign: "right" }}>
+                    {`${influencer.audience_gender * 100}% ذكور`}
+                  </div>
+                }
               />
             </ListItem>
             <ListItem>
@@ -210,8 +269,14 @@ function InfluencerPage() {
                 </Avatar>
               </ListItemAvatar>
               <ListItemText
-                primary="Audience Interests"
-                secondary={influencer.audience_interests.join(", ")}
+                primary={
+                  <div style={{ textAlign: "right" }}>{"اهتمامات الجمهور"}</div>
+                }
+                secondary={
+                  <div style={{ textAlign: "right" }}>
+                    {influencer.audience_interests.join(", ")}
+                  </div>
+                }
               />
             </ListItem>
           </List>

@@ -21,17 +21,11 @@ function InfluencerCard({ influencer }) {
   const [isFavorited, setIsFavorited] = useState(false);
 
   const handleFavoriteClick = () => {
-    setIsFavorited(!isFavorited); // Toggle favorite state
-    // Add functionality to update favorite status in your data or state management system here
+    setIsFavorited(!isFavorited);
+    // Add functionality later
   };
 
-  const handleMoreDetails = () => {
-    // Implement navigation or action to show more details
-    console.log("More details action triggered");
-    // For example, you could use React Router to navigate to a detailed view
-  };
   const handleMessageClick = () => {
-    // Placeholder for send message functionality
     console.log("Send message action triggered");
   };
   return (
@@ -93,13 +87,13 @@ function InfluencerCard({ influencer }) {
             ))}
           </Stack>
           <Typography variant="body2" color="text.secondary">
-            Avg. Cost: ${influencer.avg_cost.toLocaleString()}
+            متوسط التكلفة: {influencer.avg_cost.toLocaleString()}
           </Typography>
           <Typography variant="body2" color="text.secondary">
-            Followers: {influencer.total_followers.toLocaleString()}
+            المتابعين: {influencer.total_followers.toLocaleString()}
           </Typography>
           <Typography variant="body2" color="text.secondary">
-            Engagement Rate: {influencer.engagement_rate.toFixed(2)}%
+            معدل التفاعل: {influencer.engagement_rate.toFixed(2)}%
           </Typography>
         </CardContent>
         <CardActions
@@ -108,7 +102,7 @@ function InfluencerCard({ influencer }) {
         >
           <IconButton
             onClick={handleFavoriteClick}
-            aria-label="add to favorites"
+            aria-label="إضافة للمفضلة"
             size="large"
           >
             {isFavorited ? (
@@ -117,22 +111,23 @@ function InfluencerCard({ influencer }) {
               <FavoriteBorderIcon sx={{ fontSize: 28 }} />
             )}
           </IconButton>
-          <IconButton
-            onClick={handleMessageClick}
-            aria-label="send message"
-            size="large"
+          <Link
+            to={`/chat/${influencer.id}`}
+            style={{ textDecoration: "none", color: "inherit" }}
           >
-            <EmailIcon sx={{ fontSize: 28 }} />
-          </IconButton>
+            <IconButton
+              onClick={handleMessageClick}
+              aria-label="إرسال رسالة"
+              size="large"
+            >
+              <EmailIcon sx={{ fontSize: 28 }} />
+            </IconButton>
+          </Link>
           <Link
             to={`/influencers/${influencer.id}`}
             style={{ textDecoration: "none", color: "inherit" }}
           >
-            <IconButton
-              onClick={handleMoreDetails}
-              aria-label="more details"
-              size="large"
-            >
+            <IconButton aria-label="تفاصيل أكثر" size="large">
               <InfoIcon sx={{ fontSize: 28 }} />
             </IconButton>
           </Link>

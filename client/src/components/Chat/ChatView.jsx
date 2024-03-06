@@ -19,7 +19,7 @@ function ChatView({ chat }) {
   useEffect(() => {
     if (chat) {
       fetchMessages();
-      const interval = setInterval(fetchMessages, 5000);
+      const interval = setInterval(fetchMessages, 50000);
       return () => clearInterval(interval);
     }
   }, [chat]);
