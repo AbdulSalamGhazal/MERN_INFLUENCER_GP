@@ -23,3 +23,6 @@ dist-ssr
 *.njsproj
 *.sln
 *.sw?
+
+client/src/pages/LegacyInfluencerSignup.jsx
+client/src/pages/LegacyBusinessSignup.jsx
