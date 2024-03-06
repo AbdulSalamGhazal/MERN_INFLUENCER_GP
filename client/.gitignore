@@ -25,3 +25,4 @@ dist-ssr
 *.sw?
 
 client/src/pages/LegacyInfluencerSignup.jsx
+client/src/pages/LegacyBusinessSignup.jsx

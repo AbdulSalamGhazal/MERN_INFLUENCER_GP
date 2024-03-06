@@ -49,7 +49,7 @@ app.post("/influencers", upload.single("image"), async (req, res) => {
 });
 // creating business
 app.post("/business", upload.single("image"), async (req, res) => {
-  Business.create({ ...req.body, image: req.file.path })
+  Business.create({ ...req.body, image: req.file?.path })
     .then((business) =>
       res.json({
         _id: business._id,
