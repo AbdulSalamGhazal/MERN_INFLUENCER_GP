@@ -3,7 +3,7 @@ import TextField from "@mui/material/TextField";
 import Box from "@mui/material/Box";
 import Typography from "@mui/material/Typography";
 import Alert from "@mui/material/Alert";
-import CircularProgress from '@mui/material/CircularProgress';
+import CircularProgress from "@mui/material/CircularProgress";
 import { useNavigate } from "react-router-dom";
 import { useState } from "react";
 import { useForm } from "react-hook-form";
@@ -11,8 +11,6 @@ import useAuth from "../../context/AuthContext";
 import axios from "axios";
 import PasswordInput from "../components/signup/PasswordInput";
 import patterns from "../utils/patterns";
-import { tableFooterClasses } from "@mui/material";
-
 
 const BusinessSignup = () => {
   const {
@@ -20,22 +18,22 @@ const BusinessSignup = () => {
     handleSubmit,
     watch,
     formState: { errors },
-  } = useForm()
+  } = useForm();
 
   const [errorAlert, setErrorAlert] = useState(null);
   const [waiting, setWaiting] = useState(false);
 
   const { login } = useAuth();
   let navigate = useNavigate();
-  console.log(errors)
+  console.log(errors);
 
   const onSubmit = async () => {
-    setWaiting(true)
+    setWaiting(true);
     const business = {
-        name: watch('name'),
-        email: watch('email'),
-        password: watch('password'),
-    }
+      name: watch("name"),
+      email: watch("email"),
+      password: watch("password"),
+    };
     try {
       const { data } = await axios.post(
         "http://localhost:3001/business",
@@ -49,11 +47,11 @@ const BusinessSignup = () => {
       // setBusiness(inintialBusiness);
       login(data);
       localStorage.setItem("userInfo", JSON.stringify(data));
-      navigate("/home");
+      navigate("/");
     } catch (error) {
       console.error("Error fetching data:", error);
       setErrorAlert(error.message);
-      setWaiting(false)
+      setWaiting(false);
       setTimeout(() => {
         setErrorAlert(null);
       }, 3000);
@@ -63,7 +61,14 @@ const BusinessSignup = () => {
   return (
     <Box>
       {/* TODO: the title needs some styles */}
-      {<Alert severity="error" sx={{ visibility: errorAlert == null ? 'hidden' : 'vislible' }}>{errorAlert}</Alert>}
+      {
+        <Alert
+          severity="error"
+          sx={{ visibility: errorAlert == null ? "hidden" : "vislible" }}
+        >
+          {errorAlert}
+        </Alert>
+      }
       <Typography component="h1" variant="h4" align="center">
         انضمام صاحب عمل
       </Typography>
@@ -71,9 +76,8 @@ const BusinessSignup = () => {
         component="form"
         onSubmit={handleSubmit(onSubmit)}
         noValidate
-        sx={{ mt: 1, maxWidth: '500px', mx: 'auto' }}
+        sx={{ mt: 1, maxWidth: "500px", mx: "auto" }}
       >
-
         <TextField
           size="small"
           margin="dense"
@@ -82,8 +86,8 @@ const BusinessSignup = () => {
           label="الاسم"
           autoComplete="name"
           autoFocus
-          {...register('name', {
-            required: 'هذا الحقل مطلوب',
+          {...register("name", {
+            required: "هذا الحقل مطلوب",
           })}
           error={errors.name != undefined}
           helperText={errors.name?.message}
@@ -97,12 +101,12 @@ const BusinessSignup = () => {
           label="البريد الالكتروني"
           autoComplete="email"
           autoFocus
-          {...register('email', {
-            required: 'هذا الحقل مطلوب',
+          {...register("email", {
+            required: "هذا الحقل مطلوب",
             pattern: {
               value: patterns.emailPattern,
-              message: "غير صالح"
-            }
+              message: "غير صالح",
+            },
           })}
           error={errors.email != undefined}
           helperText={errors.email?.message}
@@ -140,14 +144,14 @@ const BusinessSignup = () => {
             required: "هذا الحقل مطلوب",
             validate: {
               samePassword: (e) =>
-                e === watch('password') || "كلمة المرور المدخلة مختلفة",
+                e === watch("password") || "كلمة المرور المدخلة مختلفة",
             },
           })}
           error={Boolean(errors.confirmPassword)}
           helperText={errors.confirmPassword?.message}
           margin="dense"
           fullWidth
-          size='small'
+          size="small"
           required
           label="تأكيد كلمة المرور"
           autoComplete="new-password"
@@ -160,13 +164,11 @@ const BusinessSignup = () => {
           variant="contained"
           sx={{ mt: 3, mb: 2 }}
         >
-          {waiting ? <CircularProgress color="inherit" size={23} /> : 'انضم'}
+          {waiting ? <CircularProgress color="inherit" size={23} /> : "انضم"}
         </Button>
-
-
       </Box>
     </Box>
-  )
-}
+  );
+};
 
 export default BusinessSignup;

@@ -67,7 +67,7 @@ const InfluencerSignup = () => {
       // setActiveStep((prevActiveStep) => prevActiveStep + 1);
       login(data);
       localStorage.setItem("userInfo", JSON.stringify(data));
-      navigate("/home");
+      navigate("/");
     } catch (error) {
       setWaiting(false)
       console.error("Error fetching data:", error);

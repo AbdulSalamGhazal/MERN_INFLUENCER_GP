@@ -145,7 +145,7 @@ function ChatView({ chat }) {
               autoFocus={true}
               fullWidth
               variant="outlined"
-              placeholder="Type a message..."
+              placeholder="اكتب رسالة..."
               value={messageText}
               onChange={(e) => setMessageText(e.target.value)} // Update the message text as the user types
               onKeyPress={(e) => {

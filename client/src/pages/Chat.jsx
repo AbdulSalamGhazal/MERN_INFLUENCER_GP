@@ -78,7 +78,9 @@ function Chat() {
         overflow: "hidden",
       }}
     >
-      <Grid container sx={{ height: "90vh", overflow: "hidden" }}>
+      <Grid
+        container
+        sx={{ height: "85vh", overflow: "hidden"}}>
         <Grid item xs={4} sx={{ bgcolor: "#f7f7f7", pr: 0 }}>
           <Paper
             elevation={3}

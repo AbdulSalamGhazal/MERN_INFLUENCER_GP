@@ -1,7 +1,7 @@
 import Button from "@mui/material/Button";
 import Alert from "@mui/material/Alert";
 import TextField from "@mui/material/TextField";
-import CircularProgress from '@mui/material/CircularProgress';
+import CircularProgress from "@mui/material/CircularProgress";
 // import FormControlLabel from "@mui/material/FormControlLabel";
 // import Checkbox from "@mui/material/Checkbox";
 import Link from "@mui/material/Link";
@@ -14,11 +14,10 @@ import { useState } from "react";
 import useAuth from "../../context/AuthContext";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
-import { useForm } from "react-hook-form"
+import { useForm } from "react-hook-form";
 
 import PasswordInput from "../components/signup/PasswordInput";
 import patterns from "../utils/patterns";
-
 
 const Login = () => {
   const {
@@ -26,7 +25,7 @@ const Login = () => {
     handleSubmit,
     watch,
     formState: { errors },
-  } = useForm()
+  } = useForm();
 
   const [errorAlert, setErrorAlert] = useState(null);
   const [waiting, setWaiting] = useState(false);
@@ -35,9 +34,8 @@ const Login = () => {
   const { login } = useAuth();
   let navigate = useNavigate();
 
-
   const onSubmit = async () => {
-    setWaiting(true)
+    setWaiting(true);
     try {
       const { data } = await axios.post(
         "http://localhost:3001/login",
@@ -50,19 +48,19 @@ const Login = () => {
       );
       login(data);
       localStorage.setItem("userInfo", JSON.stringify(data));
-      navigate("/home");
+      navigate("/");
     } catch (error) {
-      setWaiting(false)
+      setWaiting(false);
       console.error("Login error:", error);
       if (error.response) {
         // The request was made and the server responded with a status code
         setErrorAlert(error.response.data.error);
       } else if (error.request) {
         // The request was made but no response was received
-        setErrorAlert('no reply, try later');
+        setErrorAlert("no reply, try later");
       } else {
         // Something happened in setting up the request that triggered an Error
-        setErrorAlert('an error happend, try again');
+        setErrorAlert("an error happend, try again");
       }
       setTimeout(() => {
         setErrorAlert(null);
@@ -71,9 +69,20 @@ const Login = () => {
   };
 
   return (
-    <Box component="main" align='center' sx={{ maxWidth: '450px', margin: 'auto' }}>
+    <Box
+      component="main"
+      align="center"
+      sx={{ maxWidth: "450px", margin: "auto" }}
+    >
       {/* {errorAlert && <Alert severity="error">{errorAlert}</Alert>} */}
-      {<Alert severity="error" sx={{ visibility: errorAlert == null ? 'hidden' : 'vislible' }}>{errorAlert}</Alert>}
+      {
+        <Alert
+          severity="error"
+          sx={{ visibility: errorAlert == null ? "hidden" : "vislible" }}
+        >
+          {errorAlert}
+        </Alert>
+      }
       <Typography component="h1" variant="h3" align="center">
         تسجيل الدخول
       </Typography>
@@ -88,7 +97,12 @@ const Login = () => {
         </Tabs>
       </Box>
 
-      <Box component="form" onSubmit={handleSubmit(onSubmit)} noValidate sx={{ mt: 1 }}>
+      <Box
+        component="form"
+        onSubmit={handleSubmit(onSubmit)}
+        noValidate
+        sx={{ mt: 1 }}
+      >
         <TextField
           dir="rtl"
           size="small"
@@ -100,12 +114,12 @@ const Login = () => {
           autoFocus
           // onChange={(e) => setEmail(e.target.value)}
           // value={getValues('email')}
-          {...register('email', {
-            required: 'هذا الحقل مطلوب',
+          {...register("email", {
+            required: "هذا الحقل مطلوب",
             pattern: {
               value: patterns.emailPattern,
-              message: "غير صالح"
-            }
+              message: "غير صالح",
+            },
           })}
           error={errors.email != undefined}
           helperText={errors.email?.message}
@@ -120,7 +134,7 @@ const Login = () => {
           autoComplete="current-password"
           // value={password}
           // onChange={(e) => setPassword(e.target.value)}
-          {...register('password', { required: 'هذا الحقل مطلوب' })}
+          {...register("password", { required: "هذا الحقل مطلوب" })}
           error={errors.password != undefined}
           helperText={errors.password?.message}
         />
@@ -136,16 +150,16 @@ const Login = () => {
           variant="contained"
           sx={{ mt: 3, mb: 2 }}
         >
-          {waiting? <CircularProgress color="inherit" size={23}/> : 'سجل'}
+          {waiting ? <CircularProgress color="inherit" size={23} /> : "سجل"}
         </Button>
         {/* TODO: correct Link should be added in both links */}
-        <Grid container justifyContent={'space-between'}>
-          <Grid >
+        <Grid container justifyContent={"space-between"}>
+          <Grid>
             <Link href="#" variant="body2">
               هل نسيت كلمة المرور
             </Link>
           </Grid>
-          <Grid >
+          <Grid>
             <Link href="/signup" variant="body2">
               {"ليس لديك حساب؟ انشئ واحدا"}
             </Link>

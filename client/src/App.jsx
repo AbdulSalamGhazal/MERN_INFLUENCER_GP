@@ -6,10 +6,12 @@ import Home from "./pages/Home";
 import Influencers from "./pages/influencers";
 import Login from "./pages/Login";
 import Navbar from "./components/Navbar";
+import Footer from "./components/Footer";
 import Chat from "./pages/Chat";
 import InfluencerSignup from "./pages/InfluencerSignup";
 import BusinessSignup from "./pages/BusinessSignup";
 import Signup from "./pages/Signup";
+import Campaign from "./pages/Campaign";
 import InfluencerPage from "./pages/InfluencerPage";
 function App() {
   return (
@@ -17,7 +19,7 @@ function App() {
       <Navbar />
       <Container maxWidth="xl" sx={{ mt: 3, mb: 4 }}>
         <Routes>
-          <Route path="/home" element={<Home />} />
+          <Route path="/" element={<Home />} />
           <Route
             path="/influencers"
             element={
@@ -51,12 +53,14 @@ function App() {
             }
           />
 
+          <Route path="/campaign" element={<Campaign />} />
           <Route path="/login" element={<Login />} />
           <Route path="/signup" element={<Signup />} />
           <Route path="/signup/influencer" element={<InfluencerSignup />} />
           <Route path="/signup/business" element={<BusinessSignup />} />
         </Routes>
       </Container>
+      <Footer />
     </>
   );
 }
