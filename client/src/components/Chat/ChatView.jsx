@@ -19,7 +19,7 @@ function ChatView({ chat }) {
   useEffect(() => {
     if (chat) {
       fetchMessages();
-      const interval = setInterval(fetchMessages, 5000);
+      const interval = setInterval(fetchMessages, 3000);
       return () => clearInterval(interval);
     }
   }, [chat]);
@@ -142,9 +142,10 @@ function ChatView({ chat }) {
             autoComplete="off"
           >
             <TextField
+              autoFocus={true}
               fullWidth
               variant="outlined"
-              placeholder="Type a message..."
+              placeholder="اكتب رسالة..."
               value={messageText}
               onChange={(e) => setMessageText(e.target.value)} // Update the message text as the user types
               onKeyPress={(e) => {

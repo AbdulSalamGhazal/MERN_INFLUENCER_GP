@@ -38,7 +38,7 @@ function ChatList({ setSelectedChat, chats, selectedChat }) {
           >
             <ListItemText
               primary={chat.receiverName}
-              secondary={chat.lastMessage || "No messages yet"}
+              secondary={chat.lastMessage || "لايوجد رسائل"}
             />
           </ListItem>
         ))
