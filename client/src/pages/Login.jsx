@@ -2,8 +2,6 @@ import Button from "@mui/material/Button";
 import Alert from "@mui/material/Alert";
 import TextField from "@mui/material/TextField";
 import CircularProgress from "@mui/material/CircularProgress";
-// import FormControlLabel from "@mui/material/FormControlLabel";
-// import Checkbox from "@mui/material/Checkbox";
 import Link from "@mui/material/Link";
 import Grid from "@mui/material/Unstable_Grid2";
 import Box from "@mui/material/Box";
@@ -104,7 +102,7 @@ const Login = () => {
         sx={{ mt: 1 }}
       >
         <TextField
-          dir="rtl"
+          dir="ltr"
           size="small"
           margin="dense"
           required
@@ -135,6 +133,7 @@ const Login = () => {
           // value={password}
           // onChange={(e) => setPassword(e.target.value)}
           {...register("password", { required: "هذا الحقل مطلوب" })}
+          filled={Boolean(watch('password'))}
           error={errors.password != undefined}
           helperText={errors.password?.message}
         />

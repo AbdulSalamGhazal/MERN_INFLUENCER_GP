@@ -16,17 +16,17 @@ const LogoutDialog = ({ open, handleClose, handleLogout }) => {
                 aria-describedby="alert-dialog-description"
             >
                 <DialogTitle id="alert-dialog-title">
-                    {"Log Out"}
+                    {"تسجيل الخروج"}
                 </DialogTitle>
                 <DialogContent>
                     <DialogContentText id="alert-dialog-description">
-                        Are you sure you want to log out?
+                        هل انت متأكد من  تسجيل الخروج؟
                     </DialogContentText>
                 </DialogContent>
                 <DialogActions>
-                    <Button onClick={handleClose}>cancel</Button>
+                    <Button onClick={handleClose}>الغاء</Button>
                     <Button onClick={handleLogout} autoFocus>
-                        logout
+                        تسجيل الخروج
                     </Button>
                 </DialogActions>
             </Dialog>

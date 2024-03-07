@@ -8,19 +8,19 @@ const Signup = () => {
     <Grid container spacing={10} alignItems="center" justifyContent="space-evenly">
         <Grid xs={12}>
             <Typography component="h1" variant="h2" align="center">
-                Sign Up as
+                انضم معنا
             </Typography>
         </Grid>
         <Grid>
-            <Button href="/signup/influencer" size="large" variant="contained" sx={{padding: '30px 40px', fontSize: '1.5rem', fontWeight: 'bold'}}>Influencer</Button>
+            <Button href="/signup/influencer" size="large" variant="contained" sx={{padding: '30px 40px', fontSize: '1.5rem', fontWeight: 'bold'}}>كمشهور</Button>
         </Grid>
         <Grid >
-            <Button href="/signup/business" size="large" variant="contained" sx={{padding: '30px 40px', fontSize: '1.5rem', fontWeight: 'bold'}}>Business</Button>
+            <Button href="/signup/business" size="large" variant="contained" sx={{padding: '30px 40px', fontSize: '1.5rem', fontWeight: 'bold'}}>كصاحب عمل</Button>
         </Grid>
         <Grid container xs={12} justifyContent={'center'}>
             <Grid>
             <Link href="/login" variant="body2" align="center">
-              {"Do you already have an account? Log In"}
+              {"لديك حساب سابقا؟ سجل الدخول"}
             </Link>
             </Grid>
           </Grid>

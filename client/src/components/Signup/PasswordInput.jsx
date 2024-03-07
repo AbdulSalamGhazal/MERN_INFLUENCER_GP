@@ -22,22 +22,23 @@ const VisibilityToggler = ({ showPassword, setShowPassword }) => {
 };
 
 
-const PasswordInput = forwardRef((probs, ref) => {
+const PasswordInput = forwardRef(({filled, ...probs}, ref) => {
   const [showPassword, setShowPassword] = useState(false);
 
   return (
     <TextField
+      dir='ltr'
       ref={ref}
       {...probs}
       type={showPassword ? "text" : "password"}
-      InputProps={{
+      InputProps={filled?{
         endAdornment: (
           <VisibilityToggler
             showPassword={showPassword}
             setShowPassword={setShowPassword}
           />
         ),
-      }}
+      }:null}
     />
   )
 })

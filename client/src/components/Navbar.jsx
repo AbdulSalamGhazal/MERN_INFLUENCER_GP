@@ -131,9 +131,9 @@ export default function Navbar() {
                 "aria-labelledby": "basic-button",
               }}
             >
-              <MenuItem onClick={handleProfileDialogOpen}>Profile</MenuItem>
-              <MenuItem onClick={handleClose}>My account</MenuItem>
-              <MenuItem onClick={handleLogoutDialogOpen}>Logout</MenuItem>
+              <MenuItem onClick={handleProfileDialogOpen}>معلوماتي</MenuItem>
+              <MenuItem onClick={handleClose}>حسابي</MenuItem>
+              <MenuItem onClick={handleLogoutDialogOpen}>تسجيل الخروج</MenuItem>
             </Menu>
             <LogoutDialog
               open={logoutDialogOpen}

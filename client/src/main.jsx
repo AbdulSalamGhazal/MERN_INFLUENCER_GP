@@ -17,6 +17,9 @@ const cacheRtl = createCache({
 
 const theme = createTheme({
   direction: 'rtl',
+  typography: {
+    fontFamily: ['Noto Kufi Arabic', 'sans-serif']
+  }
 });
 
 ReactDOM.createRoot(document.getElementById("root")).render(

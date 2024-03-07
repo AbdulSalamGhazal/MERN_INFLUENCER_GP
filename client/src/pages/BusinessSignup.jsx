@@ -94,13 +94,13 @@ const BusinessSignup = () => {
         />
 
         <TextField
+          dir="ltr"
           size="small"
           margin="dense"
           required
           fullWidth
           label="البريد الالكتروني"
           autoComplete="email"
-          autoFocus
           {...register("email", {
             required: "هذا الحقل مطلوب",
             pattern: {
@@ -135,6 +135,7 @@ const BusinessSignup = () => {
                 "كلمة المرور يجب ان تحتوي على الاقل على: حرف صغير وحرف كبير ورقم ورمز",
             },
           })}
+          filled={Boolean(watch('password'))}
           error={Boolean(errors.password)}
           helperText={errors.password?.message}
         />
@@ -147,6 +148,7 @@ const BusinessSignup = () => {
                 e === watch("password") || "كلمة المرور المدخلة مختلفة",
             },
           })}
+          filled={Boolean(watch('confirmPassword'))}
           error={Boolean(errors.confirmPassword)}
           helperText={errors.confirmPassword?.message}
           margin="dense"

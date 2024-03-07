@@ -108,13 +108,13 @@ const InfluencerSignup = () => {
         />
 
         <TextField
+          dir="ltr"
           size="small"
           margin="dense"
           required
           fullWidth
           label="البريد الالكتروني"
           autoComplete="email"
-          autoFocus
           {...register('email', {
             required: 'هذا الحقل مطلوب',
             pattern: {
@@ -149,18 +149,20 @@ const InfluencerSignup = () => {
                 "كلمة المرور يجب ان تحتوي على الاقل على: حرف صغير وحرف كبير ورقم ورمز",
             },
           })}
+          filled={Boolean(watch('password'))}
           error={Boolean(errors.password)}
           helperText={errors.password?.message}
-        />
+          />
 
         <PasswordInput
           {...register("confirmPassword", {
             required: "هذا الحقل مطلوب",
             validate: {
               samePassword: (e) =>
-                e === watch('password') || "كلمة المرور المدخلة مختلفة",
+              e === watch('password') || "كلمة المرور المدخلة مختلفة",
             },
           })}
+          filled={Boolean(watch('confirmPassword'))}
           error={Boolean(errors.confirmPassword)}
           helperText={errors.confirmPassword?.message}
           margin="dense"
@@ -171,10 +173,11 @@ const InfluencerSignup = () => {
           autoComplete="new-password"
         />
         <Divider sx={{my: 1, fontSize:'.75em'}}>
-          اضف حسابات التواصل الاجنماعي خاصتك 
+          اضف روابط حسابات التواصل الاجنماعي خاصتك 
         </Divider> 
         {fields.map((field, index) => (
           <PlatformInput
+            dir='ltr'
             key={field.id} // important to include key with field's id
             {...register(`platforms.${index}`, {
               required: fields.length === 1 ? 'يجب ان تضيف حسابا واحدا على الاقل' : 'يجب ملئ هذا الحقل او حذفه',
