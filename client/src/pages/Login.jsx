@@ -160,7 +160,7 @@ const Login = () => {
           </Grid>
           <Grid>
             <Link href="/signup" variant="body2">
-              {"ليس لديك حساب؟ انشئ واحدا"}
+              {"ليس لديك حساب؟ قم بالتسجيل"}
             </Link>
           </Grid>
         </Grid>
