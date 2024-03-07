@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { useParams } from "react-router-dom";
+import { useParams, useNavigate } from "react-router-dom";
 import { Box, Grid, Paper } from "@mui/material";
 import axios from "axios";
 import ChatList from "../components/Chat/ChatList";
@@ -12,6 +12,7 @@ function Chat() {
   const [isChatLoaded, setIsChatLoaded] = useState(false);
   const [selectedChat, setSelectedChat] = useState(null);
   let { recieverId } = useParams();
+  const history = useNavigate();
 
   useEffect(() => {
     const fetchChats = async () => {
@@ -62,6 +63,7 @@ function Chat() {
             console.error("Error fetching chats:", error);
           }
         }
+        history("/chat");
       }
     };
     selectChat();

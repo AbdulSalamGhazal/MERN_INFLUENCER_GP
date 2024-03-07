@@ -7,11 +7,14 @@ function InfluencersCards({ influencers }) {
     <>
       <Box sx={{ flexGrow: 1, pl: 1 }}>
         <Grid container spacing={2}>
-          {influencers.map((influencer) => (
-            <Grid xs={3} key={influencer.id}>
-              <InfluencerCard influencer={influencer} />
-            </Grid>
-          ))}
+          {influencers.map(
+            (influencer) =>
+              influencer.isActive && (
+                <Grid xs={3} key={influencer.id}>
+                  <InfluencerCard influencer={influencer} />
+                </Grid>
+              )
+          )}
         </Grid>
       </Box>
     </>

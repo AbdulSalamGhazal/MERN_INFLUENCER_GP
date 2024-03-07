@@ -317,7 +317,7 @@ function Filters({ setFilters }) {
               startIcon={<BackspaceIcon />}
               onClick={handleClearFilters}
             >
-              . حذف
+              حذف
             </Button>
           </Grid>
         </Grid>

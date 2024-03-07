@@ -38,6 +38,7 @@ const influencers = [
 
     avg_likes: 50000,
     avg_comments: 2100,
+    isActive: true,
   },
   {
     name: "عمار خان",
@@ -68,6 +69,7 @@ const influencers = [
     ],
     avg_likes: 25000,
     avg_comments: 1200,
+    isActive: true,
   },
   {
     name: "صلاح طلال",
@@ -107,6 +109,7 @@ const influencers = [
 
     avg_likes: 120000,
     avg_comments: 29000,
+    isActive: true,
   },
 
   {
@@ -144,6 +147,7 @@ const influencers = [
 
     avg_likes: 18000,
     avg_comments: 800,
+    isActive: true,
   },
   {
     name: "سارة حسن",
@@ -184,6 +188,7 @@ const influencers = [
 
     avg_likes: 900000,
     avg_comments: 130000,
+    isActive: true,
   },
   {
     name: "أكرم أنس",
@@ -225,6 +230,7 @@ const influencers = [
 
     avg_likes: 60000,
     avg_comments: 15000,
+    isActive: true,
   },
   {
     name: "سلمى خالد",
@@ -259,6 +265,7 @@ const influencers = [
 
     avg_likes: 8000,
     avg_comments: 700,
+    isActive: true,
   },
   {
     name: "هاشم أحمد",
@@ -297,6 +304,7 @@ const influencers = [
 
     avg_likes: 25000,
     avg_comments: 2000,
+    isActive: true,
   },
   {
     name: "حنان بسل",
@@ -332,6 +340,7 @@ const influencers = [
 
     avg_likes: 75000,
     avg_comments: 9000,
+    isActive: true,
   },
 ];
 

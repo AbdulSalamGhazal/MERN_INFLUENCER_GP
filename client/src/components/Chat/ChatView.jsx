@@ -19,7 +19,7 @@ function ChatView({ chat }) {
   useEffect(() => {
     if (chat) {
       fetchMessages();
-      const interval = setInterval(fetchMessages, 50000);
+      const interval = setInterval(fetchMessages, 3000);
       return () => clearInterval(interval);
     }
   }, [chat]);
@@ -142,6 +142,7 @@ function ChatView({ chat }) {
             autoComplete="off"
           >
             <TextField
+              autoFocus={true}
               fullWidth
               variant="outlined"
               placeholder="Type a message..."
