@@ -25,9 +25,7 @@ function InfluencerCard({ influencer }) {
     // Add functionality later
   };
 
-  const handleMessageClick = () => {
-    console.log("Send message action triggered");
-  };
+
   return (
     <>
       <Card sx={{ maxWidth: 345, m: 2, boxShadow: 3 }}>
@@ -116,7 +114,6 @@ function InfluencerCard({ influencer }) {
             style={{ textDecoration: "none", color: "inherit" }}
           >
             <IconButton
-              onClick={handleMessageClick}
               aria-label="إرسال رسالة"
               size="large"
             >

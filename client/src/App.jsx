@@ -13,11 +13,14 @@ import BusinessSignup from "./pages/BusinessSignup";
 import Signup from "./pages/Signup";
 import Campaign from "./pages/Campaign";
 import InfluencerPage from "./pages/InfluencerPage";
+
 function App() {
   return (
-    <>
+    <div
+      style={{ display: "flex", flexDirection: "column", minHeight: "100vh" }}
+    >
       <Navbar />
-      <Container maxWidth="xl" sx={{ mt: 3, mb: 4 }}>
+      <Container maxWidth="xl" sx={{ mt: 3, mb: 4, flex: 1 }}>
         <Routes>
           <Route path="/" element={<Home />} />
           <Route
@@ -61,7 +64,7 @@ function App() {
         </Routes>
       </Container>
       <Footer />
-    </>
+    </div>
   );
 }
 

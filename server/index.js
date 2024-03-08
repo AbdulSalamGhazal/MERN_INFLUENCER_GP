@@ -87,7 +87,7 @@ app.post(
       });
     } else {
       // throw new Error("Invalid Email or Password");
-      return res.status(401).json({ error: 'Invalid email or password' });
+      return res.status(401).json({ error: "Invalid email or password" });
     }
   })
 );
@@ -128,6 +128,7 @@ app.post(
         });
       }
 
+      
       const receiverName =
         userType === "Influencer"
           ? chat.businessId.companyName

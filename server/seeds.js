@@ -1,4 +1,5 @@
 // create some seeds influencers to test in developments...
+const influencer = require("./models/influencer");
 const Influencer = require("./models/influencer");
 const mongoose = require("mongoose");
 
@@ -345,10 +346,17 @@ const influencers = [
 ];
 
 // Inserting the documents
-Influencer.insertMany(influencers)
-  .then((docs) => {
-    console.log("Influencers created:", docs);
-  })
-  .catch((err) => {
-    console.error("Error creating influencers:", err);
-  });
+
+
+async function createInfluencers() {
+  for (const influencer of influencers) {
+    try {
+      const doc = await Influencer.create(influencer);
+      console.log("Influencer created:", doc);
+    } catch (err) {
+      console.error("Error creating influencer:", err);
+    }
+  }
+}
+
+createInfluencers();

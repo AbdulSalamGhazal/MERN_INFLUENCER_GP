@@ -67,6 +67,7 @@ function ChatView({ chat }) {
       console.error("Error sending message:", error);
     }
   };
+
   return (
     <Box
       sx={{
@@ -101,7 +102,8 @@ function ChatView({ chat }) {
           <Box
             sx={{
               flexGrow: 1,
-              overflowY: "auto",
+              height: "200px",
+              overflow: "auto",
               p: 3,
             }}
           >
