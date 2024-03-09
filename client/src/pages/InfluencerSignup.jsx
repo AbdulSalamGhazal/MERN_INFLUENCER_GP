@@ -81,10 +81,11 @@ const InfluencerSignup = () => {
   return (
     <Box>
       {/* TODO: the title needs some styles */}
-      {<Alert severity="error" sx={{ visibility: errorAlert == null ? 'hidden' : 'vislible' }}>{errorAlert}</Alert>}
-      <Typography component="h1" variant="h4" align="center">
+      {errorAlert && <Alert severity="error">{errorAlert}</Alert>}
+      {/* {<Alert severity="error" sx={{ visibility: errorAlert == null ? 'hidden' : 'vislible' }}>{errorAlert}</Alert>} */}
+      {/* <Typography component="h1" variant="h3" align="center">
         انضمام مشهور
-      </Typography>
+      </Typography> */}
       <Box
         component="form"
         onSubmit={handleSubmit(onSubmit)}

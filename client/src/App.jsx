@@ -13,6 +13,7 @@ import BusinessSignup from "./pages/BusinessSignup";
 import Signup from "./pages/Signup";
 import Campaign from "./pages/Campaign";
 import InfluencerPage from "./pages/InfluencerPage";
+import MyAccount from "./pages/MyAccount";
 function App() {
   return (
     <>
@@ -54,6 +55,7 @@ function App() {
           />
 
           <Route path="/campaign" element={<Campaign />} />
+          <Route path="/account" element={<MyAccount />} />
           <Route path="/login" element={<Login />} />
           <Route path="/signup" element={<Signup />} />
           <Route path="/signup/influencer" element={<InfluencerSignup />} />

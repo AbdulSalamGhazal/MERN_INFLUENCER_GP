@@ -45,6 +45,11 @@ export default function Navbar() {
     setProfileDialogOpen(true);
     handleClose();
   };
+  
+  const handleMyAcountOpen = () => {
+    navigate('/account');
+    handleClose();
+  }
 
   return (
     <AppBar position="static">
@@ -132,7 +137,7 @@ export default function Navbar() {
               }}
             >
               <MenuItem onClick={handleProfileDialogOpen}>معلوماتي</MenuItem>
-              <MenuItem onClick={handleClose}>حسابي</MenuItem>
+              <MenuItem onClick={handleMyAcountOpen}>حسابي</MenuItem>
               <MenuItem onClick={handleLogoutDialogOpen}>تسجيل الخروج</MenuItem>
             </Menu>
             <LogoutDialog
