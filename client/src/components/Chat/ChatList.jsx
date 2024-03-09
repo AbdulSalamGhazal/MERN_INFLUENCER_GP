@@ -5,6 +5,7 @@ import {
   AppBar,
   Toolbar,
   Typography,
+  Avatar,
 } from "@mui/material";
 
 function ChatList({ setSelectedChat, chats, selectedChat }) {
@@ -36,7 +37,14 @@ function ChatList({ setSelectedChat, chats, selectedChat }) {
               boxShadow: 1,
             }}
           >
+            <Avatar
+              sx={{ width: 56, height: 56 }}
+              alt="profile image"
+              src={chat.receiverImage}
+            />
+
             <ListItemText
+              sx={{ pl: 1 }}
               primary={chat.receiverName}
               secondary={chat.lastMessage || "لايوجد رسائل"}
             />

@@ -34,7 +34,6 @@ function Filters({ setFilters }) {
     let newField = typeof value === "string" ? value.split(",") : value;
     setField(newField);
     updateFilters({ field: newField });
-    console.log(newField);
   };
   const [platform, setPlatform] = useState([]);
   const handleChangePlatform = (event) => {

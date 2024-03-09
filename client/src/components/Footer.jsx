@@ -3,15 +3,19 @@ import GitHubIcon from "@mui/icons-material/GitHub";
 
 const Footer = () => {
   return (
-    <AppBar position="static" color="primary">
-      <Toolbar sx={{ justifyContent: "space-between" }}>
+    <AppBar
+      position="static"
+      color="primary"
+      style={{ top: "auto", bottom: 0 }}
+    >
+      <Toolbar style={{ justifyContent: "space-between" }}>
         <Typography variant="body1">
           تم برمجة الموقع من قبل: عبدالسلام غزال، عبدالقادر برعية، هاني بانبيلة
         </Typography>
         <div>
           <IconButton
             component={Link}
-            href="https://https://github.com/AbdulSalamGhazal/MERN_INFLUENCER_GP"
+            href="https://github.com/AbdulSalamGhazal/MERN_INFLUENCER_GP"
             target="_blank"
             rel="noopener noreferrer"
             color="inherit"

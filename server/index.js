@@ -86,8 +86,7 @@ app.post(
         description: user.description,
       });
     } else {
-      // throw new Error("Invalid Email or Password");
-      return res.status(401).json({ error: 'Invalid email or password' });
+      return res.status(401).json({ error: "Invalid email or password" });
     }
   })
 );
@@ -104,6 +103,7 @@ app.post(
       if (!mongoose.isValidObjectId(receiver_id)) {
         return res.status(400).json({ message: "Invalid receiver_id" });
       }
+
       const searchCriteria =
         userType === "Influencer"
           ? { influencerId: sender_id, businessId: receiver_id }
@@ -111,7 +111,7 @@ app.post(
 
       let chat = await Chat.findOne(searchCriteria).populate({
         path: userType === "Influencer" ? "businessId" : "influencerId",
-        select: userType === "Influencer" ? "companyName" : "name",
+        select: userType === "Influencer" ? "companyName image" : "name image",
       });
 
       if (!chat) {
@@ -120,11 +120,10 @@ app.post(
           businessId: userType === "Business" ? sender_id : receiver_id,
           messages: [],
         });
-
-        // Populate the created chat with the receiver's name
         await chat.populate({
           path: userType === "Influencer" ? "businessId" : "influencerId",
-          select: userType === "Influencer" ? "companyName" : "name",
+          select:
+            userType === "Influencer" ? "companyName image" : "name image",
         });
       }
 
@@ -132,13 +131,17 @@ app.post(
         userType === "Influencer"
           ? chat.businessId.companyName
           : chat.influencerId.name;
-
       const receiverId = userType === "Influencer" ? receiver_id : sender_id;
+      const receiverImage =
+        userType === "Influencer"
+          ? chat.businessId.image
+          : chat.influencerId.image;
 
       const formattedChat = {
         ...chat.toObject(),
         receiverName,
         receiverId,
+        receiverImage,
       };
 
       res.status(200).json(formattedChat);
@@ -148,7 +151,6 @@ app.post(
     }
   })
 );
-
 // get all chats for user
 app.get(
   "/chat",
@@ -159,43 +161,50 @@ app.get(
     let query = {};
     let populateOptions = {};
     let receiverIdField = "";
+    let imageField = "";
+
     if (userType === "Influencer") {
       query = { influencerId: userId };
       populateOptions = {
         path: "businessId",
-        select: "companyName",
+        select: "companyName image",
       };
       receiverIdField = "businessId";
+      imageField = "businessId.image";
     } else if (userType === "Business") {
       query = { businessId: userId };
       populateOptions = {
         path: "influencerId",
-        select: "name",
+        select: "name image",
       };
       receiverIdField = "influencerId";
+      imageField = "influencerId.image";
     } else {
       return res.status(400).json({ message: "Invalid user type" });
     }
-    const chats = await Chat.find(query)
-      .populate(populateOptions)
-      .populate("messages");
 
-    if (chats.length > 0) {
+    try {
+      const chats = await Chat.find(query)
+        .populate(populateOptions)
+        .populate("messages");
+
       const formattedChats = chats.map((chat) => {
         const receiverName =
-          userType === "Influencer"
-            ? chat.businessId.companyName
-            : chat.influencerId.name;
-        const receiverId = chat[receiverIdField] && chat[receiverIdField]._id;
+          chat[receiverIdField].companyName || chat[receiverIdField].name;
+        const receiverId = chat[receiverIdField]._id;
+        const receiverImage = chat[receiverIdField].image;
+
         return {
           ...chat._doc,
           receiverName,
           receiverId,
+          receiverImage,
         };
       });
       res.json(formattedChats);
-    } else {
-      res.json([]);
+    } catch (error) {
+      console.error("Error fetching chats:", error);
+      res.status(500).json({ message: "Internal server error" });
     }
   })
 );

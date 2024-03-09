@@ -55,8 +55,6 @@ function Chat() {
               }
             );
             const newChat = response.data;
-            console.log("the new Chat is ", newChat);
-            console.log("all of the chat...", chats);
             setChats([...chats, newChat]);
             setSelectedChat(newChat);
           } catch (error) {
@@ -76,11 +74,12 @@ function Chat() {
         flexGrow: 1,
         height: "100vh",
         overflow: "hidden",
+        border: "1px solid black",
+        // eslint-disable-next-line no-dupe-keys
+        height: "85vh",
       }}
     >
-      <Grid
-        container
-        sx={{ height: "85vh", overflow: "hidden"}}>
+      <Grid container sx={{ height: "85vh", overflow: "hidden" }}>
         <Grid item xs={4} sx={{ bgcolor: "#f7f7f7", pr: 0 }}>
           <Paper
             elevation={3}
