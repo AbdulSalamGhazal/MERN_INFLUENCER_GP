@@ -236,7 +236,7 @@ app.post(
   protect,
   asyncHandler(async (req, res) => {
     const receiverId = req.params.receiver_id;
-    const { content, type } = req.body;
+    const { content, isCondition } = req.body;
 
     const senderId = req.user._id;
     const senderType = req.user.type;
@@ -252,7 +252,7 @@ app.post(
     const message = await Message.create({
       sender: senderType,
       content,
-      type: type || "Normal",
+      isCondition
     });
 
     chat.messages.push(message._id);

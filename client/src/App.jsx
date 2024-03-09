@@ -13,6 +13,7 @@ import BusinessSignup from "./pages/BusinessSignup";
 import Signup from "./pages/Signup";
 import Campaign from "./pages/Campaign";
 import InfluencerPage from "./pages/InfluencerPage";
+import Businesses from "./pages/Businesses";
 
 function App() {
   return (
@@ -36,6 +37,14 @@ function App() {
             element={
               <ProtectedRoute>
                 <InfluencerPage />
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="//businesses"
+            element={
+              <ProtectedRoute>
+                <Businesses />
               </ProtectedRoute>
             }
           />

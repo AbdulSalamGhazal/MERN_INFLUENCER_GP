@@ -11,7 +11,7 @@ import ProfileDialog from "./ProfileDialog";
 import PeopleAltIcon from "@mui/icons-material/PeopleAlt";
 import ChatIcon from "@mui/icons-material/Chat";
 import CampaignIcon from "@mui/icons-material/Campaign";
-
+import BusinessCenterIcon from "@mui/icons-material/BusinessCenter";
 export default function Navbar() {
   const { logout, user } = useAuth();
   const navigate = useNavigate();
@@ -82,6 +82,26 @@ export default function Navbar() {
                 <PeopleAltIcon sx={{ fontSize: "2rem", mr: 1 }} />
                 <Typography variant="subtitle1" sx={{ fontSize: "1.2rem" }}>
                   المشاهير
+                </Typography>
+              </Button>
+            )}
+            {user.type === "Influencer" && (
+              <Button
+                color="inherit"
+                component={RouterLink}
+                to="/businesses"
+                sx={{
+                  border:
+                    location.pathname === "/businesses"
+                      ? "2px solid white"
+                      : "none",
+                  borderRadius: "5px",
+                  marginRight: "8px",
+                }}
+              >
+                <BusinessCenterIcon sx={{ fontSize: "2rem", mr: 1 }} />
+                <Typography variant="subtitle1" sx={{ fontSize: "1.2rem" }}>
+                  المعلنين
                 </Typography>
               </Button>
             )}
