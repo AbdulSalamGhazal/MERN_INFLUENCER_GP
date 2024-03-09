@@ -7,10 +7,9 @@ const messageSchema = mongoose.Schema(
       enum: ["Influencer", "Business"],
     },
     content: { type: String, trim: true },
-    type: {
-      type: String,
-      enum: ["Normal", "Condition"],
-      default: "Normal",
+    isCondition: {
+      type: Boolean,
+      default: false,
     },
   },
   { timestamps: true }

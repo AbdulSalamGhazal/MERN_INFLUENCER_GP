@@ -14,6 +14,8 @@ import {
   ListItemText,
   Divider,
   Button,
+  CardMedia,
+  Badge,
 } from "@mui/material";
 import { Link } from "react-router-dom";
 
@@ -25,6 +27,9 @@ import InterestIcon from "@mui/icons-material/Extension";
 import PeopleIcon from "@mui/icons-material/People";
 import FavoriteIcon from "@mui/icons-material/Favorite";
 import EmailIcon from "@mui/icons-material/Email";
+import CropFreeIcon from "@mui/icons-material/CropFree";
+import GradeIcon from "@mui/icons-material/Grade";
+import SellIcon from "@mui/icons-material/Sell";
 
 function InfluencerPage() {
   let { influencerId } = useParams();
@@ -49,18 +54,48 @@ function InfluencerPage() {
     return <Typography>جاري التحميل...</Typography>;
   }
 
-  // need to show field, verified, avg_cost,  engagement_rate
-  // and add "send a message" button
   return (
     <Box sx={{ flexGrow: 1, p: 4 }}>
       <Grid container spacing={2}>
         <Grid item xs={12} md={6}>
           <Box
-            component="img"
-            src={influencer.image}
-            alt={influencer.name}
-            sx={{ width: "100%", height: "auto", borderRadius: "8px" }}
-          />
+            sx={{
+              position: "relative",
+              width: "100%",
+              paddingTop: "100%",
+            }}
+          >
+            <CardMedia
+              component="img"
+              image={influencer.image}
+              alt={influencer.name}
+              sx={{
+                position: "absolute",
+                top: 0,
+                left: 0,
+                height: "100%",
+                width: "100%",
+                objectFit: "cover",
+              }}
+            />
+            {influencer.verified && (
+              <Badge
+                color="primary"
+                badgeContent="✓"
+                sx={{
+                  position: "absolute",
+                  top: 16,
+                  right: 16,
+                  ".MuiBadge-badge": {
+                    backgroundColor: "#44b700",
+                    color: "#ffffff",
+                    border: `2px solid #ffffff`,
+                    padding: "0 4px",
+                  },
+                }}
+              />
+            )}
+          </Box>
         </Grid>
         <Grid item xs={12} md={6}>
           <Typography
@@ -94,6 +129,19 @@ function InfluencerPage() {
                 }
                 secondary={
                   <div style={{ textAlign: "right" }}>{influencer.email}</div>
+                }
+              />
+            </ListItem>
+            <ListItem>
+              <ListItemAvatar>
+                <Avatar>
+                  <CropFreeIcon />
+                </Avatar>
+              </ListItemAvatar>
+              <ListItemText
+                primary={<div style={{ textAlign: "right" }}>{"المجال"}</div>}
+                secondary={
+                  <div style={{ textAlign: "right" }}>{influencer.field}</div>
                 }
               />
             </ListItem>
@@ -159,6 +207,40 @@ function InfluencerPage() {
                 secondary={
                   <div style={{ textAlign: "right" }}>
                     {`${influencer.avg_comments.toLocaleString()}`}
+                  </div>
+                }
+              />
+            </ListItem>
+            <ListItem>
+              <ListItemAvatar>
+                <Avatar>
+                  <GradeIcon />
+                </Avatar>
+              </ListItemAvatar>
+              <ListItemText
+                primary={
+                  <div style={{ textAlign: "right" }}>{"درجة التفاعل"}</div>
+                }
+                secondary={
+                  <div style={{ textAlign: "right" }}>
+                    {`%${influencer.engagement_rate.toLocaleString()}`}
+                  </div>
+                }
+              />
+            </ListItem>
+            <ListItem>
+              <ListItemAvatar>
+                <Avatar>
+                  <SellIcon />
+                </Avatar>
+              </ListItemAvatar>
+              <ListItemText
+                primary={
+                  <div style={{ textAlign: "right" }}>{"متوسط التكلفة"}</div>
+                }
+                secondary={
+                  <div style={{ textAlign: "right" }}>
+                    {`${influencer.avg_cost.toLocaleString()} ريال سعودي`}
                   </div>
                 }
               />

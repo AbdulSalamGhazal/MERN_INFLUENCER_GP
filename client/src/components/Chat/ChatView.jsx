@@ -8,6 +8,8 @@ import {
   TextField,
   Button,
   IconButton,
+  Switch,
+  FormControlLabel,
 } from "@mui/material";
 import { Link } from "react-router-dom";
 
@@ -18,6 +20,7 @@ import axios from "axios";
 function ChatView({ chat }) {
   const { user } = useAuth();
   const [messageText, setMessageText] = useState("");
+  const [isCondition, setIsCondition] = useState(false);
   const [messages, setMessages] = useState([]);
 
   useEffect(() => {
@@ -58,6 +61,7 @@ function ChatView({ chat }) {
         `http://localhost:3001/chat/message/${receiver_id}`,
         {
           content: messageText,
+          isCondition: isCondition,
         },
         {
           headers: {
@@ -71,6 +75,7 @@ function ChatView({ chat }) {
       console.error("Error sending message:", error);
     }
   };
+  console.log(messages);
 
   return (
     <Box
@@ -98,6 +103,7 @@ function ChatView({ chat }) {
               <Typography variant="h6" color="inherit">
                 {chat.receiverName}
               </Typography>
+              {}
               <Link
                 to={`/influencers/${chat.receiverId}`}
                 style={{ textDecoration: "none", color: "inherit" }}
@@ -148,11 +154,25 @@ function ChatView({ chat }) {
                   sx={{
                     maxWidth: "80%",
                     padding: 1,
+                    pb: 0,
                     bgcolor:
                       message.sender === user.type ? "#ADD8E6" : "#90EE90",
+                    border: message.isCondition ? "3px solid black" : "none",
                   }}
                 >
                   <Typography variant="body1">{message.content}</Typography>
+                  <Typography
+                    sx={{ p: 0 }}
+                    variant="caption"
+                    display="block"
+                    gutterBottom
+                  >
+                    {new Date(message.updatedAt).toLocaleTimeString("ar-EG", {
+                      hour: "numeric",
+                      minute: "numeric",
+                      hour12: true,
+                    })}
+                  </Typography>
                 </Paper>
               </Box>
             ))}
@@ -175,15 +195,27 @@ function ChatView({ chat }) {
               variant="outlined"
               placeholder="اكتب رسالة..."
               value={messageText}
-              onChange={(e) => setMessageText(e.target.value)} 
+              onChange={(e) => setMessageText(e.target.value)}
               onKeyPress={(e) => {
                 if (e.key === "Enter") {
-                  e.preventDefault(); 
+                  e.preventDefault();
                   handleMessageSend();
                 }
               }}
               sx={{ marginRight: "8px", bgcolor: "white" }}
             />
+            <FormControlLabel
+              sx={{ m: 0 }}
+              control={
+                <Switch
+                  checked={isCondition}
+                  onChange={(e) => setIsCondition(e.target.checked)}
+                />
+              }
+              label="شرط؟"
+              labelPlacement="top"
+            />
+
             <Button
               variant="contained"
               color="primary"

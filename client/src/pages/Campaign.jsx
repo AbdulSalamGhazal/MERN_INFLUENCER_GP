@@ -1,6 +1,6 @@
 import { Typography, Box } from "@mui/material";
 
-function UnderDevelopmentPage() {
+function Campaign() {
   return (
     <Box
       sx={{
@@ -17,4 +17,4 @@ function UnderDevelopmentPage() {
   );
 }
 
-export default UnderDevelopmentPage;
+export default Campaign;
