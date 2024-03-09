@@ -7,7 +7,11 @@ import {
   Typography,
   TextField,
   Button,
+  IconButton,
 } from "@mui/material";
+import { Link } from "react-router-dom";
+
+import InfoIcon from "@mui/icons-material/Info";
 import useAuth from "../../../context/AuthContext";
 import axios from "axios";
 
@@ -83,16 +87,37 @@ function ChatView({ chat }) {
           sx={{ minHeight: "48px", paddingRight: "16px", paddingLeft: "16px" }}
         >
           {chat ? (
-            <Typography variant="h6" color="inherit">
-              {chat.receiverName}
-            </Typography>
+            <Box
+              sx={{
+                width: "100%",
+                display: "flex",
+                alignItems: "center",
+                justifyContent: "space-between",
+              }}
+            >
+              <Typography variant="h6" color="inherit">
+                {chat.receiverName}
+              </Typography>
+              <Link
+                to={`/influencers/${chat.receiverId}`}
+                style={{ textDecoration: "none", color: "inherit" }}
+              >
+                <IconButton
+                  aria-label="تفاصيل أكثر"
+                  size="large"
+                  sx={{ color: "white" }}
+                >
+                  <InfoIcon sx={{ fontSize: 28 }} />
+                </IconButton>
+              </Link>
+            </Box>
           ) : (
             <Typography
               variant="h6"
               color="inherit"
               sx={{ visibility: "hidden" }}
             >
-              Placeholder
+              لايوجد
             </Typography>
           )}
         </Toolbar>
@@ -105,6 +130,7 @@ function ChatView({ chat }) {
               height: "200px",
               overflow: "auto",
               p: 3,
+              bgcolor: "white",
             }}
           >
             {messages.map((message, index) => (
@@ -149,14 +175,14 @@ function ChatView({ chat }) {
               variant="outlined"
               placeholder="اكتب رسالة..."
               value={messageText}
-              onChange={(e) => setMessageText(e.target.value)} // Update the message text as the user types
+              onChange={(e) => setMessageText(e.target.value)} 
               onKeyPress={(e) => {
                 if (e.key === "Enter") {
-                  e.preventDefault(); // Prevent form submission
+                  e.preventDefault(); 
                   handleMessageSend();
                 }
               }}
-              sx={{ marginRight: "8px" }}
+              sx={{ marginRight: "8px", bgcolor: "white" }}
             />
             <Button
               variant="contained"

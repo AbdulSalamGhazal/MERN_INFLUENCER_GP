@@ -1,11 +1,21 @@
 import axios from "axios";
 import { useState, useEffect } from "react";
+import { useNavigate } from "react-router-dom";
+
 import Filters from "../components/Filters";
 import InfluencersCards from "../components/InfluencersCards";
+import useAuth from "../../context/AuthContext";
+
 function Influencers() {
   const [influencers, setInfluencers] = useState([]);
   const [filters, setFilters] = useState({});
+  const { user } = useAuth();
+  const history = useNavigate();
+
   useEffect(() => {
+    if (user.type === "Influencer") {
+      return history("/");
+    }
     const fetchData = async () => {
       try {
         const response = await axios.get("http://localhost:3001/influencers", {
@@ -18,7 +28,7 @@ function Influencers() {
     };
 
     fetchData();
-  }, [filters]);
+  }, [filters, user.type, history]);
 
   return (
     <>

@@ -13,15 +13,18 @@ import {
   ListItemAvatar,
   ListItemText,
   Divider,
+  Button,
 } from "@mui/material";
-import EmailIcon from "@mui/icons-material/Email";
+import { Link } from "react-router-dom";
+
 import LocationOnIcon from "@mui/icons-material/LocationOn";
 import GroupIcon from "@mui/icons-material/Group";
-import FavoriteIcon from "@mui/icons-material/Favorite";
 import CommentIcon from "@mui/icons-material/Comment";
 import CheckCircleOutlineIcon from "@mui/icons-material/CheckCircleOutline";
 import InterestIcon from "@mui/icons-material/Extension";
 import PeopleIcon from "@mui/icons-material/People";
+import FavoriteIcon from "@mui/icons-material/Favorite";
+import EmailIcon from "@mui/icons-material/Email";
 
 function InfluencerPage() {
   let { influencerId } = useParams();
@@ -280,6 +283,34 @@ function InfluencerPage() {
               />
             </ListItem>
           </List>
+        </Grid>
+        <Grid item xs={6}>
+          <Button
+            variant="contained"
+            size="large"
+            startIcon={<FavoriteIcon />}
+            fullWidth
+            sx={{ mt: 2 }}
+          >
+            إضافة للمفضلة
+          </Button>
+        </Grid>
+
+        <Grid item xs={6}>
+          <Link
+            to={`/chat/${influencer.id}`}
+            style={{ textDecoration: "none", color: "inherit" }}
+          >
+            <Button
+              variant="contained"
+              size="large"
+              startIcon={<EmailIcon />}
+              fullWidth
+              sx={{ mt: 2 }}
+            >
+              إرسال رسالة
+            </Button>
+          </Link>
         </Grid>
       </Grid>
     </Box>

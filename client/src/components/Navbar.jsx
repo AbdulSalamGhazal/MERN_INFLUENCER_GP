@@ -60,24 +60,26 @@ export default function Navbar() {
 
         {user && (
           <Box sx={{ display: "flex", flexGrow: 1, justifyContent: "center" }}>
-            <Button
-              color="inherit"
-              component={RouterLink}
-              to="/influencers"
-              sx={{
-                border:
-                  location.pathname === "/influencers"
-                    ? "2px solid white"
-                    : "none",
-                borderRadius: "5px",
-                marginRight: "8px",
-              }}
-            >
-              <PeopleAltIcon sx={{ fontSize: "2rem", mr: 1 }} />
-              <Typography variant="subtitle1" sx={{ fontSize: "1.2rem" }}>
-                المشاهير
-              </Typography>
-            </Button>
+            {user.type === "Business" && (
+              <Button
+                color="inherit"
+                component={RouterLink}
+                to="/influencers"
+                sx={{
+                  border:
+                    location.pathname === "/influencers"
+                      ? "2px solid white"
+                      : "none",
+                  borderRadius: "5px",
+                  marginRight: "8px",
+                }}
+              >
+                <PeopleAltIcon sx={{ fontSize: "2rem", mr: 1 }} />
+                <Typography variant="subtitle1" sx={{ fontSize: "1.2rem" }}>
+                  المشاهير
+                </Typography>
+              </Button>
+            )}
             <Button
               color="inherit"
               component={RouterLink}

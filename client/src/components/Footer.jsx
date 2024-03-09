@@ -15,7 +15,7 @@ const Footer = () => {
         <div>
           <IconButton
             component={Link}
-            href="https://https://github.com/AbdulSalamGhazal/MERN_INFLUENCER_GP"
+            href="https://github.com/AbdulSalamGhazal/MERN_INFLUENCER_GP"
             target="_blank"
             rel="noopener noreferrer"
             color="inherit"
