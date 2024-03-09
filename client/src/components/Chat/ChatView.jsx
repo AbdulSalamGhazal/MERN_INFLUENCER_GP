@@ -1,4 +1,5 @@
-import { useState, useEffect } from "react";
+/* eslint-disable react-hooks/exhaustive-deps */
+import { useState, useEffect, Fragment } from "react";
 import {
   AppBar,
   Box,
@@ -75,7 +76,6 @@ function ChatView({ chat }) {
       console.error("Error sending message:", error);
     }
   };
-  console.log(messages);
 
   return (
     <Box
@@ -84,6 +84,7 @@ function ChatView({ chat }) {
         height: "100%",
         display: "flex",
         flexDirection: "column",
+        border: "0.5px solid gray",
       }}
     >
       <AppBar position="static" color="primary" elevation={0}>
@@ -140,41 +141,59 @@ function ChatView({ chat }) {
             }}
           >
             {messages.map((message, index) => (
-              <Box
-                key={index}
-                sx={{
-                  display: "flex",
-                  justifyContent:
-                    message.sender === user.type ? "flex-end" : "flex-start",
-                  mb: 1,
-                }}
-              >
-                <Paper
-                  elevation={3}
-                  sx={{
-                    maxWidth: "80%",
-                    padding: 1,
-                    pb: 0,
-                    bgcolor:
-                      message.sender === user.type ? "#ADD8E6" : "#90EE90",
-                    border: message.isCondition ? "3px solid black" : "none",
-                  }}
-                >
-                  <Typography variant="body1">{message.content}</Typography>
+              <Fragment key={index}>
+                {index === 0 ||
+                messages[index].date !== messages[index - 1].date ? (
                   <Typography
-                    sx={{ p: 0 }}
-                    variant="caption"
-                    display="block"
-                    gutterBottom
+                    sx={{
+                      textAlign: "center",
+                      marginBottom: "8px",
+                    }}
+                    variant="body2"
+                    color="text.secondary"
                   >
-                    {new Date(message.updatedAt).toLocaleTimeString("ar-EG", {
-                      hour: "numeric",
-                      minute: "numeric",
-                      hour12: true,
+                    {new Date(message.updatedAt).toLocaleDateString("ar-EG", {
+                      year: "numeric",
+                      month: "long",
+                      day: "numeric",
                     })}
                   </Typography>
-                </Paper>
-              </Box>
+                ) : null}
+                <Box
+                  sx={{
+                    display: "flex",
+                    justifyContent:
+                      message.sender === user.type ? "flex-end" : "flex-start",
+                    mb: 1,
+                  }}
+                >
+                  <Paper
+                    elevation={3}
+                    sx={{
+                      maxWidth: "80%",
+                      padding: 1,
+                      pb: 0,
+                      bgcolor:
+                        message.sender === user.type ? "#ADD8E6" : "#90EE90",
+                      border: message.isCondition ? "3px solid black" : "none",
+                    }}
+                  >
+                    <Typography variant="body1">{message.content}</Typography>
+                    <Typography
+                      sx={{ p: 0 }}
+                      variant="caption"
+                      display="block"
+                      gutterBottom
+                    >
+                      {new Date(message.updatedAt).toLocaleTimeString("ar-EG", {
+                        hour: "numeric",
+                        minute: "numeric",
+                        hour12: true,
+                      })}
+                    </Typography>
+                  </Paper>
+                </Box>
+              </Fragment>
             ))}
           </Box>
           <Box

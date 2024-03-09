@@ -11,6 +11,8 @@ function Chat() {
   const [chats, setChats] = useState([]);
   const [isChatLoaded, setIsChatLoaded] = useState(false);
   const [selectedChat, setSelectedChat] = useState(null);
+  const [rerunEffect, setRerunEffect] = useState(false); // New state variable
+
   let { recieverId } = useParams();
   const history = useNavigate();
 
@@ -29,10 +31,11 @@ function Chat() {
       }
     };
 
-    if (user._id) {
+    if (user._id || rerunEffect) {
       fetchChats();
     }
-  }, [user]);
+  }, [user, rerunEffect]);
+
   useEffect(() => {
     const selectChat = async () => {
       if (recieverId && isChatLoaded) {
@@ -67,7 +70,13 @@ function Chat() {
     selectChat();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [recieverId, isChatLoaded]);
+  useEffect(() => {
+    const interval = setInterval(() => {
+      setRerunEffect((prev) => !prev);
+    }, 1000);
 
+    return () => clearInterval(interval);
+  }, []);
   return (
     <Box
       sx={{

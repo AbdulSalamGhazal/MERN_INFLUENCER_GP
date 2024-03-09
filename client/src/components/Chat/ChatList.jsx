@@ -10,7 +10,15 @@ import {
 
 function ChatList({ setSelectedChat, chats, selectedChat }) {
   return (
-    <List sx={{ bgcolor: "#f7f7f7", height: "100%", overflowY: "auto", pt: 0 }}>
+    <List
+      sx={{
+        bgcolor: "#f7f7f7",
+        height: "100%",
+        overflowY: "auto",
+        pt: 0,
+        border: "0.5px solid gray",
+      }}
+    >
       <AppBar position="static" color="primary" elevation={0}>
         <Toolbar variant="dense">
           <Typography
