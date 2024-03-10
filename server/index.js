@@ -16,6 +16,7 @@ const { storage } = require("./cloudinary");
 const multer = require("multer");
 const upload = multer({ storage });
 const { protect } = require("./middleware/authMiddleware");
+const influencer = require("./models/influencer");
 const app = express();
 app.use(express.json());
 app.use(cors());
@@ -36,17 +37,44 @@ app.get("/influencers/:id", async (req, res) => {
 app.post("/influencers", upload.single("image"), async (req, res) => {
   Influencer.create({ ...req.body, image: req.file?.path })
     .then((influencer) =>
+      // res.json({
+      //   _id: influencer._id,
+      //   token: generateToken(influencer._id),
+      //   type: "Influencer",
+      //   name: influencer.name,
+      //   image: influencer.image,
+      //   description: influencer.description,
+      // })
       res.json({
-        _id: influencer._id,
         token: generateToken(influencer._id),
         type: "Influencer",
-        name: influencer.name,
-        image: influencer.image,
-        description: influencer.description,
+        ...influencer._doc
       })
     )
     .catch((err) => res.json(err));
 });
+app.patch("/influencers/:receiver_id", upload.single("image"), async (req, res) => {
+  const { receiver_id } = req.params;
+  const updates = { ...req.body }
+  if (req.file?.path) updates.image = req.file.path;
+  Influencer.findById(receiver_id)
+  .then(influencer => {
+    Object.assign(influencer, { ...updates });  // Merge properties using spread
+    return influencer.save();
+  })
+  .then(updatedInfluencer => {
+    console.log('Influencer updated:', updatedInfluencer);
+    res.json({
+      token: generateToken(influencer._id),
+      type: "Influencer",
+      ...updatedInfluencer._doc
+    })
+  })
+  .catch(err => {
+    console.error(err);
+    res.json(err)
+  });
+})
 // creating business
 app.post("/business", upload.single("image"), async (req, res) => {
   Business.create({ ...req.body, image: req.file?.path })
@@ -77,13 +105,18 @@ app.post(
       throw new Error("Invalid Type");
     }
     if (user && (await user.matchPassword(password))) {
+      // res.json({
+      //   _id: user._id,
+      //   token: generateToken(user._id),
+      //   type,
+      //   name: user.name ? user.name : user.companyName,
+      //   image: user.image,
+      //   description: user.description,
+      // });
       res.json({
-        _id: user._id,
+        ...user._doc,
         token: generateToken(user._id),
         type,
-        name: user.name ? user.name : user.companyName,
-        image: user.image,
-        description: user.description,
       });
     } else {
       return res.status(401).json({ error: "Invalid email or password" });

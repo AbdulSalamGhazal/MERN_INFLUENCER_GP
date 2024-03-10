@@ -1,21 +1,8 @@
-import Button from "@mui/material/Button";
-import Alert from "@mui/material/Alert";
-import TextField from "@mui/material/TextField";
-import CircularProgress from "@mui/material/CircularProgress";
-import Link from "@mui/material/Link";
-import Grid from "@mui/material/Unstable_Grid2";
 import Box from "@mui/material/Box";
 import Typography from "@mui/material/Typography";
 import Tabs from "@mui/material/Tabs";
 import Tab from "@mui/material/Tab";
 import { useState } from "react";
-import useAuth from "../../context/AuthContext";
-import axios from "axios";
-import { useNavigate } from "react-router-dom";
-import { useForm } from "react-hook-form";
-
-import PasswordInput from "../components/signup/PasswordInput";
-import patterns from "../utils/patterns";
 
 import InfluencerSignup from './InfluencerSignup';
 import BusinessSignup from './BusinessSignup';
