@@ -1,7 +1,7 @@
 import Button from "@mui/material/Button";
 import TextField from "@mui/material/TextField";
 import Box from "@mui/material/Box";
-import Typography from "@mui/material/Typography";
+// import Typography from "@mui/material/Typography";
 import IconButton from "@mui/material/IconButton";
 import Alert from "@mui/material/Alert";
 import AddCircleOutlineIcon from '@mui/icons-material/AddCircleOutline';
@@ -71,7 +71,8 @@ const InfluencerSignup = () => {
     } catch (error) {
       setWaiting(false)
       console.error("Error fetching data:", error);
-      setErrorAlert(error.message);
+      // setErrorAlert(error.message);
+      setErrorAlert('حدث خطأ حاول مجددا')
       setTimeout(() => {
         setErrorAlert(null);
       }, 3000);

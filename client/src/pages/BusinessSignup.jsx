@@ -1,7 +1,7 @@
 import Button from "@mui/material/Button";
 import TextField from "@mui/material/TextField";
 import Box from "@mui/material/Box";
-import Typography from "@mui/material/Typography";
+// import Typography from "@mui/material/Typography";
 import Alert from "@mui/material/Alert";
 import CircularProgress from "@mui/material/CircularProgress";
 import { useNavigate } from "react-router-dom";
@@ -25,7 +25,6 @@ const BusinessSignup = () => {
 
   const { login } = useAuth();
   let navigate = useNavigate();
-  console.log(errors);
 
   const onSubmit = async () => {
     setWaiting(true);
@@ -50,7 +49,8 @@ const BusinessSignup = () => {
       navigate("/");
     } catch (error) {
       console.error("Error fetching data:", error);
-      setErrorAlert(error.message);
+      // setErrorAlert(error.message);
+      setErrorAlert('حدث خطأ حاول مجددا');
       setWaiting(false);
       setTimeout(() => {
         setErrorAlert(null);

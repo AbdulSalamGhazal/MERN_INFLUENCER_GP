@@ -52,13 +52,16 @@ const Login = () => {
       console.error("Login error:", error);
       if (error.response) {
         // The request was made and the server responded with a status code
-        setErrorAlert(error.response.data.error);
+        // setErrorAlert(error.response.data.error);
+        setErrorAlert('البريد لالكتروني او كلمة خاطئة');
       } else if (error.request) {
         // The request was made but no response was received
-        setErrorAlert("no reply, try later");
+        // setErrorAlert("no reply, try later");
+        setErrorAlert('حدث خطأ حاول مجددا');
       } else {
         // Something happened in setting up the request that triggered an Error
-        setErrorAlert("an error happend, try again");
+        // setErrorAlert("an error happend, try again");
+        setErrorAlert('حدث خطأ حاول مجددا');
       }
       setTimeout(() => {
         setErrorAlert(null);
