@@ -55,7 +55,7 @@ app.post("/influencers", upload.single("image"), async (req, res) => {
 });
 app.patch("/influencers/:receiver_id", upload.single("image"), async (req, res) => {
   const { receiver_id } = req.params;
-  const updates = { ...req.body }
+  const updates = { ...req.body, isActive: true }
   if (req.file?.path) updates.image = req.file.path;
   Influencer.findById(receiver_id)
   .then(influencer => {
