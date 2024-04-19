@@ -13,7 +13,7 @@ import {
   FormControlLabel,
 } from "@mui/material";
 import { Link } from "react-router-dom";
-
+import CampaignStarter from "../CampaignStarter";
 import InfoIcon from "@mui/icons-material/Info";
 import useAuth from "../../../context/AuthContext";
 import axios from "axios";
@@ -98,7 +98,6 @@ function ChatView({ chat }) {
                 width: "100%",
                 display: "flex",
                 alignItems: "center",
-                justifyContent: "space-between",
               }}
             >
               <Typography variant="h6" color="inherit">
@@ -112,11 +111,19 @@ function ChatView({ chat }) {
                 <IconButton
                   aria-label="تفاصيل أكثر"
                   size="large"
-                  sx={{ color: "white" }}
+                  sx={{ color: "white", m: 0 }}
                 >
                   <InfoIcon sx={{ fontSize: 28 }} />
                 </IconButton>
               </Link>
+              <Box sx={{ marginLeft: "auto" }}>
+                <CampaignStarter
+                  conditions={messages.filter((message) => message.isCondition)}
+                  receiverId={user.type === "Influencer"
+                  ? chat.businessId._id
+                  : chat.influencerId._id}
+                />
+              </Box>
             </Box>
           ) : (
             <Typography

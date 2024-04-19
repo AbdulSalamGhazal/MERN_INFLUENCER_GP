@@ -10,6 +10,7 @@ const Influencer = require("./models/influencer");
 const Business = require("./models/business");
 const Chat = require("./models/chat");
 const Message = require("./models/message");
+const Campaign = require("./models/campaign");
 const asyncHandler = require("express-async-handler");
 const generateToken = require("./config/generateToken");
 const { storage } = require("./cloudinary");
@@ -48,33 +49,37 @@ app.post("/influencers", upload.single("image"), async (req, res) => {
       res.json({
         token: generateToken(influencer._id),
         type: "Influencer",
-        ...influencer._doc
+        ...influencer._doc,
       })
     )
     .catch((err) => res.json(err));
 });
-app.patch("/influencers/:receiver_id", upload.single("image"), async (req, res) => {
-  const { receiver_id } = req.params;
-  const updates = { ...req.body, isActive: true }
-  if (req.file?.path) updates.image = req.file.path;
-  Influencer.findById(receiver_id)
-  .then(influencer => {
-    Object.assign(influencer, { ...updates });  // Merge properties using spread
-    return influencer.save();
-  })
-  .then(updatedInfluencer => {
-    console.log('Influencer updated:', updatedInfluencer);
-    res.json({
-      token: generateToken(influencer._id),
-      type: "Influencer",
-      ...updatedInfluencer._doc
-    })
-  })
-  .catch(err => {
-    console.error(err);
-    res.json(err)
-  });
-})
+app.patch(
+  "/influencers/:receiver_id",
+  upload.single("image"),
+  async (req, res) => {
+    const { receiver_id } = req.params;
+    const updates = { ...req.body, isActive: true };
+    if (req.file?.path) updates.image = req.file.path;
+    Influencer.findById(receiver_id)
+      .then((influencer) => {
+        Object.assign(influencer, { ...updates }); // Merge properties using spread
+        return influencer.save();
+      })
+      .then((updatedInfluencer) => {
+        console.log("Influencer updated:", updatedInfluencer);
+        res.json({
+          token: generateToken(influencer._id),
+          type: "Influencer",
+          ...updatedInfluencer._doc,
+        });
+      })
+      .catch((err) => {
+        console.error(err);
+        res.json(err);
+      });
+  }
+);
 // creating business
 app.post("/business", upload.single("image"), async (req, res) => {
   Business.create({ ...req.body, image: req.file?.path })
@@ -285,7 +290,7 @@ app.post(
     const message = await Message.create({
       sender: senderType,
       content,
-      isCondition
+      isCondition,
     });
 
     chat.messages.push(message._id);
@@ -293,6 +298,73 @@ app.post(
     await chat.save();
 
     res.json(message);
+  })
+);
+
+// get all campaign for user (business or influencer)
+// @get {userId, userType} = req.user
+app.get(
+  "/campaign",
+  protect,
+  asyncHandler(async (req, res) => {
+    const userId = req.user._id;
+    const userType = req.user.type;
+    let query = {};
+    if (userType === "Influencer") {
+      query = { influencerId: userId };
+    } else if (userType === "Business") {
+      query = { businessId: userId };
+    } else {
+      return res.status(400).json({ message: "Invalid user type" });
+    }
+
+    try {
+      const campaign = await Campaign.find(query); // populate the names
+      res.json(campaign);
+    } catch (error) {
+      console.error("Error fetching chats:", error);
+      res.status(500).json({ message: "Internal server error" });
+    }
+  })
+); // access or create new campaign
+// @post  { receiver_id } = req.body - {sender_id,userType} = req.user
+app.post(
+  "/campaign",
+  protect,
+  asyncHandler(async (req, res) => {
+    try {
+      const { campaignName, conditions, receiverId } = req.body;
+      const sender_id = req.user._id;
+      const userType = req.user.type;
+
+      if (!mongoose.isValidObjectId(receiverId)) {
+        return res.status(400).json({ message: "Invalid receiver_id" });
+      }
+
+      const searchCriteria =
+        userType === "Influencer"
+          ? { influencerId: sender_id, businessId: receiverId }
+          : { influencerId: receiverId, businessId: sender_id };
+
+      let campaign = await Campaign.findOne(searchCriteria).populate({
+        path: userType === "Influencer" ? "businessId" : "influencerId",
+        // add name and maybe images,
+      });
+
+      if (!campaign) {
+        // add the other fields
+        campaign = await Campaign.create({
+          influencerId: userType === "Influencer" ? sender_id : receiverId,
+          businessId: userType === "Business" ? sender_id : receiverId,
+          campaignName: campaignName,
+          conditions: conditions,
+          paymentStatus: "not paid",
+        });
+      }
+      res.status(200).json(campaign);
+    } catch (error) {
+      res.status(500).json({ message: "Internal server error" });
+    }
   })
 );
 app.listen(3001, () => {
