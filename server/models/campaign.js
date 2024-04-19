@@ -6,6 +6,7 @@ const campaignSchema = mongoose.Schema(
     businessId: { type: mongoose.Schema.Types.ObjectId, ref: "Business" },
     campaignName: String,
     conditions: [{ type: mongoose.Schema.Types.ObjectId, ref: "Message" }],
+    status:String,
     paymentStatus: String,
 
   },

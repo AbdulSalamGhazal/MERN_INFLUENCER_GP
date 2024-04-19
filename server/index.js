@@ -317,16 +317,37 @@ app.get(
     } else {
       return res.status(400).json({ message: "Invalid user type" });
     }
-
     try {
-      const campaign = await Campaign.find(query); // populate the names
-      res.json(campaign);
+      const campaigns = await Campaign.find(query)
+        .populate("influencerId", "name image")
+        .populate("businessId", "companyName image"); // populate the names
+
+      const campaignsWithDetails = campaigns.map((campaign) => {
+        return {
+          ...campaign._doc,
+          senderName:
+            userType === "Influencer"
+              ? campaign.influencerId.name
+              : campaign.businessId.companyName,
+          receiverName:
+            userType === "Influencer"
+              ? campaign.businessId.companyName
+              : campaign.influencerId.name,
+          receiverImage:
+            userType === "Influencer"
+              ? campaign.businessId.image
+              : campaign.influencerId.image,
+        };
+      });
+
+      res.json(campaignsWithDetails);
     } catch (error) {
       console.error("Error fetching chats:", error);
       res.status(500).json({ message: "Internal server error" });
     }
   })
-); // access or create new campaign
+);
+// access or create new campaign
 // @post  { receiver_id } = req.body - {sender_id,userType} = req.user
 app.post(
   "/campaign",
