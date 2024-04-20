@@ -5,6 +5,7 @@ const express = require("express");
 const mongoose = require("mongoose");
 const cors = require("cors");
 const filters = require("./functions/filters");
+const campaignFilters = require("./functions/campaignFilters");
 const getChatQuery = require("./functions/getChatQuery");
 const Influencer = require("./models/influencer");
 const Business = require("./models/business");
@@ -309,11 +310,13 @@ app.get(
   asyncHandler(async (req, res) => {
     const userId = req.user._id;
     const userType = req.user.type;
-    let query = {};
+    const filters = req.query;
+    console.log(req.query);
+    let query = campaignFilters(filters);
     if (userType === "Influencer") {
-      query = { influencerId: userId };
+      query.influencerId = userId;
     } else if (userType === "Business") {
-      query = { businessId: userId };
+      query.businessId = userId;
     } else {
       return res.status(400).json({ message: "Invalid user type" });
     }
@@ -339,7 +342,7 @@ app.get(
               : campaign.influencerId.image,
         };
       });
-
+      console.log(campaignsWithDetails)
       res.json(campaignsWithDetails);
     } catch (error) {
       console.error("Error fetching chats:", error);
@@ -369,17 +372,17 @@ app.post(
 
       let campaign = await Campaign.findOne(searchCriteria).populate({
         path: userType === "Influencer" ? "businessId" : "influencerId",
-        // add name and maybe images,
       });
 
       if (!campaign) {
-        // add the other fields
         campaign = await Campaign.create({
           influencerId: userType === "Influencer" ? sender_id : receiverId,
           businessId: userType === "Business" ? sender_id : receiverId,
           campaignName: campaignName,
           conditions: conditions,
-          paymentStatus: "not paid",
+          status: "لم يحن الموعد",
+          paymentStatus: "لم يتم الدفع",
+
         });
       }
       res.status(200).json(campaign);

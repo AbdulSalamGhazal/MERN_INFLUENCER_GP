@@ -45,11 +45,11 @@ export default function Navbar() {
     setProfileDialogOpen(true);
     handleClose();
   };
-  
+
   const handleMyAcountOpen = () => {
-    navigate('/account');
+    navigate("/account");
     handleClose();
-  }
+  };
 
   return (
     <AppBar position="static">
@@ -60,7 +60,7 @@ export default function Navbar() {
           to="/"
           sx={{ fontWeight: "bold", fontSize: "2rem" }}
         >
-          مشهوري
+          مؤثري
         </Button>
 
         {user && (
@@ -81,7 +81,7 @@ export default function Navbar() {
               >
                 <PeopleAltIcon sx={{ fontSize: "2rem", mr: 1 }} />
                 <Typography variant="subtitle1" sx={{ fontSize: "1.2rem" }}>
-                  المشاهير
+                  المؤثرين
                 </Typography>
               </Button>
             )}

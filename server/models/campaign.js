@@ -6,9 +6,13 @@ const campaignSchema = mongoose.Schema(
     businessId: { type: mongoose.Schema.Types.ObjectId, ref: "Business" },
     campaignName: String,
     conditions: [{ type: mongoose.Schema.Types.ObjectId, ref: "Message" }],
-    status:String,
-    paymentStatus: String,
-
+    status: String,
+    payment: String,
+    amount: Number,
+    isApproved: {
+      type: Boolean,
+      default: true,
+    },
   },
   { timestamps: true }
 );

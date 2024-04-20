@@ -33,9 +33,13 @@ export default function CampaignStarter({ conditions, receiverId }) {
 
   const [open, setOpen] = useState(false);
   const [campaignName, setCampaignName] = useState("");
+  const [campaignAmount, setCampaignAmount] = useState(0);
 
   const handleChangeCampaignName = (event) => {
     setCampaignName(event.target.value);
+  };
+  const handleChangeCampaignAmount = (event) => {
+    setCampaignAmount(event.target.value);
   };
 
   const handleClickOpen = () => {
@@ -47,12 +51,13 @@ export default function CampaignStarter({ conditions, receiverId }) {
   };
   const turnToCampaign = async () => {
     try {
-      const response = await axios.post(
+      await axios.post(
         "http://localhost:3001/campaign",
         {
           campaignName: campaignName,
           conditions: conditions,
           receiverId: receiverId,
+          amount: campaignAmount
         },
         {
           headers: {
@@ -60,8 +65,8 @@ export default function CampaignStarter({ conditions, receiverId }) {
           },
         }
       );
-      const newCampaign = response.data;
-      console.log(newCampaign)
+      setCampaignName("")
+      setCampaignAmount(0)
     } catch (error) {
       console.error("Error fetching chats:", error);
     }
@@ -101,6 +106,16 @@ export default function CampaignStarter({ conditions, receiverId }) {
             fullWidth
             sx={{ mb: 2 }}
           />
+          <TextField
+          id="outlined-number"
+          label="المبلغ"
+          type="number"
+          value={campaignAmount}
+          onChange={handleChangeCampaignAmount}
+          InputLabelProps={{
+            shrink: true,
+          }}
+        />
           <Typography gutterBottom>الشروط:</Typography>
           <List>
             {conditions.map((condition, index) => (

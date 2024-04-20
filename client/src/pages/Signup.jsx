@@ -35,7 +35,7 @@ const Signup = () => {
           variant="fullWidth"
         >
           <Tab label="صاحب عمل" value={"Business"} />
-          <Tab label="مشهور" value={"Influencer"} />
+          <Tab label="مؤثر" value={"Influencer"} />
         </Tabs>
       </Box>
 
