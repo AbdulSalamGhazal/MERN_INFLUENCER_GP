@@ -310,9 +310,7 @@ app.get(
   asyncHandler(async (req, res) => {
     const userId = req.user._id;
     const userType = req.user.type;
-    const filters = req.query;
-    console.log(req.query);
-    let query = campaignFilters(filters);
+    let query = campaignFilters(req.query);
     if (userType === "Influencer") {
       query.influencerId = userId;
     } else if (userType === "Business") {
@@ -323,7 +321,7 @@ app.get(
     try {
       const campaigns = await Campaign.find(query)
         .populate("influencerId", "name image")
-        .populate("businessId", "companyName image"); // populate the names
+        .populate("businessId", "companyName image");
 
       const campaignsWithDetails = campaigns.map((campaign) => {
         return {
@@ -342,7 +340,7 @@ app.get(
               : campaign.influencerId.image,
         };
       });
-      console.log(campaignsWithDetails)
+      console.log(campaignsWithDetails);
       res.json(campaignsWithDetails);
     } catch (error) {
       console.error("Error fetching chats:", error);
@@ -357,10 +355,10 @@ app.post(
   protect,
   asyncHandler(async (req, res) => {
     try {
-      const { campaignName, conditions, receiverId } = req.body;
+      const { campaignName, conditions, receiverId, amount, date } = req.body;
       const sender_id = req.user._id;
       const userType = req.user.type;
-
+      console.log(date);
       if (!mongoose.isValidObjectId(receiverId)) {
         return res.status(400).json({ message: "Invalid receiver_id" });
       }
@@ -380,9 +378,10 @@ app.post(
           businessId: userType === "Business" ? sender_id : receiverId,
           campaignName: campaignName,
           conditions: conditions,
+          amount: amount,
+          date: date,
           status: "لم يحن الموعد",
           paymentStatus: "لم يتم الدفع",
-
         });
       }
       res.status(200).json(campaign);

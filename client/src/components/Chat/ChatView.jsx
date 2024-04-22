@@ -103,7 +103,7 @@ function ChatView({ chat }) {
               <Typography variant="h6" color="inherit">
                 {chat.receiverName}
               </Typography>
-              {}
+
               <Link
                 to={`/influencers/${chat.receiverId}`}
                 style={{ textDecoration: "none", color: "inherit" }}
@@ -116,14 +116,20 @@ function ChatView({ chat }) {
                   <InfoIcon sx={{ fontSize: 28 }} />
                 </IconButton>
               </Link>
-              <Box sx={{ marginLeft: "auto" }}>
-                <CampaignStarter
-                  conditions={messages.filter((message) => message.isCondition)}
-                  receiverId={user.type === "Influencer"
-                  ? chat.businessId._id
-                  : chat.influencerId._id}
-                />
-              </Box>
+              {user.type === "Business" && (
+                <Box sx={{ marginLeft: "auto" }}>
+                  <CampaignStarter
+                    conditions={messages.filter(
+                      (message) => message.isCondition
+                    )}
+                    receiverId={
+                      user.type === "Influencer"
+                        ? chat.businessId._id
+                        : chat.influencerId._id
+                    }
+                  />
+                </Box>
+              )}
             </Box>
           ) : (
             <Typography
