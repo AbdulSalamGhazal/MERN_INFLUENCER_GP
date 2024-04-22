@@ -13,6 +13,7 @@ import {
   FormControlLabel,
 } from "@mui/material";
 import { Link } from "react-router-dom";
+import BackupTableIcon from "@mui/icons-material/BackupTable";
 import CampaignStarter from "../CampaignStarter";
 import InfoIcon from "@mui/icons-material/Info";
 import useAuth from "../../../context/AuthContext";
@@ -116,7 +117,7 @@ function ChatView({ chat }) {
                   <InfoIcon sx={{ fontSize: 28 }} />
                 </IconButton>
               </Link>
-              {user.type === "Business" && (
+              {user.type === "Business" && !chat.campaignId && (
                 <Box sx={{ marginLeft: "auto" }}>
                   <CampaignStarter
                     conditions={messages.filter(
@@ -209,53 +210,66 @@ function ChatView({ chat }) {
               </Fragment>
             ))}
           </Box>
-          <Box
-            component="form"
-            sx={{
-              display: "flex",
-              justifyContent: "space-between",
-              alignItems: "center",
-              padding: "8px",
-              borderTop: "1px solid #ccc",
-            }}
-            noValidate
-            autoComplete="off"
-          >
-            <TextField
-              autoFocus={true}
-              fullWidth
-              variant="outlined"
-              placeholder="اكتب رسالة..."
-              value={messageText}
-              onChange={(e) => setMessageText(e.target.value)}
-              onKeyPress={(e) => {
-                if (e.key === "Enter") {
-                  e.preventDefault();
-                  handleMessageSend();
-                }
+          {chat.campaignId ? (
+            <Box sx={{ background: "primary" }}>
+              <Link
+                to={`/campaign/${chat.campaignId}`}
+                style={{ textDecoration: "none", color: "inherit" }}
+              >
+                <IconButton size="large" sx={{ color: "primary" }}>
+                  <BackupTableIcon sx={{ fontSize: 28 }} />
+                </IconButton>
+              </Link>
+            </Box>
+          ) : (
+            <Box
+              component="form"
+              sx={{
+                display: "flex",
+                justifyContent: "space-between",
+                alignItems: "center",
+                padding: "8px",
+                borderTop: "1px solid #ccc",
               }}
-              sx={{ marginRight: "8px", bgcolor: "white" }}
-            />
-            <FormControlLabel
-              sx={{ m: 0 }}
-              control={
-                <Switch
-                  checked={isCondition}
-                  onChange={(e) => setIsCondition(e.target.checked)}
-                />
-              }
-              label="شرط؟"
-              labelPlacement="top"
-            />
-
-            <Button
-              variant="contained"
-              color="primary"
-              onClick={handleMessageSend}
+              noValidate
+              autoComplete="off"
             >
-              إرسال
-            </Button>
-          </Box>
+              <TextField
+                autoFocus={true}
+                fullWidth
+                variant="outlined"
+                placeholder="اكتب رسالة..."
+                value={messageText}
+                onChange={(e) => setMessageText(e.target.value)}
+                onKeyPress={(e) => {
+                  if (e.key === "Enter") {
+                    e.preventDefault();
+                    handleMessageSend();
+                  }
+                }}
+                sx={{ marginRight: "8px", bgcolor: "white" }}
+              />
+              <FormControlLabel
+                sx={{ m: 0 }}
+                control={
+                  <Switch
+                    checked={isCondition}
+                    onChange={(e) => setIsCondition(e.target.checked)}
+                  />
+                }
+                label="شرط؟"
+                labelPlacement="top"
+              />
+
+              <Button
+                variant="contained"
+                color="primary"
+                onClick={handleMessageSend}
+              >
+                إرسال
+              </Button>
+            </Box>
+          )}
         </>
       ) : (
         <Box

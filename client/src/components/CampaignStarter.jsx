@@ -20,7 +20,7 @@ import useAuth from "../../context/AuthContext";
 import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import { DatePicker } from "@mui/x-date-pickers/DatePicker";
-
+import { useNavigate } from "react-router-dom"; 
 import Grid from "@mui/material/Unstable_Grid2";
 
 const BootstrapDialog = styled(Dialog)(({ theme }) => ({
@@ -35,6 +35,7 @@ const BootstrapDialog = styled(Dialog)(({ theme }) => ({
 
 export default function CampaignStarter({ conditions, receiverId }) {
   const { user } = useAuth();
+  const navigate = useNavigate();
 
   const [open, setOpen] = useState(false);
   const [campaignName, setCampaignName] = useState("");
@@ -60,7 +61,7 @@ export default function CampaignStarter({ conditions, receiverId }) {
   };
   const turnToCampaign = async () => {
     try {
-      await axios.post(
+      const response = await axios.post(
         "http://localhost:3001/campaign",
         {
           campaignName: campaignName,
@@ -77,6 +78,7 @@ export default function CampaignStarter({ conditions, receiverId }) {
       );
       setCampaignName("");
       setCampaignAmount(0);
+      navigate(`/campaign/${response.data}`);
     } catch (error) {
       console.error("Error:", error);
     }
@@ -84,7 +86,7 @@ export default function CampaignStarter({ conditions, receiverId }) {
 
   return (
     <Fragment>
-      <IconButton aria-label="تحويل لحملة" size="large" sx={{ color: "white" }}>
+      <IconButton  size="large" sx={{ color: "white" }}>
         <RocketLaunchIcon onClick={handleClickOpen} sx={{ fontSize: 28 }} />
       </IconButton>
       <BootstrapDialog

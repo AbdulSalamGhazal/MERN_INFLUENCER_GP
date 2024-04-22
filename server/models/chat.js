@@ -4,6 +4,7 @@ const chatSchema = mongoose.Schema(
   {
     influencerId: { type: mongoose.Schema.Types.ObjectId, ref: "Influencer" },
     businessId: { type: mongoose.Schema.Types.ObjectId, ref: "Business" },
+    campaignId:{ type: mongoose.Schema.Types.ObjectId, ref: "Campaign" },
     lastMessage: String,
     messages: [{ type: mongoose.Schema.Types.ObjectId, ref: "Message" }],
     // isSeen: Boolean, to be added

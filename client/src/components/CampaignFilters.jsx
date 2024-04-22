@@ -118,7 +118,7 @@ function Filters({ setFilters }) {
             </FormControl>
           </Grid>
           <Grid xs={2}>
-            <InputLabel id="check">معتمد؟</InputLabel>
+            <InputLabel id="check">تم الموافقة؟</InputLabel>
 
             <Switch
               sx={{ ml: 4 }}

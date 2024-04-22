@@ -340,7 +340,6 @@ app.get(
               : campaign.influencerId.image,
         };
       });
-      console.log(campaignsWithDetails);
       res.json(campaignsWithDetails);
     } catch (error) {
       console.error("Error fetching chats:", error);
@@ -373,9 +372,12 @@ app.post(
       });
 
       if (!campaign) {
+        const influencerId = userType === "Influencer" ? sender_id : receiverId;
+        const businessId = userType === "Business" ? sender_id : receiverId;
+
         campaign = await Campaign.create({
-          influencerId: userType === "Influencer" ? sender_id : receiverId,
-          businessId: userType === "Business" ? sender_id : receiverId,
+          influencerId: influencerId,
+          businessId: businessId,
           campaignName: campaignName,
           conditions: conditions,
           amount: amount,
@@ -383,13 +385,61 @@ app.post(
           status: "لم يحن الموعد",
           paymentStatus: "لم يتم الدفع",
         });
+        // add campaign id to chat
+        const chat = await Chat.findOne({
+          influencerId: influencerId,
+          businessId: businessId,
+        });
+        chat.campaignId = campaign._id;
+        await chat.save();
       }
-      res.status(200).json(campaign);
+      res.status(200).json(campaign._id);
     } catch (error) {
       res.status(500).json({ message: "Internal server error" });
     }
   })
 );
+// get campaign from campaign id
+app.get(
+  "/campaign/:campaignId",
+  protect,
+  asyncHandler(async (req, res) => {
+    const { campaignId } = req.params;
+    console.log(campaignId);
+    const userType = req.user.type;
+
+    try {
+      const campaign = await Campaign.findById(campaignId)
+        .populate("influencerId", "name image")
+        .populate("businessId", "companyName image")
+        .populate("conditions", "content");
+
+      if (!campaign) {
+        return res.status(404).json({ message: "Campaign not found." });
+      }
+      const campaignWithDetails = {
+        ...campaign._doc,
+        senderName:
+          userType === "Influencer"
+            ? campaign.influencerId.name
+            : campaign.businessId.companyName,
+        receiverName:
+          userType === "Influencer"
+            ? campaign.businessId.companyName
+            : campaign.influencerId.name,
+        receiverImage:
+          userType === "Influencer"
+            ? campaign.businessId.image
+            : campaign.influencerId.image,
+      };
+      res.json(campaignWithDetails);
+    } catch (error) {
+      console.error("Error fetching campaign:", error);
+      res.status(500).json({ message: "Internal server error" });
+    }
+  })
+);
+
 app.listen(3001, () => {
   console.log("server is running");
 });
