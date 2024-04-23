@@ -12,7 +12,7 @@ const campaignSchema = mongoose.Schema(
     date: String,
     isApproved: {
       type: Boolean,
-      default: true,
+      default: false,
     },
   },
   { timestamps: true }

@@ -18,7 +18,7 @@ import CampaignStarter from "../CampaignStarter";
 import InfoIcon from "@mui/icons-material/Info";
 import useAuth from "../../../context/AuthContext";
 import axios from "axios";
-
+import DeleteMessage from "../DeleteMessage";
 function ChatView({ chat }) {
   const { user } = useAuth();
   const [messageText, setMessageText] = useState("");
@@ -177,7 +177,7 @@ function ChatView({ chat }) {
                   sx={{
                     display: "flex",
                     justifyContent:
-                      message.sender === user.type ? "flex-end" : "flex-start",
+                      message.sender === user.type ? "flex-start" : "flex-end",
                     mb: 1,
                   }}
                 >
@@ -188,7 +188,7 @@ function ChatView({ chat }) {
                       padding: 1,
                       pb: 0,
                       bgcolor:
-                        message.sender === user.type ? "#ADD8E6" : "#90EE90",
+                        message.sender === user.type ? "#90EE90" : "#ADD8E6",
                       border: message.isCondition ? "3px solid black" : "none",
                     }}
                   >
@@ -206,19 +206,43 @@ function ChatView({ chat }) {
                       })}
                     </Typography>
                   </Paper>
+                  {message.sender === user.type && !chat.campaignId && (
+                    <DeleteMessage messageId={message._id} />
+                  )}
                 </Box>
               </Fragment>
             ))}
           </Box>
           {chat.campaignId ? (
-            <Box sx={{ background: "primary" }}>
+            <Box
+              sx={{
+                display: "flex",
+                justifyContent: "center",
+                alignItems: "center",
+                background: "primary",
+                width: "100%",
+              }}
+            >
               <Link
                 to={`/campaign/${chat.campaignId}`}
-                style={{ textDecoration: "none", color: "inherit" }}
+                style={{
+                  textDecoration: "none",
+                  color: "inherit",
+                  width: "100%",
+                }}
               >
-                <IconButton size="large" sx={{ color: "primary" }}>
-                  <BackupTableIcon sx={{ fontSize: 28 }} />
-                </IconButton>
+                <Button
+                  variant="contained"
+                  sx={{
+                    height: "45px",
+                    width: "100%",
+                  }}
+                >
+                  الذهاب إلى الحملة
+                  <IconButton size="large" sx={{ color: "white" }}>
+                    <BackupTableIcon sx={{ fontSize: 28 }} />
+                  </IconButton>
+                </Button>
               </Link>
             </Box>
           ) : (

@@ -6,6 +6,7 @@ import Typography from "@mui/material/Typography";
 import { Link } from "react-router-dom";
 import CheckCircleIcon from "@mui/icons-material/CheckCircle";
 import CancelIcon from "@mui/icons-material/Cancel";
+import ScheduleIcon from "@mui/icons-material/Schedule";
 
 export default function CampaignCard({ campaign }) {
   const getStatusBackgroundColor = () => {
@@ -35,10 +36,10 @@ export default function CampaignCard({ campaign }) {
           my: 2,
         }}
       >
-        <Box sx={{ position: "relative", width: 180 }}>
+        <Box sx={{ position: "relative", width: 300 }}>
           <CardMedia
             component="img"
-            sx={{ width: "100%", height: 180, objectFit: "cover" }}
+            sx={{ width: "100%", height: 250, objectFit: "cover" }}
             image={campaign.receiverImage}
             alt="Campaign Receiver Image"
           />
@@ -69,9 +70,31 @@ export default function CampaignCard({ campaign }) {
           }}
         >
           <CardContent sx={{ flex: "1 0 auto" }}>
-            <Typography component="div" variant="h5">
-              {campaign.campaignName}
-            </Typography>
+            <Box
+              sx={{
+                display: "flex",
+                alignItems: "center",
+                justifyContent: "space-between",
+                pr: 1,
+              }}
+            >
+              <Typography component="div" variant="h3" sx={{ flex: "1" }}>
+                {campaign.campaignName}
+              </Typography>
+              <Typography
+                variant="body2"
+                fontWeight="bold"
+                sx={{
+                  fontSize: 25,
+                  flexShrink: 0,
+                  display: "flex",
+                  alignItems: "center",
+                }}
+              >
+                <ScheduleIcon sx={{ mr: 1 }} /> {campaign.date.slice(0, 10)}
+              </Typography>
+            </Box>
+
             <Box
               sx={{
                 backgroundColor: getStatusBackgroundColor(),
@@ -81,8 +104,8 @@ export default function CampaignCard({ campaign }) {
                 mt: 1,
               }}
             >
-              <Typography variant="subtitle2" color="text.primary">
-                الحالة: {campaign.status}
+              <Typography variant="h5" color="text.primary">
+                {campaign.status}
               </Typography>
             </Box>
             <Typography variant="body2" color="text.secondary" sx={{ mt: 1 }}>
@@ -101,13 +124,17 @@ export default function CampaignCard({ campaign }) {
               ) : (
                 <CancelIcon sx={{ color: "red", mr: 1 }} />
               )}
-              <Typography variant="body2">
+              <Typography variant="button">
                 {campaign.isApproved ? "تم الموافقة" : "لم يتم الموافقة"}
               </Typography>
             </Box>
           </CardContent>
           <Box sx={{ alignSelf: "flex-end", pr: 1 }}>
-            <Typography variant="body1" fontWeight="bold" sx={{ fontSize: 25 }}>
+            <Typography
+              variant="body1"
+              fontWeight="bold"
+              sx={{ fontSize: 25, fontFamily: "Nanum Gothic, sans-serif" }}
+            >
               {campaign.amount} ريال
             </Typography>
           </Box>

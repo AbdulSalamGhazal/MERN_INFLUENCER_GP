@@ -357,7 +357,6 @@ app.post(
       const { campaignName, conditions, receiverId, amount, date } = req.body;
       const sender_id = req.user._id;
       const userType = req.user.type;
-      console.log(date);
       if (!mongoose.isValidObjectId(receiverId)) {
         return res.status(400).json({ message: "Invalid receiver_id" });
       }
@@ -405,7 +404,6 @@ app.get(
   protect,
   asyncHandler(async (req, res) => {
     const { campaignId } = req.params;
-    console.log(campaignId);
     const userType = req.user.type;
 
     try {
@@ -435,6 +433,43 @@ app.get(
       res.json(campaignWithDetails);
     } catch (error) {
       console.error("Error fetching campaign:", error);
+      res.status(500).json({ message: "Internal server error" });
+    }
+  })
+);
+// approve/reject campaign
+app.patch(
+  "/campaign/:campaignId",
+  protect,
+  asyncHandler(async (req, res) => {
+    const { campaignId } = req.params;
+    const { isApproved } = req.body;
+
+    try {
+      let campaign = await Campaign.findById(campaignId);
+
+      if (!campaign) {
+        return res.status(404).json({ message: "Campaign not found" });
+      }
+
+      const searchCriteria = {
+        influencerId: campaign.influencerId._id,
+        businessId: campaign.businessId._id,
+      };
+      let chat = await Chat.findOne(searchCriteria);
+      if (isApproved) {
+        campaign.isApproved = isApproved;
+        await campaign.save();
+        await Chat.findByIdAndDelete(chat._id);
+        res.json(campaign);
+      } else {
+        await Campaign.findByIdAndDelete(campaignId);
+        chat.campaignId = null;
+        await chat.save();
+        res.json(null);
+      }
+    } catch (error) {
+      console.error("Error updating campaign:", error);
       res.status(500).json({ message: "Internal server error" });
     }
   })

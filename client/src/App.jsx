@@ -43,7 +43,7 @@ function App() {
             }
           />
           <Route
-            path="//businesses"
+            path="/businesses"
             element={
               <ProtectedRoute>
                 <Businesses />

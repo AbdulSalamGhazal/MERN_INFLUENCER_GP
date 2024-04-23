@@ -1,4 +1,4 @@
-import { useState, Fragment } from "react";
+import { useEffect, useState, Fragment } from "react";
 import RocketLaunchIcon from "@mui/icons-material/RocketLaunch";
 import {
   TextField,
@@ -20,7 +20,7 @@ import useAuth from "../../context/AuthContext";
 import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import { DatePicker } from "@mui/x-date-pickers/DatePicker";
-import { useNavigate } from "react-router-dom"; 
+import { useNavigate } from "react-router-dom";
 import Grid from "@mui/material/Unstable_Grid2";
 
 const BootstrapDialog = styled(Dialog)(({ theme }) => ({
@@ -41,6 +41,7 @@ export default function CampaignStarter({ conditions, receiverId }) {
   const [campaignName, setCampaignName] = useState("");
   const [campaignAmount, setCampaignAmount] = useState(0);
   const [campaignDate, setCampaignDate] = useState("");
+  const [disableButton, setDisableButton] = useState(false);
 
   const handleChangeCampaignName = (event) => {
     setCampaignName(event.target.value);
@@ -68,7 +69,7 @@ export default function CampaignStarter({ conditions, receiverId }) {
           conditions: conditions,
           receiverId: receiverId,
           amount: campaignAmount,
-          date: campaignDate
+          date: campaignDate,
         },
         {
           headers: {
@@ -84,11 +85,27 @@ export default function CampaignStarter({ conditions, receiverId }) {
     }
   };
 
+  useEffect(() => {
+    if (conditions.length === 0) {
+      setDisableButton(true);
+    } else {
+      setDisableButton(false);
+    }
+  }, [conditions]);
+
   return (
     <Fragment>
-      <IconButton  size="large" sx={{ color: "white" }}>
-        <RocketLaunchIcon onClick={handleClickOpen} sx={{ fontSize: 28 }} />
-      </IconButton>
+      <Button
+        variant="contained"
+        onClick={handleClickOpen}
+        sx={{ height: "40px", border: "1px solid white" }}
+      >
+        تحويل إلى حملة
+        <IconButton size="large" sx={{ color: "white" }}>
+          <RocketLaunchIcon sx={{ fontSize: 28 }} />
+        </IconButton>
+      </Button>
+
       <BootstrapDialog
         onClose={handleClose}
         aria-labelledby="customized-dialog-title"
@@ -119,6 +136,7 @@ export default function CampaignStarter({ conditions, receiverId }) {
                 onChange={handleChangeCampaignName}
                 fullWidth
                 sx={{ mb: 2 }}
+                required
               />
             </Grid>
             <Grid xs={6}>
@@ -128,13 +146,18 @@ export default function CampaignStarter({ conditions, receiverId }) {
                 type="number"
                 value={campaignAmount}
                 onChange={handleChangeCampaignAmount}
+                required
                 InputLabelProps={{
                   shrink: true,
                 }}
               />
             </Grid>
             <Grid xs={6}>
-              <LocalizationProvider sx={{ mx: 2 }} dateAdapter={AdapterDayjs}>
+              <LocalizationProvider
+                required
+                sx={{ mx: 2 }}
+                dateAdapter={AdapterDayjs}
+              >
                 <DatePicker
                   label="تاريخ التنفيذ"
                   value={campaignDate}
@@ -155,7 +178,7 @@ export default function CampaignStarter({ conditions, receiverId }) {
           </Grid>
         </DialogContent>
         <DialogActions>
-          <Button autoFocus onClick={turnToCampaign}>
+          <Button autoFocus onClick={turnToCampaign} disabled={disableButton}>
             تحويل
           </Button>
         </DialogActions>
