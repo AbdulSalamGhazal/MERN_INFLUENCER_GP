@@ -106,7 +106,11 @@ function ChatView({ chat }) {
               </Typography>
 
               <Link
-                to={`/influencers/${chat.receiverId}`}
+                to={
+                  user.type === "Business"
+                    ? `/influencers/${chat.receiverId}`
+                    : `/businesses/${chat.receiverId}`
+                }
                 style={{ textDecoration: "none", color: "inherit" }}
               >
                 <IconButton
@@ -207,7 +211,10 @@ function ChatView({ chat }) {
                     </Typography>
                   </Paper>
                   {message.sender === user.type && !chat.campaignId && (
-                    <DeleteMessage messageId={message._id} fetchMessages={fetchMessages}/>
+                    <DeleteMessage
+                      messageId={message._id}
+                      fetchMessages={fetchMessages}
+                    />
                   )}
                 </Box>
               </Fragment>

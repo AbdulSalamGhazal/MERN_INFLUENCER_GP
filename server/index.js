@@ -6,6 +6,7 @@ const mongoose = require("mongoose");
 const cors = require("cors");
 const filters = require("./functions/filters");
 const campaignFilters = require("./functions/campaignFilters");
+const businessFilters = require("./functions/BusinessFilters");
 const getChatQuery = require("./functions/getChatQuery");
 const Influencer = require("./models/influencer");
 const Business = require("./models/business");
@@ -96,7 +97,32 @@ app.post("/business", upload.single("image"), async (req, res) => {
     )
     .catch((err) => res.json(err));
 });
-
+// fetching all businesses
+app.get(
+  "/businesses",
+  protect,
+  asyncHandler(async (req, res) => {
+    const query = businessFilters(req.query);
+    try {
+      const business = await Business.find(query);
+      res.json(business);
+    } catch (error) {
+      res.status(500).json({ message: "Internal server error" });
+    }
+  })
+);
+app.get(
+  "/businesses/:id",
+  protect,
+  asyncHandler(async (req, res) => {
+    try {
+      const business = await Business.findById(req.params.id);
+      res.json(business);
+    } catch (error) {
+      res.status(500).json({ message: "Internal server error" });
+    }
+  })
+);
 app.post(
   "/login",
   asyncHandler(async (req, res) => {
@@ -138,7 +164,6 @@ app.post(
       const { receiver_id } = req.body;
       const sender_id = req.user._id;
       const userType = req.user.type;
-
       if (!mongoose.isValidObjectId(receiver_id)) {
         return res.status(400).json({ message: "Invalid receiver_id" });
       }
@@ -147,12 +172,10 @@ app.post(
         userType === "Influencer"
           ? { influencerId: sender_id, businessId: receiver_id }
           : { influencerId: receiver_id, businessId: sender_id };
-
       let chat = await Chat.findOne(searchCriteria).populate({
         path: userType === "Influencer" ? "businessId" : "influencerId",
         select: userType === "Influencer" ? "companyName image" : "name image",
       });
-
       if (!chat) {
         chat = await Chat.create({
           influencerId: userType === "Influencer" ? sender_id : receiver_id,
@@ -494,7 +517,6 @@ app.patch(
       }
       res.json({ message: "success" });
     } catch (error) {
-      console.error("Error updating campaign:", error);
       res.status(500).json({ message: "Internal server error" });
     }
   })

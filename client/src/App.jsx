@@ -15,6 +15,7 @@ import Campaign from "./pages/Campaign";
 import CampaignPage from "./pages/CampaginPage";
 import InfluencerPage from "./pages/InfluencerPage";
 import Businesses from "./pages/Businesses";
+import BusinessPage from "./pages/BusinessPage";
 import MyAccount from "./pages/MyAccount";
 
 function App() {
@@ -47,6 +48,14 @@ function App() {
             element={
               <ProtectedRoute>
                 <Businesses />
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="/businesses/:businessId"
+            element={
+              <ProtectedRoute>
+                <BusinessPage />
               </ProtectedRoute>
             }
           />

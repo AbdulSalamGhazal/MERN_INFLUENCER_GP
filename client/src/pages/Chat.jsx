@@ -11,7 +11,7 @@ function Chat() {
   const [chats, setChats] = useState([]);
   const [isChatLoaded, setIsChatLoaded] = useState(false);
   const [selectedChat, setSelectedChat] = useState(null);
-  const [rerunEffect, setRerunEffect] = useState(false); // New state variable
+  const [rerunEffect, setRerunEffect] = useState(false);
 
   let { recieverId } = useParams();
   const history = useNavigate();
