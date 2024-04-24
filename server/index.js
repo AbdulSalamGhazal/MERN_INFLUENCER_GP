@@ -301,6 +301,32 @@ app.post(
     res.json(message);
   })
 );
+// delete meesage by id
+app.delete(
+  "/chat/message/:messageId",
+  protect,
+  asyncHandler(async (req, res) => {
+    try {
+      const { messageId } = req.params;
+
+      const chat = await Chat.findOneAndUpdate(
+        { messages: messageId },
+        { $pull: { messages: messageId } }
+      );
+
+      if (!chat) {
+        return res.status(404).json({ message: "Chat not found" });
+      }
+
+      await Message.findByIdAndDelete(messageId);
+
+      res.json({ message: "Message deleted successfully" });
+    } catch (error) {
+      console.error("Error deleting message:", error);
+      res.status(500).json({ message: "Internal server error" });
+    }
+  })
+);
 
 // get all campaign for user (business or influencer)
 // @get {userId, userType} = req.user
@@ -461,13 +487,12 @@ app.patch(
         campaign.isApproved = isApproved;
         await campaign.save();
         await Chat.findByIdAndDelete(chat._id);
-        res.json(campaign);
       } else {
         await Campaign.findByIdAndDelete(campaignId);
         chat.campaignId = null;
         await chat.save();
-        res.json(null);
       }
+      res.json({ message: "success" });
     } catch (error) {
       console.error("Error updating campaign:", error);
       res.status(500).json({ message: "Internal server error" });

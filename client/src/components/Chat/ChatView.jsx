@@ -207,7 +207,7 @@ function ChatView({ chat }) {
                     </Typography>
                   </Paper>
                   {message.sender === user.type && !chat.campaignId && (
-                    <DeleteMessage messageId={message._id} />
+                    <DeleteMessage messageId={message._id} fetchMessages={fetchMessages}/>
                   )}
                 </Box>
               </Fragment>

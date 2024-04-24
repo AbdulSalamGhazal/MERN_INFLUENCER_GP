@@ -5,9 +5,12 @@ import IconButton from "@mui/material/IconButton";
 import DialogActions from "@mui/material/DialogActions";
 import DialogTitle from "@mui/material/DialogTitle";
 import DeleteIcon from "@mui/icons-material/Delete";
+import axios from "axios";
+import useAuth from "../../context/AuthContext";
 
-export default function DeleteMessage({ messageId }) {
+export default function DeleteMessage({ messageId, fetchMessages }) {
   const [open, setOpen] = React.useState(false);
+  const { user } = useAuth();
 
   const handleClickOpen = () => {
     setOpen(true);
@@ -17,8 +20,17 @@ export default function DeleteMessage({ messageId }) {
     setOpen(false);
   };
 
-  const handleDeleteMessage = () => {
-    console.log(`deleting message ${messageId}`);
+  const handleDeleteMessage = async () => {
+    try {
+      await axios.delete(`http://localhost:3001/chat/message/${messageId}`, {
+        headers: {
+          Authorization: `Bearer ${user.token} ${user.type}`,
+        },
+      });
+      fetchMessages();
+    } catch (error) {
+      console.error("Error deleting message:", error.response.data.message);
+    }
     setOpen(false);
   };
 

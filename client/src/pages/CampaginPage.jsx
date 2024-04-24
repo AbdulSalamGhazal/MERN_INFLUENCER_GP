@@ -23,29 +23,30 @@ export default function CampaginPage() {
   const navigate = useNavigate();
 
   const [campaign, setCampaign] = useState(null);
+  const fetchDataAndUpdateCampaign = async () => {
+    try {
+      const response = await axios.get(
+        `http://localhost:3001/campaign/${campaignId}`,
+        {
+          headers: {
+            Authorization: `Bearer ${user.token} ${user.type}`,
+          },
+        }
+      );
+      console.log(response.data);
+      setCampaign(response.data);
+    } catch (error) {
+      console.error("Error fetching data:", error);
+    }
+  };
   useEffect(() => {
-    const fetchData = async () => {
-      try {
-        const response = await axios.get(
-          `http://localhost:3001/campaign/${campaignId}`,
-          {
-            headers: {
-              Authorization: `Bearer ${user.token} ${user.type}`,
-            },
-          }
-        );
-
-        setCampaign(response.data);
-      } catch (error) {
-        console.error("Error fetching data:", error);
-      }
-    };
-
-    fetchData();
+    fetchDataAndUpdateCampaign();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [campaignId, user.token, user.type]);
   const onApproveOrReject = async (isApproved) => {
+    console.log("Approving");
     try {
-      const response = await axios.patch(
+      await axios.patch(
         `http://localhost:3001/campaign/${campaign._id}`,
         { isApproved: isApproved },
         {
@@ -57,7 +58,8 @@ export default function CampaginPage() {
       if (!isApproved) {
         navigate(`/campaign`);
       }
-      setCampaign(response.data);
+      fetchDataAndUpdateCampaign();
+      console.log("after");
     } catch (error) {
       console.error("Error updating campaign:", error);
       throw new Error("Failed to update campaign");

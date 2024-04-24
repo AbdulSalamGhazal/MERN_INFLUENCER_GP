@@ -101,7 +101,7 @@ export default function Navbar() {
               >
                 <BusinessCenterIcon sx={{ fontSize: "2rem", mr: 1 }} />
                 <Typography variant="subtitle1" sx={{ fontSize: "1.2rem" }}>
-                  المعلنين
+                  التجار
                 </Typography>
               </Button>
             )}
