@@ -12,11 +12,75 @@ import {
 import InfoIcon from "@mui/icons-material/Info";
 import EmailIcon from "@mui/icons-material/Email";
 import { Link } from "react-router-dom";
+import FacebookIcon from "@mui/icons-material/Facebook";
+import TwitterIcon from "@mui/icons-material/Twitter";
+import LinkedInIcon from "@mui/icons-material/LinkedIn";
+import InstagramIcon from "@mui/icons-material/Instagram";
+import LinkIcon from "@mui/icons-material/Link";
+import YouTubeIcon from "@mui/icons-material/YouTube";
 
 function BusinessCard({ business }) {
+  const getSocialMediaLabel = (platform) => {
+    if (platform.includes("facebook")) {
+      return (
+        <>
+          <FacebookIcon fontSize="small" /> فيس بوك
+        </>
+      );
+    } else if (platform.includes("twitter")) {
+      return (
+        <>
+          <TwitterIcon fontSize="small" /> تويتر
+        </>
+      );
+    } else if (platform.includes("linkedin")) {
+      return (
+        <>
+          <LinkedInIcon fontSize="small" /> لينكد إن
+        </>
+      );
+    } else if (platform.includes("instagram")) {
+      return (
+        <>
+          <InstagramIcon fontSize="small" /> إنستغرام
+        </>
+      );
+    } else if (platform.includes("youtube")) {
+      return (
+        <>
+          <LinkIcon fontSize="small" />
+          سناب شات
+        </>
+      );
+    } else if (platform.includes("tiktok")) {
+      return (
+        <>
+          <LinkIcon fontSize="small" />
+          تيك توك
+        </>
+      );
+    } else if (platform.includes("snapchat")) {
+      return (
+        <>
+          <YouTubeIcon fontSize="small" /> يوتيوب
+        </>
+      );
+    } else {
+      return platform;
+    }
+  };
   return (
     <>
-      <Card sx={{ maxWidth: 345, m: 2, boxShadow: 3 }}>
+      <Card
+        sx={{
+          maxWidth: 345,
+          m: 2,
+          boxShadow: 3,
+          height: "100%",
+          display: "flex",
+          flexDirection: "column",
+        }}
+      >
         <Box
           sx={{
             position: "relative",
@@ -38,7 +102,7 @@ function BusinessCard({ business }) {
             }}
           />
         </Box>
-        <CardContent>
+        <CardContent sx={{ flexGrow: 1 }}>
           <Typography gutterBottom variant="h5" component="div">
             {business.companyName}
           </Typography>
@@ -52,7 +116,19 @@ function BusinessCard({ business }) {
           </Typography>
           <Stack direction="row" spacing={1} mb={2}>
             {business.socialMediaLinks.map((platform, index) => (
-              <Chip key={index} label={platform} variant="outlined" />
+              <Link
+                key={index}
+                href={platform}
+                target="_blank"
+                rel="noopener noreferrer"
+                color="inherit"
+                underline="none"
+              >
+                <Chip
+                  label={getSocialMediaLabel(platform)}
+                  variant="outlined"
+                />
+              </Link>
             ))}
           </Stack>
           <Typography variant="body2" color="text.secondary">
@@ -62,10 +138,7 @@ function BusinessCard({ business }) {
             العنوان: {business.address}
           </Typography>
         </CardContent>
-        <CardActions
-          disableSpacing
-          sx={{ justifyContent: "space-between", alignItems: "center" }}
-        >
+        <CardActions disableSpacing sx={{ justifyContent: "space-between" }}>
           <Link
             to={`/chat/${business._id}`}
             style={{ textDecoration: "none", color: "inherit" }}
