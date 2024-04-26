@@ -161,7 +161,10 @@ function ChatView({ chat }) {
             {messages.map((message, index) => (
               <Fragment key={index}>
                 {index === 0 ||
-                messages[index].date !== messages[index - 1].date ? (
+                new Date(message.updatedAt).toLocaleDateString() !==
+                  new Date(
+                    messages[index - 1].updatedAt
+                  ).toLocaleDateString() ? (
                   <Typography
                     sx={{
                       textAlign: "center",
@@ -220,6 +223,7 @@ function ChatView({ chat }) {
               </Fragment>
             ))}
           </Box>
+
           {chat.campaignId ? (
             <Box
               sx={{
