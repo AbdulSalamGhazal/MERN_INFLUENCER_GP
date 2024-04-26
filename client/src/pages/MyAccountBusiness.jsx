@@ -26,7 +26,7 @@ import patterns from "../utils/patterns";
 
 const MyAccountBusiness = ({ user }) => {
   //   const navigate = useNavigate();
-  const {login} = useAuth()
+  const { login } = useAuth()
   const [errorAlert, setErrorAlert] = useState(null);
   const [budgetRange, setBudgetRange] = useState(user.budgetRange?.min || { min: 1000, max: 5000 })
 
@@ -40,7 +40,7 @@ const MyAccountBusiness = ({ user }) => {
     mode: 'onChange',
     defaultValues: {
       ...user,
-      image: undefined, 
+      image: undefined,
       socialMediaLinks: user.socialMediaLinks && user.socialMediaLinks.length || [' ']
     }
   });
@@ -165,7 +165,7 @@ const MyAccountBusiness = ({ user }) => {
 
         <TextField
           {...register("image", {
-            required: user.image? false : "هذا الحقل مطلوب",
+            required: user.image ? false : "هذا الحقل مطلوب",
           })}
           error={errors.image}
           helperText={errors.image?.message}
@@ -279,7 +279,7 @@ const MyAccountBusiness = ({ user }) => {
         />
 
         <FormControl fullWidth margin="dense"
-        size="small" required>
+          size="small" required>
           {/* <InputLabel HTMLFor="age" >Audience age range</InputLabel> */}
           <FormLabel>ميزانية الحملة</FormLabel>
           <Slider
@@ -363,6 +363,8 @@ const MyAccountBusiness = ({ user }) => {
             label={"link"}
           />
         </FormControl> */}
+
+
         {socialMediaLinks.map((link, index) => (
           <PlatformInput
             dir='ltr'
@@ -389,6 +391,19 @@ const MyAccountBusiness = ({ user }) => {
         <IconButton onClick={() => appendLink(' ')} color="primary" aria-label="add field">
           <AddCircleOutlineIcon />
         </IconButton>
+
+        <TextField
+          {...register("autoReply")}
+          error={errors.autoReply}
+          helperText={errors.autoReply?.message}
+          margin="dense"
+          size="small"
+          required
+          fullWidth
+          multiline
+          label="رسالة الرد الآلي"
+          type="text"
+        />
 
         {errorAlert && <Alert severity="error">{errorAlert}</Alert>}
         <Button

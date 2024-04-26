@@ -56,7 +56,7 @@ const MyAccountInfluencer = ({ user }) => {
   } = useForm({
     mode: 'onChange',
     defaultValues: {
-      influencer: {...user, image:undefined}
+      influencer: { ...user, image: undefined }
     }
   });
 
@@ -368,7 +368,7 @@ const MyAccountInfluencer = ({ user }) => {
                     renderValue: (selected) => selected.join(", "),
                   }}
                   {...field}
-                >   
+                >
                   {audienceLocations.map((location) => (
                     <MenuItem key={location.value} value={location.value}>
                       {location.label}
@@ -461,6 +461,27 @@ const MyAccountInfluencer = ({ user }) => {
             <IconButton onClick={() => appendSpecialRequriements(' ')} color="primary" aria-label="add field">
               <AddCircleOutlineIcon />
             </IconButton>
+          </Grid>
+
+          <Grid xs={12}>
+            <Divider sx={{ my: 1, fontSize: '.75em' }}>
+              الرد الآلي
+            </Divider>
+          </Grid>
+
+          <Grid xs={12}>
+            <TextField
+              {...register("influencer.autoReply")}
+              error={errors.influencer?.autoReply}
+              helperText={errors.influencer?.autoReply?.message}
+              margin="dense"
+              size="small"
+              required
+              fullWidth
+              multiline
+              label="رسالة الرد الآلي"
+              type="text"
+            />
           </Grid>
         </Grid>
 
