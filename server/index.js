@@ -19,6 +19,7 @@ const multer = require("multer");
 const upload = multer({ storage });
 const { protect } = require("./middleware/authMiddleware");
 const influencer = require("./models/influencer");
+const business = require("./models/business");
 const app = express();
 app.use(express.json());
 app.use(cors());
@@ -61,7 +62,9 @@ app.patch(
   async (req, res) => {
     const { receiver_id } = req.params;
     const updates = { ...req.body, isActive: true };
-    if (req.file?.path) updates.image = req.file.path;
+    if (req.file?.path) {
+      updates.image = req.file.path;
+    }
     Influencer.findById(receiver_id)
       .then((influencer) => {
         Object.assign(influencer, { ...updates }); // Merge properties using spread
@@ -84,18 +87,52 @@ app.patch(
 // creating business
 app.post("/business", upload.single("image"), async (req, res) => {
   Business.create({ ...req.body, image: req.file?.path })
-    .then((business) =>
-      res.json({
-        _id: business._id,
-        token: generateToken(business._id),
-        type: "Business",
-        name: business.companyName,
-        image: business.image,
-        description: business.description,
-      })
-    )
-    .catch((err) => res.json(err));
+  .then((business) =>
+  // res.json({
+  //   _id: business._id,
+  //   token: generateToken(business._id),
+  //   type: "Business",
+  //   name: business.companyName,
+  //   image: business.image,
+  //   description: business.description,
+  // })
+  res.json({
+    token: generateToken(business._id),
+    type: "Business",
+    ...business._doc,
+  })
+)
+.catch((err) => res.json(err));
 });
+
+app.patch(
+  "/business/:receiver_id",
+  upload.single("image"),
+  async (req, res) => {
+    const { receiver_id } = req.params;
+    const updates = { ...req.body, isActive: true };
+    if (req.file?.path) {
+      updates.image = req.file.path;
+    }
+    Business.findById(receiver_id)
+      .then((business) => {
+        Object.assign(business, { ...updates }); // Merge properties using spread
+        return business.save();
+      })
+      .then((updatedBusiness) => {
+        console.log("Business updated:", updatedBusiness);
+        res.json({
+          token: generateToken(Business._id),
+          type: "Business",
+          ...updatedBusiness._doc,
+        });
+      })
+      .catch((err) => {
+        console.error(err);
+        res.json(err);
+      });
+  }
+);
 
 app.post(
   "/login",

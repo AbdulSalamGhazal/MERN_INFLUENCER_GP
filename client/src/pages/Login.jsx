@@ -23,7 +23,9 @@ const Login = () => {
     handleSubmit,
     watch,
     formState: { errors },
-  } = useForm();
+  } = useForm({
+    mode: 'onChange'
+  });
 
   const [errorAlert, setErrorAlert] = useState(null);
   const [waiting, setWaiting] = useState(false);
@@ -32,12 +34,12 @@ const Login = () => {
   const { login } = useAuth();
   let navigate = useNavigate();
 
-  const onSubmit = async () => {
+  const onSubmit = async (inputs) => {
     setWaiting(true);
     try {
       const { data } = await axios.post(
         "http://localhost:3001/login",
-        { ...watch(), type },
+        { ...inputs, type },
         {
           headers: {
             "Content-Type": "application/json",

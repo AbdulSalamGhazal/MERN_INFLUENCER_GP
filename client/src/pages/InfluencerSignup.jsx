@@ -25,6 +25,7 @@ const InfluencerSignup = () => {
     formState: { errors },
     control
   } = useForm({
+    mode: 'onChange'
     // defaultValues: {
     //   platforms: ['']
     // }
@@ -46,14 +47,9 @@ const InfluencerSignup = () => {
   let navigate = useNavigate();
   console.log(errors)
 
-  const onSubmit = async () => {
+  const onSubmit = async (inputs) => {
     setWaiting(true)
-    const influencer = {
-      name: watch('name'),
-      email: watch('email'),
-      password: watch('password'),
-      platforms: watch('platforms')
-    };
+    const influencer = inputs
     try {
       const { data } = await axios.post(
         "http://localhost:3001/influencers",
