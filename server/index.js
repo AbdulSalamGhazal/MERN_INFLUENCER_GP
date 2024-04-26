@@ -88,22 +88,22 @@ app.patch(
 // creating business
 app.post("/business", upload.single("image"), async (req, res) => {
   Business.create({ ...req.body, image: req.file?.path })
-  .then((business) =>
-  // res.json({
-  //   _id: business._id,
-  //   token: generateToken(business._id),
-  //   type: "Business",
-  //   name: business.companyName,
-  //   image: business.image,
-  //   description: business.description,
-  // })
-  res.json({
-    token: generateToken(business._id),
-    type: "Business",
-    ...business._doc,
-  })
-)
-.catch((err) => res.json(err));
+    .then((business) =>
+      // res.json({
+      //   _id: business._id,
+      //   token: generateToken(business._id),
+      //   type: "Business",
+      //   name: business.companyName,
+      //   image: business.image,
+      //   description: business.description,
+      // })
+      res.json({
+        token: generateToken(business._id),
+        type: "Business",
+        ...business._doc,
+      })
+    )
+    .catch((err) => res.json(err));
 });
 // fetching all businesses
 app.get(
@@ -558,7 +558,51 @@ app.patch(
     }
   })
 );
+// get notes
+app.get(
+  "/campaign/notes/:campaign_id",
+  protect,
+  asyncHandler(async (req, res) => {
+    const { campaign_id } = req.params;
 
+    const campaign = await Campaign.findOne({ _id: campaign_id }).populate({
+      path: "notes",
+      model: "Message",
+    });
+    if (!campaign) {
+      return res.json({ message: "Campaign not found." });
+    }
+    res.json(campaign.notes);
+  })
+);
+
+// send notes
+app.post(
+  "/campaign/notes/:campaign_id",
+  protect,
+  asyncHandler(async (req, res) => {
+    const { campaign_id } = req.params;
+    const { content } = req.body;
+
+    const senderType = req.user.type;
+
+    const campaign = await Campaign.findOne({ _id: campaign_id });
+
+    if (!campaign) {
+      return res.json({ message: "campaign not found." });
+    }
+
+    const message = await Message.create({
+      sender: senderType,
+      content,
+    });
+
+    campaign.notes.push(message._id);
+    await campaign.save();
+
+    res.json(message);
+  })
+);
 app.listen(3001, () => {
   console.log("server is running");
 });

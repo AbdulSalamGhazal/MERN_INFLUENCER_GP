@@ -10,6 +10,8 @@ const campaignSchema = mongoose.Schema(
     payment: String,
     amount: Number,
     date: String,
+    notes: [{ type: mongoose.Schema.Types.ObjectId, ref: "Message" }],
+
     isApproved: {
       type: Boolean,
       default: false,

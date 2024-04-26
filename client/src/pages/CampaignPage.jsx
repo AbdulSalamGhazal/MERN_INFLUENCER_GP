@@ -12,6 +12,8 @@ import {
   Avatar,
   Button,
 } from "@mui/material";
+import CampaignNotes from "../components/CampaignNotes";
+
 import ThumbUpIcon from "@mui/icons-material/ThumbUp";
 import ThumbDownIcon from "@mui/icons-material/ThumbDown";
 import DisabledByDefaultIcon from "@mui/icons-material/DisabledByDefault";
@@ -100,7 +102,7 @@ export default function CampaginPage() {
         </Grid>
         <Grid xs={5}>
           {campaign.isApproved ? (
-            <h1>تم الموافقة</h1>
+            <CampaignNotes campaign={campaign} />
           ) : user.type === "Influencer" ? (
             <Box>
               <Typography variant="h4" gutterBottom>

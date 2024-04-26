@@ -11,12 +11,11 @@ import {
   Stack,
 } from "@mui/material";
 import { Link } from "react-router-dom";
-
 import BusinessIcon from "@mui/icons-material/Business";
 import EmailIcon from "@mui/icons-material/Email";
 import LocationOnIcon from "@mui/icons-material/LocationOn";
 import LanguageIcon from "@mui/icons-material/Language";
-import GroupsIcon from '@mui/icons-material/Groups';
+import GroupsIcon from "@mui/icons-material/Groups";
 import FacebookIcon from "@mui/icons-material/Facebook";
 import TwitterIcon from "@mui/icons-material/Twitter";
 import LinkedInIcon from "@mui/icons-material/LinkedIn";
@@ -151,30 +150,29 @@ const BusinessPage = () => {
         <Divider />
         <List>
           <ListItem>
-            <BusinessIcon sx={{mx:3}} />
+            <BusinessIcon sx={{ mx: 3 }} />
             <ListItemText primary="الصناعة" secondary={business.industry} />
           </ListItem>
           <ListItem>
-            <EmailIcon sx={{mx:3}} />
+            <EmailIcon sx={{ mx: 3 }} />
             <ListItemText
               primary="البريد الإلكتروني"
               secondary={business.email}
-              
             />
           </ListItem>
           <ListItem>
-            <LocationOnIcon sx={{mx:3}} />
+            <LocationOnIcon sx={{ mx: 3 }} />
             <ListItemText primary="العنوان" secondary={business.address} />
           </ListItem>
           <ListItem>
-            <LanguageIcon sx={{mx:3}}/>
+            <LanguageIcon sx={{ mx: 3 }} />
             <ListItemText
               primary="رابط الموقع"
               secondary={business.websiteURL}
             />
           </ListItem>
           <ListItem>
-            <GroupsIcon sx={{mx:3}}/>
+            <GroupsIcon sx={{ mx: 3 }} />
             <ListItemText primary="الحجم" secondary={business.size} />
           </ListItem>
         </List>
