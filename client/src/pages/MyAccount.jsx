@@ -1,13 +1,19 @@
 import useAuth from "../../context/AuthContext";
 import MyAccountInfluencer from "./MyAccountInfluencer";
 import MyAccountBusiness from "./MyAccountBusiness"
+import CircularProgress from '@mui/material/CircularProgress';
+import Box from '@mui/material/Box';
 
 const MyAccount = () => {
-  const { user } = useAuth();
+  const { user, loading } = useAuth();
 
   return (
     <>
-    {user.type == 'Influencer'? <MyAccountInfluencer user={user} /> : <MyAccountBusiness user={user} />}
+      {loading ?
+        <Box sx={{ display: 'flex' }}>
+          <CircularProgress />
+        </Box> :
+        user.type == 'Influencer' ? <MyAccountInfluencer user={user} /> : <MyAccountBusiness user={user} />}
     </>
   )
 }
