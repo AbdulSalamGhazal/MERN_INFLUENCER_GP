@@ -12,8 +12,10 @@ import InfluencerSignup from "./pages/InfluencerSignup";
 import BusinessSignup from "./pages/BusinessSignup";
 import Signup from "./pages/Signup";
 import Campaign from "./pages/Campaign";
+import CampaignPage from "./pages/CampaginPage";
 import InfluencerPage from "./pages/InfluencerPage";
 import Businesses from "./pages/Businesses";
+import BusinessPage from "./pages/BusinessPage";
 import MyAccount from "./pages/MyAccount";
 
 function App() {
@@ -42,10 +44,18 @@ function App() {
             }
           />
           <Route
-            path="//businesses"
+            path="/businesses"
             element={
               <ProtectedRoute>
                 <Businesses />
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="/businesses/:businessId"
+            element={
+              <ProtectedRoute>
+                <BusinessPage />
               </ProtectedRoute>
             }
           />
@@ -66,7 +76,22 @@ function App() {
             }
           />
 
-          <Route path="/campaign" element={<Campaign />} />
+          <Route
+            path="/campaign"
+            element={
+              <ProtectedRoute>
+                <Campaign />
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="/campaign/:campaignId"
+            element={
+              <ProtectedRoute>
+                <CampaignPage />
+              </ProtectedRoute>
+            }
+          />
           <Route path="/account" element={<MyAccount />} />
           <Route path="/login" element={<Login />} />
           <Route path="/signup" element={<Signup />} />

@@ -4,6 +4,7 @@ import axios from "axios";
 import CampaignFilters from "../components/CampaignFilters";
 import CampaignCard from "../components/CampaignCard";
 import { Box, Typography } from "@mui/material";
+import Grid from "@mui/material/Unstable_Grid2";
 
 function Campaign() {
   const { user, loading } = useAuth();
@@ -43,9 +44,13 @@ function Campaign() {
             لا يوجد حملات
           </Typography>
         ) : (
-          campaigns.map((campaign, index) => (
-            <CampaignCard key={index} campaign={campaign} />
-          ))
+          <Grid container spacing={2}>
+            {campaigns.map((campaign, index) => (
+              <Grid xs={12} key={index}>
+                <CampaignCard  campaign={campaign} />
+              </Grid>
+            ))}
+          </Grid>
         )}
       </Box>
     </Box>

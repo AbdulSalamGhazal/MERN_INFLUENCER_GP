@@ -6,6 +6,7 @@ const mongoose = require("mongoose");
 const cors = require("cors");
 const filters = require("./functions/filters");
 const campaignFilters = require("./functions/campaignFilters");
+const businessFilters = require("./functions/BusinessFilters");
 const getChatQuery = require("./functions/getChatQuery");
 const Influencer = require("./models/influencer");
 const Business = require("./models/business");
@@ -104,7 +105,32 @@ app.post("/business", upload.single("image"), async (req, res) => {
 )
 .catch((err) => res.json(err));
 });
-
+// fetching all businesses
+app.get(
+  "/businesses",
+  protect,
+  asyncHandler(async (req, res) => {
+    const query = businessFilters(req.query);
+    try {
+      const business = await Business.find(query);
+      res.json(business);
+    } catch (error) {
+      res.status(500).json({ message: "Internal server error" });
+    }
+  })
+);
+app.get(
+  "/businesses/:id",
+  protect,
+  asyncHandler(async (req, res) => {
+    try {
+      const business = await Business.findById(req.params.id);
+      res.json(business);
+    } catch (error) {
+      res.status(500).json({ message: "Internal server error" });
+    }
+  })
+);
 app.patch(
   "/business/:receiver_id",
   upload.single("image"),
@@ -175,7 +201,6 @@ app.post(
       const { receiver_id } = req.body;
       const sender_id = req.user._id;
       const userType = req.user.type;
-
       if (!mongoose.isValidObjectId(receiver_id)) {
         return res.status(400).json({ message: "Invalid receiver_id" });
       }
@@ -184,12 +209,10 @@ app.post(
         userType === "Influencer"
           ? { influencerId: sender_id, businessId: receiver_id }
           : { influencerId: receiver_id, businessId: sender_id };
-
       let chat = await Chat.findOne(searchCriteria).populate({
         path: userType === "Influencer" ? "businessId" : "influencerId",
         select: userType === "Influencer" ? "companyName image" : "name image",
       });
-
       if (!chat) {
         chat = await Chat.create({
           influencerId: userType === "Influencer" ? sender_id : receiver_id,
@@ -338,6 +361,32 @@ app.post(
     res.json(message);
   })
 );
+// delete meesage by id
+app.delete(
+  "/chat/message/:messageId",
+  protect,
+  asyncHandler(async (req, res) => {
+    try {
+      const { messageId } = req.params;
+
+      const chat = await Chat.findOneAndUpdate(
+        { messages: messageId },
+        { $pull: { messages: messageId } }
+      );
+
+      if (!chat) {
+        return res.status(404).json({ message: "Chat not found" });
+      }
+
+      await Message.findByIdAndDelete(messageId);
+
+      res.json({ message: "Message deleted successfully" });
+    } catch (error) {
+      console.error("Error deleting message:", error);
+      res.status(500).json({ message: "Internal server error" });
+    }
+  })
+);
 
 // get all campaign for user (business or influencer)
 // @get {userId, userType} = req.user
@@ -347,9 +396,7 @@ app.get(
   asyncHandler(async (req, res) => {
     const userId = req.user._id;
     const userType = req.user.type;
-    const filters = req.query;
-    console.log(req.query);
-    let query = campaignFilters(filters);
+    let query = campaignFilters(req.query);
     if (userType === "Influencer") {
       query.influencerId = userId;
     } else if (userType === "Business") {
@@ -360,7 +407,7 @@ app.get(
     try {
       const campaigns = await Campaign.find(query)
         .populate("influencerId", "name image")
-        .populate("businessId", "companyName image"); // populate the names
+        .populate("businessId", "companyName image");
 
       const campaignsWithDetails = campaigns.map((campaign) => {
         return {
@@ -379,7 +426,6 @@ app.get(
               : campaign.influencerId.image,
         };
       });
-      console.log(campaignsWithDetails)
       res.json(campaignsWithDetails);
     } catch (error) {
       console.error("Error fetching chats:", error);
@@ -394,10 +440,9 @@ app.post(
   protect,
   asyncHandler(async (req, res) => {
     try {
-      const { campaignName, conditions, receiverId } = req.body;
+      const { campaignName, conditions, receiverId, amount, date } = req.body;
       const sender_id = req.user._id;
       const userType = req.user.type;
-
       if (!mongoose.isValidObjectId(receiverId)) {
         return res.status(400).json({ message: "Invalid receiver_id" });
       }
@@ -412,22 +457,108 @@ app.post(
       });
 
       if (!campaign) {
+        const influencerId = userType === "Influencer" ? sender_id : receiverId;
+        const businessId = userType === "Business" ? sender_id : receiverId;
+
         campaign = await Campaign.create({
-          influencerId: userType === "Influencer" ? sender_id : receiverId,
-          businessId: userType === "Business" ? sender_id : receiverId,
+          influencerId: influencerId,
+          businessId: businessId,
           campaignName: campaignName,
           conditions: conditions,
+          amount: amount,
+          date: date,
           status: "لم يحن الموعد",
           paymentStatus: "لم يتم الدفع",
-
         });
+        // add campaign id to chat
+        const chat = await Chat.findOne({
+          influencerId: influencerId,
+          businessId: businessId,
+        });
+        chat.campaignId = campaign._id;
+        await chat.save();
       }
-      res.status(200).json(campaign);
+      res.status(200).json(campaign._id);
     } catch (error) {
       res.status(500).json({ message: "Internal server error" });
     }
   })
 );
+// get campaign from campaign id
+app.get(
+  "/campaign/:campaignId",
+  protect,
+  asyncHandler(async (req, res) => {
+    const { campaignId } = req.params;
+    const userType = req.user.type;
+
+    try {
+      const campaign = await Campaign.findById(campaignId)
+        .populate("influencerId", "name image")
+        .populate("businessId", "companyName image")
+        .populate("conditions", "content");
+
+      if (!campaign) {
+        return res.status(404).json({ message: "Campaign not found." });
+      }
+      const campaignWithDetails = {
+        ...campaign._doc,
+        senderName:
+          userType === "Influencer"
+            ? campaign.influencerId.name
+            : campaign.businessId.companyName,
+        receiverName:
+          userType === "Influencer"
+            ? campaign.businessId.companyName
+            : campaign.influencerId.name,
+        receiverImage:
+          userType === "Influencer"
+            ? campaign.businessId.image
+            : campaign.influencerId.image,
+      };
+      res.json(campaignWithDetails);
+    } catch (error) {
+      console.error("Error fetching campaign:", error);
+      res.status(500).json({ message: "Internal server error" });
+    }
+  })
+);
+// approve/reject campaign
+app.patch(
+  "/campaign/:campaignId",
+  protect,
+  asyncHandler(async (req, res) => {
+    const { campaignId } = req.params;
+    const { isApproved } = req.body;
+
+    try {
+      let campaign = await Campaign.findById(campaignId);
+
+      if (!campaign) {
+        return res.status(404).json({ message: "Campaign not found" });
+      }
+
+      const searchCriteria = {
+        influencerId: campaign.influencerId._id,
+        businessId: campaign.businessId._id,
+      };
+      let chat = await Chat.findOne(searchCriteria);
+      if (isApproved) {
+        campaign.isApproved = isApproved;
+        await campaign.save();
+        await Chat.findByIdAndDelete(chat._id);
+      } else {
+        await Campaign.findByIdAndDelete(campaignId);
+        chat.campaignId = null;
+        await chat.save();
+      }
+      res.json({ message: "success" });
+    } catch (error) {
+      res.status(500).json({ message: "Internal server error" });
+    }
+  })
+);
+
 app.listen(3001, () => {
   console.log("server is running");
 });

@@ -10,11 +10,11 @@ function Influencers() {
   const [influencers, setInfluencers] = useState([]);
   const [filters, setFilters] = useState({});
   const { user } = useAuth();
-  const history = useNavigate();
+  const navigate = useNavigate();
 
   useEffect(() => {
     if (user.type === "Influencer") {
-      return history("/");
+      return navigate("/");
     }
     const fetchData = async () => {
       try {
@@ -28,7 +28,7 @@ function Influencers() {
     };
 
     fetchData();
-  }, [filters, user.type, history]);
+  }, [filters, user.type, navigate]);
 
   return (
     <>

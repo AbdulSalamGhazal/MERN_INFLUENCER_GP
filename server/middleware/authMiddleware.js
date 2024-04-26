@@ -18,20 +18,21 @@ const protect = asyncHandler(async (req, res, next) => {
       if (type === "Influencer") {
         req.user = await Influencer.findById(decoded.id).select("-password");
         req.user.type = "Influencer";
-      } else {
+      } else if (type === "Business") {
         req.user = await Business.findById(decoded.id).select("-password");
         req.user.type = "Business";
+      } else {
+        throw new Error();
       }
       next();
     } catch (error) {
       res.status(401);
-      throw new Error("Not authorized, token failed");
     }
   }
 
   if (!token) {
     res.status(401);
-    throw new Error("Not authorized, no token");
+    throw new Error("No token, Not authorized, no token");
   }
 });
 

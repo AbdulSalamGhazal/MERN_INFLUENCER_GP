@@ -9,9 +9,10 @@ const campaignSchema = mongoose.Schema(
     status: String,
     payment: String,
     amount: Number,
+    date: String,
     isApproved: {
       type: Boolean,
-      default: true,
+      default: false,
     },
   },
   { timestamps: true }
