@@ -34,6 +34,7 @@ const influencerSchema = new Schema({
 
   avg_likes: Number,
   avg_comments: Number,
+  autoReply: String,
 });
 influencerSchema.virtual("engagement_rate").get(function () {
   if (this.total_followers === 0) {
