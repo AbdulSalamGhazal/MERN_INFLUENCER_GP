@@ -18,7 +18,9 @@ const BusinessSignup = () => {
     handleSubmit,
     watch,
     formState: { errors },
-  } = useForm();
+  } = useForm({
+    mode: 'onChange'
+  });
 
   const [errorAlert, setErrorAlert] = useState(null);
   const [waiting, setWaiting] = useState(false);
@@ -26,13 +28,9 @@ const BusinessSignup = () => {
   const { login } = useAuth();
   let navigate = useNavigate();
 
-  const onSubmit = async () => {
+  const onSubmit = async (inputs) => {
     setWaiting(true);
-    const business = {
-      name: watch("name"),
-      email: watch("email"),
-      password: watch("password"),
-    };
+    const business = inputs;
     try {
       const { data } = await axios.post(
         "http://localhost:3001/business",
@@ -86,11 +84,11 @@ const BusinessSignup = () => {
           label="الاسم"
           autoComplete="name"
           autoFocus
-          {...register("name", {
+          {...register("companyName", {
             required: "هذا الحقل مطلوب",
           })}
-          error={errors.name != undefined}
-          helperText={errors.name?.message}
+          error={errors.companyName != undefined}
+          helperText={errors.companyName?.message}
         />
 
         <TextField
@@ -111,6 +109,7 @@ const BusinessSignup = () => {
           error={errors.email != undefined}
           helperText={errors.email?.message}
         />
+
 
         <PasswordInput
           margin="dense"
