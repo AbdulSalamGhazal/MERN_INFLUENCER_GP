@@ -7,7 +7,6 @@ const chatSchema = mongoose.Schema(
     campaignId: { type: mongoose.Schema.Types.ObjectId, ref: "Campaign" },
     lastMessage: String,
     messages: [{ type: mongoose.Schema.Types.ObjectId, ref: "Message" }],
-    // isSeen: Boolean, to be added
   },
   { timestamps: true }
 );

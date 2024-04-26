@@ -23,7 +23,7 @@ const businessSchema = new Schema({
     min: Number,
     max: Number,
   },
-  autoReplyMessage: String,
+  autoReply:String
 });
 businessSchema.methods.matchPassword = async function (enteredPassword) {
   return await bcrypt.compare(enteredPassword, this.password);

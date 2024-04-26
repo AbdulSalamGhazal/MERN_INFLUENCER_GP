@@ -31,33 +31,35 @@ function ChatList({ setSelectedChat, chats, selectedChat }) {
         </Toolbar>
       </AppBar>
       {chats.length > 0 ? (
-        chats.map((chat, index) => (
-          <ListItem
-            button
-            key={index}
-            onClick={() => setSelectedChat(chat)}
-            sx={{
-              bgcolor:
-                selectedChat && selectedChat._id === chat._id
-                  ? "lightblue"
-                  : "white",
-              my: 1,
-              boxShadow: 1,
-            }}
-          >
-            <Avatar
-              sx={{ width: 56, height: 56 }}
-              alt="profile image"
-              src={chat.receiverImage}
-            />
+        chats
+          .sort((a, b) => new Date(b.updatedAt) - new Date(a.updatedAt)) // Sort chats by updatedAt in descending order
+          .map((chat, index) => (
+            <ListItem
+              button
+              key={index}
+              onClick={() => setSelectedChat(chat)}
+              sx={{
+                bgcolor:
+                  selectedChat && selectedChat._id === chat._id
+                    ? "lightblue"
+                    : "white",
+                my: 1,
+                boxShadow: 1,
+              }}
+            >
+              <Avatar
+                sx={{ width: 56, height: 56 }}
+                alt="profile image"
+                src={chat.receiverImage}
+              />
 
-            <ListItemText
-              sx={{ pl: 1 }}
-              primary={chat.receiverName}
-              secondary={chat.lastMessage || "لايوجد رسائل"}
-            />
-          </ListItem>
-        ))
+              <ListItemText
+                sx={{ pl: 1 }}
+                primary={chat.receiverName}
+                secondary={chat.lastMessage || "لايوجد رسائل"}
+              />
+            </ListItem>
+          ))
       ) : (
         <Typography sx={{ p: 2, textAlign: "center" }}>
           لايوجد محادثات!
