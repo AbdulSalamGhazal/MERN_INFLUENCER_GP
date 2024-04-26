@@ -471,9 +471,9 @@ const MyAccountInfluencer = ({ user }) => {
 
           <Grid xs={12}>
             <TextField
-              {...register("influencer.autoReplyMessage")}
-              error={errors.influencer?.autoReplyMessage}
-              helperText={errors.influencer?.autoReplyMessage?.message}
+              {...register("influencer.autoReply")}
+              error={errors.influencer?.autoReply}
+              helperText={errors.influencer?.autoReply?.message}
               margin="dense"
               size="small"
               required

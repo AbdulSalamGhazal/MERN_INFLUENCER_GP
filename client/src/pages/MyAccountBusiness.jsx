@@ -391,11 +391,11 @@ const MyAccountBusiness = ({ user }) => {
         <IconButton onClick={() => appendLink(' ')} color="primary" aria-label="add field">
           <AddCircleOutlineIcon />
         </IconButton>
-        
+
         <TextField
-          {...register("autoReplyMessage")}
-          error={errors.autoReplyMessage}
-          helperText={errors.autoReplyMessage?.message}
+          {...register("autoReply")}
+          error={errors.autoReply}
+          helperText={errors.autoReply?.message}
           margin="dense"
           size="small"
           required
