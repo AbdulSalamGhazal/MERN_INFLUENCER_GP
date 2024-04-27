@@ -468,7 +468,7 @@ app.post(
           amount: amount,
           date: date,
           status: "لم يحن الموعد",
-          paymentStatus: "لم يتم الدفع",
+          payment: "لم يتم الدفع",
         });
         // add campaign id to chat
         const chat = await Chat.findOne({
@@ -552,6 +552,29 @@ app.patch(
         chat.campaignId = null;
         await chat.save();
       }
+      res.json({ message: "success" });
+    } catch (error) {
+      res.status(500).json({ message: "Internal server error" });
+    }
+  })
+);
+// make payment
+app.patch(
+  "/campaign/payment/:campaignId",
+  protect,
+  asyncHandler(async (req, res) => {
+    const { campaignId } = req.params;
+    const { paymentNote } = req.body;
+
+    try {
+      let campaign = await Campaign.findById(campaignId);
+
+      if (!campaign) {
+        return res.status(404).json({ message: "Campaign not found" });
+      }
+      campaign.payment = "تم التحويل، جاري التحقق";
+      campaign.paymentNote = paymentNote;
+      await campaign.save();
       res.json({ message: "success" });
     } catch (error) {
       res.status(500).json({ message: "Internal server error" });

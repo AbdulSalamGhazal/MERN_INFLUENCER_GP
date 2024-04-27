@@ -8,6 +8,8 @@ const campaignSchema = mongoose.Schema(
     conditions: [{ type: mongoose.Schema.Types.ObjectId, ref: "Message" }],
     status: String,
     payment: String,
+    paymentFile: String,
+    paymentNote: String,
     amount: Number,
     date: String,
     notes: [{ type: mongoose.Schema.Types.ObjectId, ref: "Message" }],

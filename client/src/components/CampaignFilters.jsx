@@ -112,6 +112,9 @@ function Filters({ setFilters }) {
                 input={<OutlinedInput label="payment" />}
               >
                 <MenuItem value={"لم يتم الدفع"}>لم يتم الدفع</MenuItem>
+                <MenuItem value={"تم التحويل، جاري التحقق"}>
+                  تم التحويل، جاري التحقق
+                </MenuItem>
                 <MenuItem value={"تم استلام المبلغ"}>تم استلام المبلغ</MenuItem>
                 <MenuItem value={"تم تحويل المبلغ"}>تم تحويل المبلغ</MenuItem>
               </Select>
