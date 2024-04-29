@@ -31,22 +31,6 @@ const MyAccountInfluencer = ({ user }) => {
 
   const { login } = useAuth();
 
-  // useEffect(() => {
-  //   const fetchData = async () => {
-  //     try {
-  //       const response = await axios.get(
-  //         `http://localhost:3001/influencers/${user._id}`
-  //       );
-  //       setInfluencer(response.data);
-  //     } catch (error) {
-  //       console.error("Error fetching data:", error);
-  //     }
-  //   };
-
-  //   fetchData();
-  // }, [user._id]);
-
-
   const {
     register,
     handleSubmit,
@@ -83,6 +67,7 @@ const MyAccountInfluencer = ({ user }) => {
       image: data.influencer.image[0],
       audience_age_rang: `${age[0]}-${age[1]}`,
       audience_gender: genderPercent,
+      isActive: true
     };
     try {
       const { data } = await axios.patch(
@@ -94,7 +79,6 @@ const MyAccountInfluencer = ({ user }) => {
           },
         }
       );
-      // setActiveStep((prevActiveStep) => prevActiveStep + 1);
       login(data);
       localStorage.setItem("userInfo", JSON.stringify(data));
       // navigate("/");
@@ -125,9 +109,6 @@ const MyAccountInfluencer = ({ user }) => {
           {errorAlert}
           </Alert>
       } */}
-      {/* <Typography component="h1" variant="h3" align="center">
-        انضمام صاحب عمل
-      </Typography> */}
       <Box
         component="form"
         onSubmit={handleSubmit(onSubmit)}
