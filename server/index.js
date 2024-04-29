@@ -211,7 +211,10 @@ app.post(
           : { influencerId: receiver_id, businessId: sender_id };
       let chat = await Chat.findOne(searchCriteria).populate({
         path: userType === "Influencer" ? "businessId" : "influencerId",
-        select: userType === "Influencer" ? "companyName image" : "name image",
+        select:
+          userType === "Influencer"
+            ? "companyName image autoReply"
+            : "name image autoReply",
       });
       if (!chat) {
         chat = await Chat.create({
@@ -222,7 +225,9 @@ app.post(
         await chat.populate({
           path: userType === "Influencer" ? "businessId" : "influencerId",
           select:
-            userType === "Influencer" ? "companyName image" : "name image",
+            userType === "Influencer"
+              ? "companyName image autoReply"
+              : "name image autoReply",
         });
       }
 
@@ -235,6 +240,21 @@ app.post(
         userType === "Influencer"
           ? chat.businessId.image
           : chat.influencerId.image;
+      const receiverAutoReply =
+        userType === "Influencer"
+          ? chat.businessId.autoReply
+          : chat.influencerId.autoReply;
+
+      if (receiverAutoReply) {
+        const message = await Message.create({
+          sender: userType === "Influencer" ? "Business" : "Influencer",
+          content: receiverAutoReply,
+        });
+
+        chat.messages.push(message._id);
+        chat.lastMessage = receiverAutoReply;
+        await chat.save();
+      }
 
       const formattedChat = {
         ...chat.toObject(),
@@ -242,7 +262,6 @@ app.post(
         receiverId,
         receiverImage,
       };
-
       res.status(200).json(formattedChat);
     } catch (error) {
       console.error("Error creating/getting chat:", error);
@@ -566,6 +585,9 @@ app.patch(
     const { campaignId } = req.params;
     const { paymentNote } = req.body;
 
+    // const { paymentFile} = req.body;
+    // you find it in: PaymentProcess.jsx
+    // handle storing payment file in cloudinry @Abdulqader
     try {
       let campaign = await Campaign.findById(campaignId);
 
@@ -626,6 +648,8 @@ app.post(
     res.json(message);
   })
 );
+
+// handle auto meesage
 app.listen(3001, () => {
   console.log("server is running");
 });

@@ -20,17 +20,15 @@ import {
   Button,
   IconButton,
 } from "@mui/material";
-import {
-  InfoOutlined,
-  MoneyOutlined,
-  CalendarTodayOutlined,
-} from "@mui/icons-material";
+import { MoneyOutlined, CalendarTodayOutlined } from "@mui/icons-material";
 import CheckIcon from "@mui/icons-material/Check";
 
 import CampaignNotes from "../components/CampaignNotes";
 import PaymentProcess from "../components/PaymentProcess";
 import ThumbUpIcon from "@mui/icons-material/ThumbUp";
 import ThumbDownIcon from "@mui/icons-material/ThumbDown";
+import TimerIcon from "@mui/icons-material/Timer";
+import TimelapseIcon from "@mui/icons-material/Timelapse";
 import DisabledByDefaultIcon from "@mui/icons-material/DisabledByDefault";
 import { useNavigate } from "react-router-dom";
 
@@ -103,13 +101,33 @@ export default function CampaginPage() {
     }
     return { icon: icon, color: color };
   };
+  const getStatusStyle = (status) => {
+    let icon;
+    let color;
+    if (status === "لم يحن الموعد") {
+      icon = <TimerIcon />;
+      color = "pink";
+    } else if (status === "جاري التنفيذ") {
+      icon = <TimelapseIcon />;
+      color = "red";
+    } else if (status === "تم الانتهاء") {
+      icon = <DoneAll />;
+      color = "green";
+    } else {
+      icon = null;
+      color = "black";
+    }
+    return { icon: icon, color: color };
+  };
   if (!campaign) {
     return <Typography>جاري التحميل...</Typography>;
   } else {
     const { color: paymentColor, icon: paymentIcon } = getPaymentStyle(
       campaign.payment
     );
-    console.log(paymentColor, paymentIcon);
+    const { color: statusColor, icon: statusIcon } = getStatusStyle(
+      campaign.status
+    );
     return (
       <Box sx={{ flexGrow: 1, pl: 1 }}>
         <Grid container spacing={2}>
@@ -153,14 +171,6 @@ export default function CampaginPage() {
                     في تاريخ: {campaign.date.slice(0, 10)}
                   </Typography>
                 </Box>
-                <Box sx={{ display: "flex", alignItems: "center", px: 3 }}>
-                  <IconButton sx={{ marginRight: 1 }}>
-                    <InfoOutlined />
-                  </IconButton>
-                  <Typography variant="body1">
-                    الحالة: {campaign.status}
-                  </Typography>
-                </Box>
               </Box>
               <Typography variant="h5" sx={{ marginY: 2 }}>
                 اسم الحملة: {campaign.campaignName}
@@ -179,6 +189,13 @@ export default function CampaginPage() {
           <Grid xs={5}>
             {campaign.isApproved ? (
               <>
+                <Box sx={{ my: 3 }}>
+                  <Typography variant="h5">الحالة:</Typography>
+                  <Typography variant="h5" style={{ color: statusColor }}>
+                    {statusIcon}
+                    {campaign.status}
+                  </Typography>
+                </Box>
                 <Box sx={{ my: 3 }}>
                   <Typography variant="h5">حالة الدفع: </Typography>
                   <Typography variant="h5" style={{ color: paymentColor }}>
