@@ -15,7 +15,6 @@ import {
   Divider,
   Button,
   CardMedia,
-  Badge,
 } from "@mui/material";
 import { Link } from "react-router-dom";
 
@@ -78,23 +77,6 @@ function InfluencerPage() {
                 objectFit: "cover",
               }}
             />
-            {influencer.verified && (
-              <Badge
-                color="primary"
-                badgeContent="✓"
-                sx={{
-                  position: "absolute",
-                  top: 16,
-                  right: 16,
-                  ".MuiBadge-badge": {
-                    backgroundColor: "#44b700",
-                    color: "#ffffff",
-                    border: `2px solid #ffffff`,
-                    padding: "0 4px",
-                  },
-                }}
-              />
-            )}
           </Box>
         </Grid>
         <Grid item xs={12} md={6}>
@@ -366,19 +348,8 @@ function InfluencerPage() {
             </ListItem>
           </List>
         </Grid>
-        <Grid item xs={6}>
-          <Button
-            variant="contained"
-            size="large"
-            startIcon={<FavoriteIcon />}
-            fullWidth
-            sx={{ mt: 2 }}
-          >
-            إضافة للمفضلة
-          </Button>
-        </Grid>
 
-        <Grid item xs={6}>
+        <Grid item xs={12}>
           <Link
             to={`/chat/${influencer.id}`}
             style={{ textDecoration: "none", color: "inherit" }}

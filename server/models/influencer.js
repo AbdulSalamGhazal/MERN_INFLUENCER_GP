@@ -11,10 +11,6 @@ const influencerSchema = new Schema({
   description: String,
   platforms: [String],
   field: String,
-  verified: {
-    type: Boolean,
-    default: false,
-  },
   isActive: {
     type: Boolean,
     default: false,

@@ -15,7 +15,6 @@ const influencers = [
     description: "أحب استكشاف العالم ومشاركة تجربتي مع الآخرين",
     platforms: ["يوتيوب", "سناب شات"],
     field: "السفر",
-    verified: true,
     avg_cost: 10000,
     password: "Aa@123456",
     special_requriements: [
@@ -205,7 +204,6 @@ const influencers = [
       "https://www.سناب شات.com/add/Akram9",
     ],
     field: "الرياضة والألعاب الرياضية",
-    verified: true,
 
     avg_cost: 10000,
     password: "Aa@123456",
