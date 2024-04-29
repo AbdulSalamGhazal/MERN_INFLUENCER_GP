@@ -649,6 +649,21 @@ app.post(
   })
 );
 
+app.get(
+  "/admin",
+  asyncHandler(async (req, res) => {
+    try {
+
+      const campaigns = await Campaign.find();
+
+      res.json(campaigns);
+    } catch (error) {
+      console.error("Error fetching chats:", error);
+      res.status(500).json({ message: "Internal server error" });
+    }
+  })
+);
+
 // handle auto meesage
 app.listen(3001, () => {
   console.log("server is running");

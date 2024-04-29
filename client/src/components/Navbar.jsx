@@ -60,7 +60,7 @@ export default function Navbar() {
           to="/"
           sx={{ fontWeight: "bold", fontSize: "2rem" }}
         >
-          مؤثري
+          مـــؤثــــر
         </Button>
 
         {user && (
