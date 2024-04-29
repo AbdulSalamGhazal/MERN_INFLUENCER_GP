@@ -15,6 +15,8 @@ import DialogContent from "@mui/material/DialogContent";
 import DialogActions from "@mui/material/DialogActions";
 import IconButton from "@mui/material/IconButton";
 import CloseIcon from "@mui/icons-material/Close";
+import CheckIcon from "@mui/icons-material/Check";
+
 import axios from "axios";
 import useAuth from "../../context/AuthContext";
 import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
@@ -170,6 +172,8 @@ export default function CampaignStarter({ conditions, receiverId }) {
               <List>
                 {conditions.map((condition, index) => (
                   <ListItem key={index}>
+                    <CheckIcon sx={{ marginRight: 1 }}/>
+
                     <ListItemText primary={condition.content} />
                   </ListItem>
                 ))}

@@ -12,7 +12,7 @@ import InfluencerSignup from "./pages/InfluencerSignup";
 import BusinessSignup from "./pages/BusinessSignup";
 import Signup from "./pages/Signup";
 import Campaign from "./pages/Campaign";
-import CampaignPage from "./pages/CampaginPage";
+import CampaignPage from "./pages/CampaignPage";
 import InfluencerPage from "./pages/InfluencerPage";
 import Businesses from "./pages/Businesses";
 import BusinessPage from "./pages/BusinessPage";

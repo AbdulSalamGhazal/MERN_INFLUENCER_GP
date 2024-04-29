@@ -88,22 +88,22 @@ app.patch(
 // creating business
 app.post("/business", upload.single("image"), async (req, res) => {
   Business.create({ ...req.body, image: req.file?.path })
-  .then((business) =>
-  // res.json({
-  //   _id: business._id,
-  //   token: generateToken(business._id),
-  //   type: "Business",
-  //   name: business.companyName,
-  //   image: business.image,
-  //   description: business.description,
-  // })
-  res.json({
-    token: generateToken(business._id),
-    type: "Business",
-    ...business._doc,
-  })
-)
-.catch((err) => res.json(err));
+    .then((business) =>
+      // res.json({
+      //   _id: business._id,
+      //   token: generateToken(business._id),
+      //   type: "Business",
+      //   name: business.companyName,
+      //   image: business.image,
+      //   description: business.description,
+      // })
+      res.json({
+        token: generateToken(business._id),
+        type: "Business",
+        ...business._doc,
+      })
+    )
+    .catch((err) => res.json(err));
 });
 // fetching all businesses
 app.get(
@@ -211,7 +211,10 @@ app.post(
           : { influencerId: receiver_id, businessId: sender_id };
       let chat = await Chat.findOne(searchCriteria).populate({
         path: userType === "Influencer" ? "businessId" : "influencerId",
-        select: userType === "Influencer" ? "companyName image" : "name image",
+        select:
+          userType === "Influencer"
+            ? "companyName image autoReply"
+            : "name image autoReply",
       });
       if (!chat) {
         chat = await Chat.create({
@@ -222,7 +225,9 @@ app.post(
         await chat.populate({
           path: userType === "Influencer" ? "businessId" : "influencerId",
           select:
-            userType === "Influencer" ? "companyName image" : "name image",
+            userType === "Influencer"
+              ? "companyName image autoReply"
+              : "name image autoReply",
         });
       }
 
@@ -235,6 +240,21 @@ app.post(
         userType === "Influencer"
           ? chat.businessId.image
           : chat.influencerId.image;
+      const receiverAutoReply =
+        userType === "Influencer"
+          ? chat.businessId.autoReply
+          : chat.influencerId.autoReply;
+
+      if (receiverAutoReply) {
+        const message = await Message.create({
+          sender: userType === "Influencer" ? "Business" : "Influencer",
+          content: receiverAutoReply,
+        });
+
+        chat.messages.push(message._id);
+        chat.lastMessage = receiverAutoReply;
+        await chat.save();
+      }
 
       const formattedChat = {
         ...chat.toObject(),
@@ -242,7 +262,6 @@ app.post(
         receiverId,
         receiverImage,
       };
-
       res.status(200).json(formattedChat);
     } catch (error) {
       console.error("Error creating/getting chat:", error);
@@ -468,7 +487,7 @@ app.post(
           amount: amount,
           date: date,
           status: "لم يحن الموعد",
-          paymentStatus: "لم يتم الدفع",
+          payment: "لم يتم الدفع",
         });
         // add campaign id to chat
         const chat = await Chat.findOne({
@@ -558,7 +577,79 @@ app.patch(
     }
   })
 );
+// make payment
+app.patch(
+  "/campaign/payment/:campaignId",
+  protect,
+  asyncHandler(async (req, res) => {
+    const { campaignId } = req.params;
+    const { paymentNote } = req.body;
 
+    // const { paymentFile} = req.body;
+    // you find it in: PaymentProcess.jsx
+    // handle storing payment file in cloudinry @Abdulqader
+    try {
+      let campaign = await Campaign.findById(campaignId);
+
+      if (!campaign) {
+        return res.status(404).json({ message: "Campaign not found" });
+      }
+      campaign.payment = "تم التحويل، جاري التحقق";
+      campaign.paymentNote = paymentNote;
+      await campaign.save();
+      res.json({ message: "success" });
+    } catch (error) {
+      res.status(500).json({ message: "Internal server error" });
+    }
+  })
+);
+// get notes
+app.get(
+  "/campaign/notes/:campaign_id",
+  protect,
+  asyncHandler(async (req, res) => {
+    const { campaign_id } = req.params;
+
+    const campaign = await Campaign.findOne({ _id: campaign_id }).populate({
+      path: "notes",
+      model: "Message",
+    });
+    if (!campaign) {
+      return res.json({ message: "Campaign not found." });
+    }
+    res.json(campaign.notes);
+  })
+);
+
+// send notes
+app.post(
+  "/campaign/notes/:campaign_id",
+  protect,
+  asyncHandler(async (req, res) => {
+    const { campaign_id } = req.params;
+    const { content } = req.body;
+
+    const senderType = req.user.type;
+
+    const campaign = await Campaign.findOne({ _id: campaign_id });
+
+    if (!campaign) {
+      return res.json({ message: "campaign not found." });
+    }
+
+    const message = await Message.create({
+      sender: senderType,
+      content,
+    });
+
+    campaign.notes.push(message._id);
+    await campaign.save();
+
+    res.json(message);
+  })
+);
+
+// handle auto meesage
 app.listen(3001, () => {
   console.log("server is running");
 });
