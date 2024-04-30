@@ -3,12 +3,6 @@ import { useParams } from "react-router-dom";
 import useAuth from "../../context/AuthContext";
 import axios from "axios";
 import Grid from "@mui/material/Unstable_Grid2";
-import {
-  CheckCircle,
-  HourglassEmpty,
-  Receipt,
-  DoneAll,
-} from "@mui/icons-material";
 
 import {
   Typography,
@@ -20,6 +14,8 @@ import {
   Button,
   IconButton,
 } from "@mui/material";
+import TextField from "@mui/material/TextField";
+
 import { MoneyOutlined, CalendarTodayOutlined } from "@mui/icons-material";
 import CheckIcon from "@mui/icons-material/Check";
 
@@ -27,10 +23,9 @@ import CampaignNotes from "../components/CampaignNotes";
 import PaymentProcess from "../components/PaymentProcess";
 import ThumbUpIcon from "@mui/icons-material/ThumbUp";
 import ThumbDownIcon from "@mui/icons-material/ThumbDown";
-import TimerIcon from "@mui/icons-material/Timer";
-import TimelapseIcon from "@mui/icons-material/Timelapse";
 import DisabledByDefaultIcon from "@mui/icons-material/DisabledByDefault";
 import { useNavigate } from "react-router-dom";
+import ChangeStatus from "../components/ChangeStatus";
 
 export default function CampaginPage() {
   let { campaignId } = useParams();
@@ -80,54 +75,9 @@ export default function CampaginPage() {
       throw new Error("Failed to update campaign");
     }
   };
-  const getPaymentStyle = (status) => {
-    let icon;
-    let color;
-    if (status === "لم يتم الدفع") {
-      icon = <HourglassEmpty />;
-      color = "orange";
-    } else if (status === "تم التحويل، جاري التحقق") {
-      icon = <Receipt />;
-      color = "blue";
-    } else if (status === "تم استلام المبلغ") {
-      icon = <CheckCircle />;
-      color = "green";
-    } else if (status === "تم تحويل المبلغ") {
-      icon = <DoneAll />;
-      color = "green";
-    } else {
-      icon = null;
-      color = "black";
-    }
-    return { icon: icon, color: color };
-  };
-  const getStatusStyle = (status) => {
-    let icon;
-    let color;
-    if (status === "لم يحن الموعد") {
-      icon = <TimerIcon />;
-      color = "pink";
-    } else if (status === "جاري التنفيذ") {
-      icon = <TimelapseIcon />;
-      color = "red";
-    } else if (status === "تم الانتهاء") {
-      icon = <DoneAll />;
-      color = "green";
-    } else {
-      icon = null;
-      color = "black";
-    }
-    return { icon: icon, color: color };
-  };
   if (!campaign) {
     return <Typography>جاري التحميل...</Typography>;
   } else {
-    const { color: paymentColor, icon: paymentIcon } = getPaymentStyle(
-      campaign.payment
-    );
-    const { color: statusColor, icon: statusIcon } = getStatusStyle(
-      campaign.status
-    );
     return (
       <Box sx={{ flexGrow: 1, pl: 1 }}>
         <Grid container spacing={2}>
@@ -191,24 +141,30 @@ export default function CampaginPage() {
               <>
                 <Box sx={{ my: 3 }}>
                   <Typography variant="h5">الحالة:</Typography>
-                  <Typography variant="h5" style={{ color: statusColor }}>
-                    {statusIcon}
-                    {campaign.status}
-                  </Typography>
+                  <ChangeStatus
+                    campaign={campaign}
+                    isReadOnly={user.type === "Business"}
+                  />
                 </Box>
                 <Box sx={{ my: 3 }}>
                   <Typography variant="h5">حالة الدفع: </Typography>
-                  <Typography variant="h5" style={{ color: paymentColor }}>
-                    {paymentIcon}
-                    {campaign.payment}
-                  </Typography>
-
-                  {user.type === "Business" &&
-                    campaign.payment === "لم يتم الدفع" && (
-                      <PaymentProcess campaignId={campaign._id} />
-                    )}
+                  <TextField
+                    fullWidth
+                    defaultValue={campaign.payment}
+                    InputProps={{
+                      readOnly: true,
+                    }}
+                  />
+                  <Box sx={{ my: 2 }}>
+                    {user.type === "Business" &&
+                      campaign.payment === "لم يتم الدفع" && (
+                        <PaymentProcess fullWidth campaignId={campaign._id} />
+                      )}
+                  </Box>
                 </Box>
-                <CampaignNotes campaign={campaign} />
+                <Box sx={{ height: "500px" }}>
+                  <CampaignNotes campaign={campaign} />
+                </Box>
               </>
             ) : user.type === "Influencer" ? (
               <Box>

@@ -79,6 +79,7 @@ export default function CampaignStarter({ campaignId }) {
   return (
     <Fragment>
       <Button
+        fullWidth
         variant="outlined"
         onClick={handleClickOpen}
         sx={{ height: "40px" }}

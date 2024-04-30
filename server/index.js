@@ -603,6 +603,28 @@ app.patch(
     }
   })
 );
+// change status
+app.patch(
+  "/campaign/status/:campaignId",
+  protect,
+  asyncHandler(async (req, res) => {
+    const { campaignId } = req.params;
+    const { newStatus } = req.body;
+
+    try {
+      let campaign = await Campaign.findById(campaignId);
+
+      if (!campaign) {
+        return res.status(404).json({ message: "Campaign not found" });
+      }
+      campaign.status = newStatus;
+      await campaign.save();
+      res.json({ message: "success" });
+    } catch (error) {
+      res.status(500).json({ message: "Internal server error" });
+    }
+  })
+);
 // get notes
 app.get(
   "/campaign/notes/:campaign_id",
@@ -653,7 +675,6 @@ app.get(
   "/admin",
   asyncHandler(async (req, res) => {
     try {
-
       const campaigns = await Campaign.find();
 
       res.json(campaigns);
