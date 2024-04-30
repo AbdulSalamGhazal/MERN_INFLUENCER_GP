@@ -82,7 +82,7 @@ export default function CampaignStarter({ campaignId }) {
         fullWidth
         variant="outlined"
         onClick={handleClickOpen}
-        sx={{ height: "40px" }}
+        sx={{ height: "40px", color: "green", borderColor: "green" }}
       >
         تقديم طلب دفع
         <PaidIcon sx={{ ml: 2, fontSize: 28, color: "primary" }} />

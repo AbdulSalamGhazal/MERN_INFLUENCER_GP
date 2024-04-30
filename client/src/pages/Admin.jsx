@@ -5,11 +5,9 @@ import Box from "@mui/material/Box";
 import Card from "@mui/material/Card";
 import CardContent from "@mui/material/CardContent";
 import Typography from "@mui/material/Typography";
-import { Link } from "react-router-dom";
-import CheckCircleIcon from "@mui/icons-material/CheckCircle";
-import CancelIcon from "@mui/icons-material/Cancel";
-import ScheduleIcon from "@mui/icons-material/Schedule";
 import Grid from "@mui/material/Unstable_Grid2";
+import ChangePaymentAdmin from "../components/ChangePaymentAdmin";
+import TextField from "@mui/material/TextField";
 
 export default function Admin() {
   const [campaigns, setCampaigns] = useState([]);
@@ -27,6 +25,8 @@ export default function Admin() {
 
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
+  // turn from جاري التحقق to تم الاستلام
+  // turn from تم الاستلام to تم تحويل المبلغ
   return (
     <Box sx={{ flexGrow: 1, pl: 1 }}>
       {campaigns.length === 0 ? (
@@ -41,101 +41,71 @@ export default function Admin() {
         <Grid container spacing={2}>
           {campaigns.map((campaign, index) => (
             <Grid xs={12} key={index}>
-              <Link
-                to={`/campaign/${campaign._id}`}
-                style={{ textDecoration: "none", color: "inherit" }}
+              <Card
+                sx={{
+                  display: "flex",
+                  my: 2,
+                }}
               >
-                <Card
+                <Box
                   sx={{
                     display: "flex",
-                    my: 2,
+                    flexDirection: "column",
+                    pl: 1,
+                    width: "100%",
                   }}
                 >
-                  <Box
-                    sx={{
-                      display: "flex",
-                      flexDirection: "column",
-                      pl: 1,
-                      width: "100%",
-                    }}
-                  >
-                    <CardContent sx={{ flex: "1 0 auto" }}>
-                      <Box
-                        sx={{
-                          display: "flex",
-                          alignItems: "center",
-                          justifyContent: "space-between",
-                          pr: 1,
-                        }}
-                      >
-                        <Typography
-                          component="div"
-                          variant="h3"
-                          sx={{ flex: "1" }}
+                  <CardContent sx={{ flex: "1 0 auto" }}>
+                    <Grid container spacing={2}>
+                      <Grid xs={6}>
+                        <Box
+                          sx={{
+                            display: "flex",
+                            alignItems: "center",
+                            justifyContent: "space-between",
+                            pr: 1,
+                          }}
                         >
-                          {campaign.campaignName}
-                        </Typography>
+                          <Typography
+                            component="div"
+                            variant="h3"
+                            sx={{ flex: "1" }}
+                          >
+                            {campaign.campaignName}
+                          </Typography>
+                        </Box>
+
                         <Typography
-                          variant="body2"
+                          variant="body1"
                           fontWeight="bold"
                           sx={{
                             fontSize: 25,
-                            flexShrink: 0,
-                            display: "flex",
-                            alignItems: "center",
+                            fontFamily: "Nanum Gothic, sans-serif",
                           }}
                         >
-                          <ScheduleIcon sx={{ mr: 1 }} />{" "}
-                          {campaign.date.slice(0, 10)}
+                          {campaign.amount} ريال
                         </Typography>
-                      </Box>
-
-                      <Box
-                        sx={{
-                          borderRadius: "4px",
-                          padding: "4px 8px",
-                          display: "inline-block",
-                          mt: 1,
-                        }}
-                      >
-                        <Typography variant="h5" color="text.primary">
-                          {campaign.status}
+                      </Grid>
+                      <Grid xs={6}>
+                        <Box sx={{ mb: 3 }}>
+                          <TextField
+                            fullWidth
+                            defaultValue={campaign.status}
+                            InputProps={{
+                              readOnly: true,
+                            }}
+                          />
+                        </Box>
+                        <ChangePaymentAdmin campaign={campaign} />
+                        <Typography sx={{ my: 2 }}>
+                          {campaign.paymentNote}
                         </Typography>
-                      </Box>
-
-                      <Box
-                        sx={{
-                          display: "flex",
-                          alignItems: "center",
-                          mt: 1,
-                        }}
-                      >
-                        {campaign.isApproved ? (
-                          <CheckCircleIcon sx={{ color: "green", mr: 1 }} />
-                        ) : (
-                          <CancelIcon sx={{ color: "red", mr: 1 }} />
-                        )}
-                        <Typography variant="button">
-                          {campaign.isApproved
-                            ? "تم الموافقة"
-                            : "لم يتم الموافقة"}
-                        </Typography>
-                      </Box>
-                      <Typography
-                        variant="body1"
-                        fontWeight="bold"
-                        sx={{
-                          fontSize: 25,
-                          fontFamily: "Nanum Gothic, sans-serif",
-                        }}
-                      >
-                        {campaign.amount} ريال
-                      </Typography>
-                    </CardContent>
-                    <Box sx={{ alignSelf: "flex-end", pr: 1 }}></Box>
-                  </Box>
-                </Card>
-              </Link>
+                      </Grid>
+                    </Grid>
+                  </CardContent>
+                  <Box sx={{ alignSelf: "flex-end", pr: 1 }}></Box>
+                </Box>
+              </Card>
             </Grid>
           ))}
         </Grid>
