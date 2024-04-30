@@ -603,7 +603,7 @@ app.patch(
     }
   })
 );
-// change status
+// change payment
 app.patch("/admin/payment/:campaignId", async (req, res) => {
   const { campaignId } = req.params;
   const { newPayment } = req.body;
@@ -636,6 +636,34 @@ app.patch(
         return res.status(404).json({ message: "Campaign not found" });
       }
       campaign.status = newStatus;
+      await campaign.save();
+      res.json({ message: "success" });
+    } catch (error) {
+      res.status(500).json({ message: "Internal server error" });
+    }
+  })
+);
+// change rate
+app.patch(
+  "/campaign/rate/:campaignId",
+  protect,
+  asyncHandler(async (req, res) => {
+    const senderType = req.user.type;
+
+    const { campaignId } = req.params;
+    const { rate } = req.body;
+
+    try {
+      let campaign = await Campaign.findById(campaignId);
+
+      if (!campaign) {
+        return res.status(404).json({ message: "Campaign not found" });
+      }
+      if (senderType === "Business") {
+        campaign.influencerRating = rate;
+      } else {
+        campaign.BusinessRating = rate;
+      }
       await campaign.save();
       res.json({ message: "success" });
     } catch (error) {
