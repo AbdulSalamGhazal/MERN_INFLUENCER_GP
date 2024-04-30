@@ -10,11 +10,10 @@ import {
   TextField,
   Button,
 } from "@mui/material";
-function CampaignLogs({ campaign }) {
+function CampaignLogs({ campaign, disabled }) {
   const { user } = useAuth();
   const [noteText, setNoteText] = useState("");
   const [notes, setNotes] = useState([]);
-
   const fetchNotes = async () => {
     try {
       const response = await axios.get(
@@ -160,6 +159,7 @@ function CampaignLogs({ campaign }) {
         autoComplete="off"
       >
         <TextField
+          disabled={disabled}
           autoFocus={true}
           fullWidth
           variant="outlined"
@@ -174,7 +174,12 @@ function CampaignLogs({ campaign }) {
           }}
           sx={{ marginRight: "8px", bgcolor: "white" }}
         />
-        <Button variant="contained" color="primary" onClick={handleNoteSend}>
+        <Button
+          disabled={disabled}
+          variant="contained"
+          color="primary"
+          onClick={handleNoteSend}
+        >
           إرسال
         </Button>
       </Box>

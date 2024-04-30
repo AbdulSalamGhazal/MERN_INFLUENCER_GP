@@ -33,6 +33,7 @@ export default function CampaginPage() {
   const navigate = useNavigate();
 
   const [campaign, setCampaign] = useState(null);
+  const [isDisabled, setIsDisabled] = useState(false);
   const fetchDataAndUpdateCampaign = async () => {
     try {
       const response = await axios.get(
@@ -43,8 +44,11 @@ export default function CampaginPage() {
           },
         }
       );
-      console.log(response.data);
       setCampaign(response.data);
+      setIsDisabled(
+        response.data.payment === "تم تحويل المبلغ" &&
+          response.data.status === "تم الانتهاء"
+      );
     } catch (error) {
       console.error("Error fetching data:", error);
     }
@@ -144,6 +148,7 @@ export default function CampaginPage() {
                   <ChangeStatus
                     campaign={campaign}
                     isReadOnly={user.type === "Business"}
+                    disabled={isDisabled}
                   />
                 </Box>
                 <Box sx={{ my: 3 }}>
@@ -163,7 +168,7 @@ export default function CampaginPage() {
                   </Box>
                 </Box>
                 <Box sx={{ height: "500px" }}>
-                  <CampaignNotes campaign={campaign} />
+                  <CampaignNotes campaign={campaign} disabled={isDisabled} />
                 </Box>
               </>
             ) : user.type === "Influencer" ? (
@@ -206,7 +211,6 @@ export default function CampaginPage() {
               </Box>
             )}
           </Grid>
-          
         </Grid>
       </Box>
     );

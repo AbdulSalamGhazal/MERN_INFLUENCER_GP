@@ -4,7 +4,7 @@ import { Select, MenuItem, FormControl } from "@mui/material";
 import useAuth from "../../context/AuthContext";
 import TextField from "@mui/material/TextField";
 
-const ChangeStatus = ({ campaign, isReadOnly }) => {
+const ChangeStatus = ({ campaign, isReadOnly, disabled }) => {
   const [selectedOption, setSelectedOption] = useState("");
   const { user } = useAuth();
 
@@ -56,7 +56,7 @@ const ChangeStatus = ({ campaign, isReadOnly }) => {
           id="select"
           value={selectedOption}
           onChange={handleSelectChange}
-          disabled={isReadOnly}
+          disabled={disabled}
         >
           <MenuItem value={"لم يحن الموعد"}>لم يحن الموعد</MenuItem>
           <MenuItem value={"جاري التنفيذ"}>جاري التنفيذ</MenuItem>
