@@ -8,6 +8,7 @@ import Typography from "@mui/material/Typography";
 import Grid from "@mui/material/Unstable_Grid2";
 import ChangePaymentAdmin from "../components/ChangePaymentAdmin";
 import TextField from "@mui/material/TextField";
+import { Button } from "@mui/material";
 
 export default function Admin() {
   const [campaigns, setCampaigns] = useState([]);
@@ -25,6 +26,15 @@ export default function Admin() {
 
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
+  const handleClearDispute = async (user, campaignId) => {
+    try {
+      await axios.patch(`http://localhost:3001/admin/dispute/${campaignId}`, {
+        userType: user,
+      });
+    } catch (error) {
+      console.log("Error fetching data");
+    }
+  };
   return (
     <Box sx={{ flexGrow: 1, pl: 1 }}>
       {campaigns.length === 0 ? (
@@ -55,7 +65,7 @@ export default function Admin() {
                 >
                   <CardContent sx={{ flex: "1 0 auto" }}>
                     <Grid container spacing={2}>
-                      <Grid xs={6}>
+                      <Grid xs={4}>
                         <Box
                           sx={{
                             display: "flex",
@@ -84,7 +94,7 @@ export default function Admin() {
                           {campaign.amount} ريال
                         </Typography>
                       </Grid>
-                      <Grid xs={6}>
+                      <Grid xs={4}>
                         <Box sx={{ mb: 3 }}>
                           <TextField
                             fullWidth
@@ -98,6 +108,44 @@ export default function Admin() {
                         <Typography sx={{ my: 2 }}>
                           {campaign.paymentNote}
                         </Typography>
+                      </Grid>
+                      <Grid xs={4}>
+                        <Box sx={{ mb: 3 }}>
+                          <TextField
+                            defaultValue={campaign.influencerDispute}
+                            InputProps={{
+                              readOnly: true,
+                            }}
+                            sx={{ width: "70%" }}
+                          />
+                          <Button
+                            variant="outlined"
+                            sx={{ width: "20px", mx: 2, height: "52px" }}
+                            onClick={() =>
+                              handleClearDispute("influencer", campaign._id)
+                            }
+                          >
+                            انهاء
+                          </Button>
+                        </Box>
+                        <Box sx={{ mb: 3 }}>
+                          <TextField
+                            defaultValue={campaign.BusinessDispute}
+                            InputProps={{
+                              readOnly: true,
+                            }}
+                            sx={{ width: "70%" }}
+                          />
+                          <Button
+                            variant="outlined"
+                            sx={{ width: "20px", mx: 2, height: "52px" }}
+                            onClick={() =>
+                              handleClearDispute("Business", campaign._id)
+                            }
+                          >
+                            انهاء
+                          </Button>
+                        </Box>
                       </Grid>
                     </Grid>
                   </CardContent>

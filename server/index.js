@@ -603,24 +603,6 @@ app.patch(
     }
   })
 );
-// change payment
-app.patch("/admin/payment/:campaignId", async (req, res) => {
-  const { campaignId } = req.params;
-  const { newPayment } = req.body;
-
-  try {
-    let campaign = await Campaign.findById(campaignId);
-
-    if (!campaign) {
-      return res.status(404).json({ message: "Campaign not found" });
-    }
-    campaign.payment = newPayment;
-    await campaign.save();
-    res.json({ message: "success" });
-  } catch (error) {
-    res.status(500).json({ message: "Internal server error" });
-  }
-});
 // change status
 app.patch(
   "/campaign/status/:campaignId",
@@ -663,6 +645,34 @@ app.patch(
         campaign.influencerRating = rate;
       } else {
         campaign.BusinessRating = rate;
+      }
+      await campaign.save();
+      res.json({ message: "success" });
+    } catch (error) {
+      res.status(500).json({ message: "Internal server error" });
+    }
+  })
+);
+// report dispute
+app.patch(
+  "/campaign/dispute/:campaignId",
+  protect,
+  asyncHandler(async (req, res) => {
+    const senderType = req.user.type;
+
+    const { campaignId } = req.params;
+    const { disputeDesc } = req.body;
+
+    try {
+      let campaign = await Campaign.findById(campaignId);
+
+      if (!campaign) {
+        return res.status(404).json({ message: "Campaign not found" });
+      }
+      if (senderType === "Business") {
+        campaign.BusinessDispute = disputeDesc;
+      } else {
+        campaign.influencerDispute = disputeDesc;
       }
       await campaign.save();
       res.json({ message: "success" });
@@ -730,7 +740,46 @@ app.get(
     }
   })
 );
+// change payment
+app.patch("/admin/payment/:campaignId", async (req, res) => {
+  const { campaignId } = req.params;
+  const { newPayment } = req.body;
 
+  try {
+    let campaign = await Campaign.findById(campaignId);
+
+    if (!campaign) {
+      return res.status(404).json({ message: "Campaign not found" });
+    }
+    campaign.payment = newPayment;
+    await campaign.save();
+    res.json({ message: "success" });
+  } catch (error) {
+    res.status(500).json({ message: "Internal server error" });
+  }
+});
+// clear dispute
+app.patch("/admin/dispute/:campaignId", async (req, res) => {
+  const { campaignId } = req.params;
+  const { userType } = req.body;
+
+  try {
+    let campaign = await Campaign.findById(campaignId);
+
+    if (!campaign) {
+      return res.status(404).json({ message: "Campaign not found" });
+    }
+    if (userType === "Business") {
+      campaign.BusinessDispute = null;
+    } else {
+      campaign.influencerDispute = null;
+    }
+    await campaign.save();
+    res.json({ message: "success" });
+  } catch (error) {
+    res.status(500).json({ message: "Internal server error" });
+  }
+});
 // handle auto meesage
 app.listen(3001, () => {
   console.log("server is running");

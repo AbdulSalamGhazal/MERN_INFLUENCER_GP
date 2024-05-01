@@ -21,6 +21,8 @@ const campaignSchema = mongoose.Schema(
     notes: [{ type: mongoose.Schema.Types.ObjectId, ref: "Message" }],
     influencerRating: Number,
     BusinessRating: Number,
+    influencerDispute: String,
+    BusinessDispute: String,
   },
   { timestamps: true }
 );

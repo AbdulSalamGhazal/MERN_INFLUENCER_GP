@@ -4,6 +4,7 @@ import useAuth from "../../context/AuthContext";
 import axios from "axios";
 import Grid from "@mui/material/Unstable_Grid2";
 import Rating from "@mui/material/Rating";
+import ReportProblemIcon from "@mui/icons-material/ReportProblem";
 
 import {
   Typography,
@@ -27,7 +28,7 @@ import ThumbDownIcon from "@mui/icons-material/ThumbDown";
 import DisabledByDefaultIcon from "@mui/icons-material/DisabledByDefault";
 import { useNavigate } from "react-router-dom";
 import ChangeStatus from "../components/ChangeStatus";
-
+import DisputeButton from "../components/DisputeButton";
 export default function CampaginPage() {
   let { campaignId } = useParams();
   const { user } = useAuth();
@@ -62,7 +63,12 @@ export default function CampaginPage() {
     }
   };
   useEffect(() => {
-    fetchDataAndUpdateCampaign();
+    const intervalId = setInterval(() => {
+      fetchDataAndUpdateCampaign();
+    }, 2000);
+
+    return () => clearInterval(intervalId);
+
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [campaignId, user.token, user.type]);
   const onApproveOrReject = async (isApproved) => {
@@ -164,6 +170,47 @@ export default function CampaginPage() {
                 </ListItem>
               ))}
             </List>
+          </Box>
+          <Box sx={{ display: "flex", justifyContent: "center", mt: 6 }}>
+            {user.type === "Business" ? (
+              campaign.BusinessDispute ? (
+                <Button
+                  variant="outlined"
+                  readOnly
+                  sx={{
+                    height: "40px",
+                    color: "red",
+                    borderColor: "red",
+                    width: "50%",
+                  }}
+                >
+                  تم تقديم طلب خلاف، جاري التحقق
+                  <ReportProblemIcon
+                    sx={{ ml: 2, fontSize: 28, color: "primary" }}
+                  />
+                </Button>
+              ) : (
+                <DisputeButton campaign={campaign} />
+              )
+            ) : campaign.influencerDispute ? (
+              <Button
+                variant="outlined"
+                readOnly
+                sx={{
+                  height: "40px",
+                  color: "red",
+                  borderColor: "red",
+                  width: "50%",
+                }}
+              >
+                تم تقديم طلب خلاف، جاري التحقق
+                <ReportProblemIcon
+                  sx={{ ml: 2, fontSize: 28, color: "primary" }}
+                />
+              </Button>
+            ) : (
+              <DisputeButton campaign={campaign} />
+            )}
           </Box>
         </Grid>
         <Grid xs={5}>
