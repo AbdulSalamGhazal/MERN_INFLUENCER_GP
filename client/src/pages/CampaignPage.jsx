@@ -199,41 +199,54 @@ export default function CampaginPage() {
             </>
           ) : user.type === "Influencer" ? (
             <Box>
-              <Typography variant="h4" gutterBottom>
-                بانتظار الموافقة على الطلب
-              </Typography>
+              <Grid xs={12} sx={{ textAlign: "center" }}>
+                <Typography variant="h4" gutterBottom>
+                  بانتظار الموافقة على الطلب
+                </Typography>
+              </Grid>
+
               <Box sx={{ display: "flex", justifyContent: "center" }}>
-                <Button
-                  variant="contained"
-                  onClick={() => onApproveOrReject(true)}
-                  color="success"
-                  sx={{ mr: 2 }}
+                <Grid
+                  xs={6}
+                  sx={{ display: "flex", justifyContent: "flex-end" }}
                 >
-                  <ThumbUpIcon sx={{ fontSize: 30 }} />
-                </Button>
-                <Button
-                  variant="contained"
-                  onClick={() => onApproveOrReject(false)}
-                  color="error"
-                >
-                  <ThumbDownIcon sx={{ fontSize: 30 }} />
-                </Button>
+                  <Button
+                    variant="contained"
+                    onClick={() => onApproveOrReject(true)}
+                    color="success"
+                  >
+                    <ThumbUpIcon sx={{ fontSize: 60 }} />
+                  </Button>
+                </Grid>
+                <Grid xs={6}>
+                  <Button
+                    variant="contained"
+                    onClick={() => onApproveOrReject(false)}
+                    color="error"
+                  >
+                    <ThumbDownIcon sx={{ fontSize: 60 }} />
+                  </Button>
+                </Grid>
               </Box>
             </Box>
           ) : (
             <Box>
-              <Typography variant="h4" gutterBottom>
-                بانتظار الموافقة على الطلب
-              </Typography>
-              <Box sx={{ display: "flex", justifyContent: "center" }}>
-                <Button
-                  variant="contained"
-                  onClick={() => onApproveOrReject(false)}
-                  color="error"
-                >
-                  <DisabledByDefaultIcon sx={{ fontSize: 30 }} />
-                </Button>
-              </Box>
+              <Grid xs={12} sx={{ textAlign: "center" }}>
+                <Typography variant="h4" gutterBottom>
+                  بانتظار الموافقة على الطلب
+                </Typography>
+              </Grid>
+              <Grid xs={12}>
+                <Box sx={{ display: "flex", justifyContent: "center" }}>
+                  <Button
+                    variant="contained"
+                    onClick={() => onApproveOrReject(false)}
+                    color="error"
+                  >
+                    <DisabledByDefaultIcon sx={{ fontSize: 50 }} />
+                  </Button>
+                </Box>
+              </Grid>
             </Box>
           )}
         </Grid>

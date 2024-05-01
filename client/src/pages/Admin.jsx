@@ -25,8 +25,6 @@ export default function Admin() {
 
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
-  // turn from جاري التحقق to تم الاستلام
-  // turn from تم الاستلام to تم تحويل المبلغ
   return (
     <Box sx={{ flexGrow: 1, pl: 1 }}>
       {campaigns.length === 0 ? (
