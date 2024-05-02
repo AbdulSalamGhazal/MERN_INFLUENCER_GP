@@ -19,6 +19,9 @@ function Influencers() {
     const fetchData = async () => {
       try {
         const response = await axios.get("http://localhost:3001/influencers", {
+          headers: {
+            Authorization: `Bearer ${user.token} ${user.type}`,
+          },
           params: filters,
         });
         setInfluencers(response.data);

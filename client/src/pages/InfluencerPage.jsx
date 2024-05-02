@@ -30,16 +30,23 @@ import CropFreeIcon from "@mui/icons-material/CropFree";
 import GradeIcon from "@mui/icons-material/Grade";
 import SellIcon from "@mui/icons-material/Sell";
 import Rating from "@mui/material/Rating";
+import useAuth from "../../context/AuthContext";
 
 function InfluencerPage() {
   let { influencerId } = useParams();
   const [influencer, setInfluencer] = useState(null);
+  const { user } = useAuth();
 
   useEffect(() => {
     const fetchData = async () => {
       try {
         const response = await axios.get(
-          `http://localhost:3001/influencers/${influencerId}`
+          `http://localhost:3001/influencers/${influencerId}`,
+          {
+            headers: {
+              Authorization: `Bearer ${user.token} ${user.type}`,
+            },
+          }
         );
 
         setInfluencer(response.data);

@@ -27,37 +27,49 @@ app.use(cors());
 
 mongoose.connect("mongodb://127.0.0.1:27017/MERN_INFLUENCER_GP");
 
-app.get("/influencers", async (req, res) => {
-  const query = filters(req.query);
-  const influencers = await Influencer.find(query);
-  res.json(influencers);
-});
-app.get("/influencers/:id", async (req, res) => {
-  try {
-    const influencer = await Influencer.findById(req.params.id);
-    if (!influencer) {
-      return res.status(404).json({ message: "influencer not found" });
+app.get(
+  "/influencers",
+  protect,
+  asyncHandler(async (req, res) => {
+    const query = filters(req.query);
+    try {
+      const influencers = await Influencer.find(query);
+      res.json(influencers);
+    } catch (error) {
+      res.status(500).json({ message: "Internal server error" });
     }
-    const campaigns = await Campaign.find({
-      influencerId: influencer._id,
-    }).populate({
-      path: "businessId",
-      select: "companyName",
-    });
-    const formattedCampaigns = campaigns.map((campaign) => ({
-      rate: campaign.BusinessRating,
-      raterName: campaign.businessId.companyName,
-    }));
-    const influencerWithCampaigns = {
-      ...influencer.toObject(),
-      campaigns: formattedCampaigns,
-    };
+  })
+);
+app.get(
+  "/influencers/:id",
+  protect,
+  asyncHandler(async (req, res) => {
+    try {
+      const influencer = await Influencer.findById(req.params.id);
+      if (!influencer) {
+        return res.status(404).json({ message: "influencer not found" });
+      }
+      const campaigns = await Campaign.find({
+        influencerId: influencer._id,
+      }).populate({
+        path: "businessId",
+        select: "companyName",
+      });
+      const formattedCampaigns = campaigns.map((campaign) => ({
+        rate: campaign.BusinessRating,
+        raterName: campaign.businessId.companyName,
+      }));
+      const influencerWithCampaigns = {
+        ...influencer.toObject(),
+        campaigns: formattedCampaigns,
+      };
 
-    res.json(influencerWithCampaigns);
-  } catch (error) {
-    res.status(500).json({ message: "Internal server error" });
-  }
-});
+      res.json(influencerWithCampaigns);
+    } catch (error) {
+      res.status(500).json({ message: "Internal server error" });
+    }
+  })
+);
 
 // creating influencer
 app.post("/influencers", upload.single("image"), async (req, res) => {
