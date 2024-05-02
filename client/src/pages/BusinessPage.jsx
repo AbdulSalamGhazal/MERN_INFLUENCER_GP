@@ -22,6 +22,7 @@ import LinkedInIcon from "@mui/icons-material/LinkedIn";
 import InstagramIcon from "@mui/icons-material/Instagram";
 import LinkIcon from "@mui/icons-material/Link";
 import YouTubeIcon from "@mui/icons-material/YouTube";
+import Rating from "@mui/material/Rating";
 
 import axios from "axios";
 import { useParams } from "react-router-dom";
@@ -239,6 +240,17 @@ const BusinessPage = () => {
           الحد الأدنى: {business.budgetRange.min}، الحد الأقصى:{" "}
           {business.budgetRange.max}
         </Typography>
+        <Divider sx={{ height: "4px", backgroundColor: "#ccc", my: 3 }} />
+        <Typography variant="h4" gutterBottom>
+          التقييمات
+        </Typography>
+        {business.campaigns.map((campaign) => (
+          <Typography variant="h6" key={campaign._id}>
+            {campaign.raterName}:
+            <Rating value={campaign.rate} size="medium" readOnly />
+          </Typography>
+        ))}
+
         <Link
           to={`/chat/${business._id}`}
           style={{ textDecoration: "none", color: "inherit", width: "100%" }}

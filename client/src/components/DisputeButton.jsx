@@ -99,6 +99,8 @@ export default function CampaignStarter({ campaign }) {
                   label="وصف الخلاف"
                   onChange={handleChangeDisputeDesc}
                   fullWidth
+                  multiline
+                  rows={7}
                   sx={{ mb: 2 }}
                 />
               </Grid>

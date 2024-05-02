@@ -33,8 +33,30 @@ app.get("/influencers", async (req, res) => {
   res.json(influencers);
 });
 app.get("/influencers/:id", async (req, res) => {
-  const influencer = await Influencer.findById(req.params.id);
-  res.json(influencer);
+  try {
+    const influencer = await Influencer.findById(req.params.id);
+    if (!influencer) {
+      return res.status(404).json({ message: "influencer not found" });
+    }
+    const campaigns = await Campaign.find({
+      influencerId: influencer._id,
+    }).populate({
+      path: "businessId",
+      select: "companyName",
+    });
+    const formattedCampaigns = campaigns.map((campaign) => ({
+      rate: campaign.BusinessRating,
+      raterName: campaign.businessId.companyName,
+    }));
+    const influencerWithCampaigns = {
+      ...influencer.toObject(),
+      campaigns: formattedCampaigns,
+    };
+
+    res.json(influencerWithCampaigns);
+  } catch (error) {
+    res.status(500).json({ message: "Internal server error" });
+  }
 });
 
 // creating influencer
@@ -125,7 +147,27 @@ app.get(
   asyncHandler(async (req, res) => {
     try {
       const business = await Business.findById(req.params.id);
-      res.json(business);
+      if (!business) {
+        return res.status(404).json({ message: "Business not found" });
+      }
+      const campaigns = await Campaign.find({
+        businessId: business._id,
+      }).populate({
+        path: "influencerId",
+        select: "name",
+      });
+
+      const formattedCampaigns = campaigns.map((campaign) => ({
+        rate: campaign.influencerRating,
+        raterName: campaign.influencerId.name,
+      }));
+
+      const businessWithCampaigns = {
+        ...business.toObject(),
+        campaigns: formattedCampaigns,
+      };
+
+      res.json(businessWithCampaigns);
     } catch (error) {
       res.status(500).json({ message: "Internal server error" });
     }
