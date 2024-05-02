@@ -834,7 +834,7 @@ app.patch("/admin/dispute/:campaignId", async (req, res) => {
     res.status(500).json({ message: "Internal server error" });
   }
 });
-// handle auto meesage
+
 app.listen(3001, () => {
   console.log("server is running");
 });

@@ -171,47 +171,51 @@ export default function CampaginPage() {
               ))}
             </List>
           </Box>
-          <Box sx={{ display: "flex", justifyContent: "center", mt: 6 }}>
-            {user.type === "Business" ? (
-              campaign.BusinessDispute ? (
-                <Button
-                  variant="outlined"
-                  readOnly
-                  sx={{
-                    height: "40px",
-                    color: "red",
-                    borderColor: "red",
-                    width: "50%",
-                  }}
-                >
-                  تم تقديم طلب خلاف، جاري التحقق
-                  <ReportProblemIcon
-                    sx={{ ml: 2, fontSize: 28, color: "primary" }}
-                  />
-                </Button>
-              ) : (
-                <DisputeButton campaign={campaign} />
-              )
-            ) : campaign.influencerDispute ? (
-              <Button
-                variant="outlined"
-                readOnly
-                sx={{
-                  height: "40px",
-                  color: "red",
-                  borderColor: "red",
-                  width: "50%",
-                }}
-              >
-                تم تقديم طلب خلاف، جاري التحقق
-                <ReportProblemIcon
-                  sx={{ ml: 2, fontSize: 28, color: "primary" }}
-                />
-              </Button>
-            ) : (
-              <DisputeButton campaign={campaign} />
+          {campaign.isApproved &&
+            campaign.status === "تم الانتهاء" &&
+            campaign.payment === "تم تحويل المبلغ" && (
+              <Box sx={{ display: "flex", justifyContent: "center", mt: 6 }}>
+                {user.type === "Business" ? (
+                  campaign.BusinessDispute ? (
+                    <Button
+                      variant="outlined"
+                      readOnly
+                      sx={{
+                        height: "40px",
+                        color: "red",
+                        borderColor: "red",
+                        width: "50%",
+                      }}
+                    >
+                      تم تقديم طلب خلاف، جاري التحقق
+                      <ReportProblemIcon
+                        sx={{ ml: 2, fontSize: 28, color: "primary" }}
+                      />
+                    </Button>
+                  ) : (
+                    <DisputeButton campaign={campaign} />
+                  )
+                ) : campaign.influencerDispute ? (
+                  <Button
+                    variant="outlined"
+                    readOnly
+                    sx={{
+                      height: "40px",
+                      color: "red",
+                      borderColor: "red",
+                      width: "50%",
+                    }}
+                  >
+                    تم تقديم طلب خلاف، جاري التحقق
+                    <ReportProblemIcon
+                      sx={{ ml: 2, fontSize: 28, color: "primary" }}
+                    />
+                  </Button>
+                ) : (
+                  <DisputeButton campaign={campaign} />
+                )}
+              </Box>
             )}
-          </Box>
         </Grid>
         <Grid xs={5}>
           {campaign.isApproved ? (
