@@ -175,7 +175,7 @@ export default function Navbar() {
           </>
         ) : (
           <Box sx={{ display: "flex", justifyContent: "flex-end" }}>
-            <Button color="inherit" component={RouterLink} to="/signup">
+            <Button color="inherit" component={RouterLink} to="/signup/business">
               انضم لنا
             </Button>
             <Button color="inherit" component={RouterLink} to="/login">

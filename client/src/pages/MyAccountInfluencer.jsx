@@ -17,7 +17,7 @@ import Slider from "@mui/material/Slider";
 import PlatformInput from "../components/signup/PlatformInput";
 import IconButton from "@mui/material/IconButton";
 import AddCircleOutlineIcon from '@mui/icons-material/AddCircleOutline';
-
+import { InputAdornment } from "@mui/material";
 import { audienceInterests, audienceLocations, influencerFields } from "../utils/lists";
 
 const MyAccountInfluencer = ({ user }) => {
@@ -25,8 +25,8 @@ const MyAccountInfluencer = ({ user }) => {
   const [errorAlert, setErrorAlert] = useState(null);
   const [successAlert, setSuccessAlert] = useState(null);
   const [waiting, setWaiting] = useState(false);
-  const [age, setAge] = useState([10, 30])
-  const [genderPercent, setGenderPercent] = useState(50);
+  const [age, setAge] = useState(user.audience_age_rang ? user.audience_age_rang.split('-').map(value => parseInt(value)) : [1, 100])
+  const [genderPercent, setGenderPercent] = useState(user.audience_gender || 50);
   const [image, setImage] = useState('');
 
   const { login } = useAuth();
@@ -61,7 +61,7 @@ const MyAccountInfluencer = ({ user }) => {
     });
 
   const onSubmit = async (data) => {
-    setWaiting(true)
+    setWaiting(true);
     const influencer = {
       ...data.influencer,
       image: data.influencer.image[0],
@@ -97,23 +97,14 @@ const MyAccountInfluencer = ({ user }) => {
     }
   };
 
-  console.log(watch())
   return (
 
     <Box>
-      {/* {
-        <Alert
-        severity="error"
-          sx={{ visibility: errorAlert == null ? "hidden" : "vislible" }}
-        >
-          {errorAlert}
-          </Alert>
-      } */}
+    
       <Box
         component="form"
         onSubmit={handleSubmit(onSubmit)}
         noValidate
-      // sx={{ mt: 1, maxWidth: "500px", mx: "auto" }}
       >
         <Grid container spacing={1}>
           <Grid xs={12}>
@@ -163,7 +154,6 @@ const MyAccountInfluencer = ({ user }) => {
               name="influencer.field"
               control={control}
               defaultValue={watch('influencer.field')}
-              required
               render={({ field }) => (
                 <TextField
                   {...register("influencer.field", {
@@ -171,6 +161,7 @@ const MyAccountInfluencer = ({ user }) => {
                   })}
                   error={errors?.influencer?.field != undefined}
                   helperText={errors?.influencer?.field?.message}
+                  required
                   margin="dense"
                   select
                   size="small"
@@ -208,7 +199,6 @@ const MyAccountInfluencer = ({ user }) => {
               fullWidth
               size="small"
               margin="dense"
-              required
               label="مكان الاقامة"
               {...register("influencer.location")}
               error={errors?.influencer?.location != undefined}
@@ -303,6 +293,7 @@ const MyAccountInfluencer = ({ user }) => {
                   size="small"
                   margin="dense"
                   label="اهتمامات المتابعين"
+                  required
                   {...register("influencer.audience_interests", {
                     required: "هذا الحقل مطلوب",
                   })}
@@ -379,7 +370,7 @@ const MyAccountInfluencer = ({ user }) => {
             />
           </Grid>
           <Grid xs={6}>
-            <FormControl id="age" fullWidth margin="dense" >
+            <FormControl id="age" fullWidth margin="dense" required>
               {/* <InputLabel HTMLFor="age" >Audience age range</InputLabel> */}
               <FormLabel>فئة عمر الجمهور</FormLabel>
 
@@ -396,7 +387,7 @@ const MyAccountInfluencer = ({ user }) => {
             </FormControl>
           </Grid>
           <Grid xs={6}>
-            <FormControl id="genderPrecent" fullWidth margin="dense">
+            <FormControl id="genderPrecent" fullWidth margin="dense" required>
               {/* <InputLabel HTMLFor="age" >Audience age range</InputLabel> */}
               <FormLabel>نسبة الرجال الى النساء</FormLabel>
 
@@ -415,8 +406,22 @@ const MyAccountInfluencer = ({ user }) => {
           </Grid>
           <Grid xs={12}>
             <Divider sx={{ my: 1, fontSize: '.75em' }}>
-              شروط خاصة
+              التكلفة والشروط الخاصة
             </Divider>
+          </Grid>
+          <Grid xs={4}>
+
+            <TextField
+              margin="dense"
+              fullWidth
+              label="تكلفة الاعلان التقريبية"
+              type="number"
+              required
+              {...register('influencer.avg_cost', { required: 'هذا الحقل مطلوب' })}
+              InputProps={{
+                endAdornment: <InputAdornment position="end">ر.س</InputAdornment>,
+              }}
+            />
           </Grid>
           <Grid xs={12}>
 
@@ -457,7 +462,6 @@ const MyAccountInfluencer = ({ user }) => {
               helperText={errors.influencer?.autoReply?.message}
               margin="dense"
               size="small"
-              required
               fullWidth
               multiline
               label="رسالة الرد الآلي"

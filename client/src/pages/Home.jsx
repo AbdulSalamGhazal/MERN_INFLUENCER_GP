@@ -1,10 +1,15 @@
 import { Grid, Typography } from "@mui/material";
+import useAuth from "../../context/AuthContext";
+import HomePageBefore from "./HomePageBefore";
 // import Logo1 from './logo1.png'; // استبدل بمسار صورة الشعار الأول
 // import Logo2 from './logo2.png'; // استبدل بمسار صورة الشعار الثاني
 // import Logo3 from './logo3.png'; // استبدل بمسار صورة الشعار الثالث
 
 function Home() {
+  const {user} = useAuth();
+  console.log(user)
   return (
+    !user? <HomePageBefore /> :
     <div style={{ padding: "20px" }}>
       <Typography variant="h4" gutterBottom>
         مرحبًا بك في موقعنا للحملات الإعلانية مع المؤثرين

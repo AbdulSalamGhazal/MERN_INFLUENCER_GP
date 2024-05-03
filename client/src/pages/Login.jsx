@@ -158,13 +158,13 @@ const Login = () => {
         </Button>
         {/* TODO: correct Link should be added in both links */}
         <Grid container justifyContent={"space-between"}>
-          <Grid>
+          {/* <Grid>
             <Link href="#" variant="body2">
               هل نسيت كلمة المرور
             </Link>
-          </Grid>
+          </Grid> */}
           <Grid>
-            <Link href="/signup" variant="body2">
+            <Link href={`/signup/${type.toLowerCase()}`} variant="body2">
               {"ليس لديك حساب؟ قم بالتسجيل"}
             </Link>
           </Grid>

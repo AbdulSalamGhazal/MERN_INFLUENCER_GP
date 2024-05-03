@@ -12,7 +12,7 @@ const storage = new CloudinaryStorage({
   cloudinary: cloudinary,
   params: {
     folder: 'MERN_INFLUENCER_GP',
-    allowedFormat: ['png', 'jepg', 'jpg']
+    allowedFormat: ['png', 'jepg', 'jpg', 'pdf']
   }
 });
 

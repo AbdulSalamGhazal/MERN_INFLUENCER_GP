@@ -3,12 +3,16 @@ import Typography from "@mui/material/Typography";
 import Tabs from "@mui/material/Tabs";
 import Tab from "@mui/material/Tab";
 import { useState } from "react";
+import { useParams, useNavigate } from "react-router-dom";
+
 
 import InfluencerSignup from './InfluencerSignup';
 import BusinessSignup from './BusinessSignup';
 
 const Signup = () => {
-  const [type, setType] = useState('Business');
+  const navigate = useNavigate()
+  const {type} = useParams();
+  // const [type, setType] = useState('Business');
 
   return (
     <Box
@@ -16,37 +20,25 @@ const Signup = () => {
       align="center"
       sx={{ maxWidth: "450px", margin: "auto" }}
     >
-      {/* {errorAlert && <Alert severity="error">{errorAlert}</Alert>} */}
-      {/* {
-        <Alert
-          severity="error"
-          sx={{ visibility: errorAlert == null ? "hidden" : "vislible" }}
-        >
-          {errorAlert}
-        </Alert>
-      } */}
       <Typography component="h1" variant="h3" align="center">
         انشاء حساب
       </Typography>
       <Box sx={{ borderBottom: 1, borderColor: "divider" }}>
         <Tabs
           value={type}
-          onChange={(e, newValue) => setType(newValue)}
+          onChange={(e, newValue) => navigate(`/signup/${newValue}`)}
           variant="fullWidth"
         >
-          <Tab label="صاحب عمل" value={"Business"} />
-          <Tab label="مؤثر" value={"Influencer"} />
+          <Tab label="صاحب عمل" value={"business"} />
+          <Tab label="مؤثر" value={"influencer"} />
         </Tabs>
       </Box>
 
       <Box
         sx={{ mt: 1 }}
       >
-        {type == 'Influencer'? <InfluencerSignup /> : <BusinessSignup/>}
+        {type == 'influencer'? <InfluencerSignup /> : <BusinessSignup/>}
       </Box>
-
-      {/* <TabPanel value="business"><LoginForm /></TabPanel>
-      <TabPanel value="influencer"><LoginForm /></TabPanel> */}
     </Box>
   );
 };

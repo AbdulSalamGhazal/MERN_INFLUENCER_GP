@@ -94,9 +94,7 @@ function App() {
           />
           <Route path="/account" element={<MyAccount />} />
           <Route path="/login" element={<Login />} />
-          <Route path="/signup" element={<Signup />} />
-          <Route path="/signup/influencer" element={<InfluencerSignup />} />
-          <Route path="/signup/business" element={<BusinessSignup />} />
+          <Route path="/signup/:type" element={<Signup />} />
         </Routes>
       </Container>
       <Footer />
