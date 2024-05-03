@@ -51,12 +51,15 @@ app.get(
       }
       const campaigns = await Campaign.find({
         influencerId: influencer._id,
+        status: "تم الانتهاء",
+        payment: "تم تحويل المبلغ",
+        influencerRating: { $ne: -1 },
       }).populate({
         path: "businessId",
         select: "companyName",
       });
       const formattedCampaigns = campaigns.map((campaign) => ({
-        rate: campaign.BusinessRating,
+        rate: campaign.influencerRating,
         raterName: campaign.businessId.companyName,
       }));
       const influencerWithCampaigns = {
@@ -164,13 +167,16 @@ app.get(
       }
       const campaigns = await Campaign.find({
         businessId: business._id,
+        status: "تم الانتهاء",
+        payment: "تم تحويل المبلغ",
+        BusinessRating: { $ne: -1 },
       }).populate({
         path: "influencerId",
         select: "name",
       });
 
       const formattedCampaigns = campaigns.map((campaign) => ({
-        rate: campaign.influencerRating,
+        rate: campaign.BusinessRating,
         raterName: campaign.influencerId.name,
       }));
 

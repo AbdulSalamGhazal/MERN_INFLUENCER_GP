@@ -19,8 +19,14 @@ const campaignSchema = mongoose.Schema(
     amount: Number,
     date: String,
     notes: [{ type: mongoose.Schema.Types.ObjectId, ref: "Message" }],
-    influencerRating: Number,
-    BusinessRating: Number,
+    influencerRating: {
+      type: Number,
+      default: -1,
+    },
+    BusinessRating: {
+      type: Number,
+      default: -1,
+    },
     influencerDispute: String,
     BusinessDispute: String,
   },
