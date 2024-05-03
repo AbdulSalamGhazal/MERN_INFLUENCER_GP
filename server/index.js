@@ -519,38 +519,27 @@ app.post(
       if (!mongoose.isValidObjectId(receiverId)) {
         return res.status(400).json({ message: "Invalid receiver_id" });
       }
+      const influencerId = userType === "Influencer" ? sender_id : receiverId;
+      const businessId = userType === "Business" ? sender_id : receiverId;
 
-      const searchCriteria =
-        userType === "Influencer"
-          ? { influencerId: sender_id, businessId: receiverId }
-          : { influencerId: receiverId, businessId: sender_id };
-
-      let campaign = await Campaign.findOne(searchCriteria).populate({
-        path: userType === "Influencer" ? "businessId" : "influencerId",
+      const campaign = await Campaign.create({
+        influencerId: influencerId,
+        businessId: businessId,
+        campaignName: campaignName,
+        conditions: conditions,
+        amount: amount,
+        date: date,
+        status: "لم يحن الموعد",
+        payment: "لم يتم الدفع",
       });
+      // add campaign id to chat
+      const chat = await Chat.findOne({
+        influencerId: influencerId,
+        businessId: businessId,
+      });
+      chat.campaignId = campaign._id;
+      await chat.save();
 
-      if (!campaign) {
-        const influencerId = userType === "Influencer" ? sender_id : receiverId;
-        const businessId = userType === "Business" ? sender_id : receiverId;
-
-        campaign = await Campaign.create({
-          influencerId: influencerId,
-          businessId: businessId,
-          campaignName: campaignName,
-          conditions: conditions,
-          amount: amount,
-          date: date,
-          status: "لم يحن الموعد",
-          payment: "لم يتم الدفع",
-        });
-        // add campaign id to chat
-        const chat = await Chat.findOne({
-          influencerId: influencerId,
-          businessId: businessId,
-        });
-        chat.campaignId = campaign._id;
-        await chat.save();
-      }
       res.status(200).json(campaign._id);
     } catch (error) {
       res.status(500).json({ message: "Internal server error" });
