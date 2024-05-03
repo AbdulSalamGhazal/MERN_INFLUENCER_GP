@@ -1,5 +1,4 @@
 import {
-  Badge,
   Card,
   CardActions,
   CardContent,
@@ -10,22 +9,11 @@ import {
   Stack,
   Box,
 } from "@mui/material";
-import { useState } from "react";
-import FavoriteBorderIcon from "@mui/icons-material/FavoriteBorder";
-import FavoriteIcon from "@mui/icons-material/Favorite";
 import InfoIcon from "@mui/icons-material/Info";
 import EmailIcon from "@mui/icons-material/Email";
 import { Link } from "react-router-dom";
 
 function InfluencerCard({ influencer }) {
-  const [isFavorited, setIsFavorited] = useState(false);
-
-  const handleFavoriteClick = () => {
-    setIsFavorited(!isFavorited);
-    // Add functionality later
-  };
-
-
   return (
     <>
       <Card sx={{ maxWidth: 345, m: 2, boxShadow: 3 }}>
@@ -49,23 +37,6 @@ function InfluencerCard({ influencer }) {
               objectFit: "cover",
             }}
           />
-          {influencer.verified && (
-            <Badge
-              color="primary"
-              badgeContent="✓"
-              sx={{
-                position: "absolute",
-                top: 16,
-                right: 16,
-                ".MuiBadge-badge": {
-                  backgroundColor: "#44b700",
-                  color: "#ffffff",
-                  border: `2px solid #ffffff`,
-                  padding: "0 4px",
-                },
-              }}
-            />
-          )}
         </Box>
         <CardContent>
           <Typography gutterBottom variant="h5" component="div">
@@ -98,25 +69,11 @@ function InfluencerCard({ influencer }) {
           disableSpacing
           sx={{ justifyContent: "space-between", alignItems: "center" }}
         >
-          <IconButton
-            onClick={handleFavoriteClick}
-            aria-label="إضافة للمفضلة"
-            size="large"
-          >
-            {isFavorited ? (
-              <FavoriteIcon color="error" sx={{ fontSize: 28 }} />
-            ) : (
-              <FavoriteBorderIcon sx={{ fontSize: 28 }} />
-            )}
-          </IconButton>
           <Link
             to={`/chat/${influencer.id}`}
             style={{ textDecoration: "none", color: "inherit" }}
           >
-            <IconButton
-              aria-label="إرسال رسالة"
-              size="large"
-            >
+            <IconButton aria-label="إرسال رسالة" size="large">
               <EmailIcon sx={{ fontSize: 28 }} />
             </IconButton>
           </Link>

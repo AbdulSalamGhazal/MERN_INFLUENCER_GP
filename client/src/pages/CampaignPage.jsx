@@ -3,12 +3,8 @@ import { useParams } from "react-router-dom";
 import useAuth from "../../context/AuthContext";
 import axios from "axios";
 import Grid from "@mui/material/Unstable_Grid2";
-import {
-  CheckCircle,
-  HourglassEmpty,
-  Receipt,
-  DoneAll,
-} from "@mui/icons-material";
+import Rating from "@mui/material/Rating";
+import ReportProblemIcon from "@mui/icons-material/ReportProblem";
 
 import {
   Typography,
@@ -20,6 +16,8 @@ import {
   Button,
   IconButton,
 } from "@mui/material";
+import TextField from "@mui/material/TextField";
+
 import { MoneyOutlined, CalendarTodayOutlined } from "@mui/icons-material";
 import CheckIcon from "@mui/icons-material/Check";
 
@@ -27,17 +25,19 @@ import CampaignNotes from "../components/CampaignNotes";
 import PaymentProcess from "../components/PaymentProcess";
 import ThumbUpIcon from "@mui/icons-material/ThumbUp";
 import ThumbDownIcon from "@mui/icons-material/ThumbDown";
-import TimerIcon from "@mui/icons-material/Timer";
-import TimelapseIcon from "@mui/icons-material/Timelapse";
 import DisabledByDefaultIcon from "@mui/icons-material/DisabledByDefault";
 import { useNavigate } from "react-router-dom";
-
+import ChangeStatus from "../components/ChangeStatus";
+import DisputeButton from "../components/DisputeButton";
 export default function CampaginPage() {
   let { campaignId } = useParams();
   const { user } = useAuth();
   const navigate = useNavigate();
 
   const [campaign, setCampaign] = useState(null);
+  const [isDisabled, setIsDisabled] = useState(false);
+  const [rate, setRate] = useState(0);
+
   const fetchDataAndUpdateCampaign = async () => {
     try {
       const response = await axios.get(
@@ -48,18 +48,30 @@ export default function CampaginPage() {
           },
         }
       );
-      console.log(response.data);
       setCampaign(response.data);
+      setIsDisabled(
+        response.data.payment === "تم تحويل المبلغ" &&
+          response.data.status === "تم الانتهاء"
+      );
+      if (user.type === "Business") {
+        setRate(response.data.influencerRating);
+      } else {
+        setRate(response.data.BusinessRating);
+      }
     } catch (error) {
       console.error("Error fetching data:", error);
     }
   };
   useEffect(() => {
-    fetchDataAndUpdateCampaign();
+    const intervalId = setInterval(() => {
+      fetchDataAndUpdateCampaign();
+    }, 2000);
+
+    return () => clearInterval(intervalId);
+
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [campaignId, user.token, user.type]);
   const onApproveOrReject = async (isApproved) => {
-    console.log("Approving");
     try {
       await axios.patch(
         `http://localhost:3001/campaign/${campaign._id}`,
@@ -74,184 +86,238 @@ export default function CampaginPage() {
         navigate(`/campaign`);
       }
       fetchDataAndUpdateCampaign();
-      console.log("after");
     } catch (error) {
       console.error("Error updating campaign:", error);
       throw new Error("Failed to update campaign");
     }
   };
-  const getPaymentStyle = (status) => {
-    let icon;
-    let color;
-    if (status === "لم يتم الدفع") {
-      icon = <HourglassEmpty />;
-      color = "orange";
-    } else if (status === "تم التحويل، جاري التحقق") {
-      icon = <Receipt />;
-      color = "blue";
-    } else if (status === "تم استلام المبلغ") {
-      icon = <CheckCircle />;
-      color = "green";
-    } else if (status === "تم تحويل المبلغ") {
-      icon = <DoneAll />;
-      color = "green";
-    } else {
-      icon = null;
-      color = "black";
+  const UpdateRate = async (newRate) => {
+    try {
+      await axios.patch(
+        `http://localhost:3001/campaign/rate/${campaign._id}`,
+        { rate: newRate },
+        {
+          headers: {
+            Authorization: `Bearer ${user.token} ${user.type}`,
+          },
+        }
+      );
+    } catch (error) {
+      console.error("Error updating campaign:", error);
+      throw new Error("Failed to update campaign");
     }
-    return { icon: icon, color: color };
   };
-  const getStatusStyle = (status) => {
-    let icon;
-    let color;
-    if (status === "لم يحن الموعد") {
-      icon = <TimerIcon />;
-      color = "pink";
-    } else if (status === "جاري التنفيذ") {
-      icon = <TimelapseIcon />;
-      color = "red";
-    } else if (status === "تم الانتهاء") {
-      icon = <DoneAll />;
-      color = "green";
-    } else {
-      icon = null;
-      color = "black";
-    }
-    return { icon: icon, color: color };
+  const changeRate = (event, newValue) => {
+    setRate(newValue);
+    UpdateRate(newValue);
   };
   if (!campaign) {
     return <Typography>جاري التحميل...</Typography>;
-  } else {
-    const { color: paymentColor, icon: paymentIcon } = getPaymentStyle(
-      campaign.payment
-    );
-    const { color: statusColor, icon: statusIcon } = getStatusStyle(
-      campaign.status
-    );
-    return (
-      <Box sx={{ flexGrow: 1, pl: 1 }}>
-        <Grid container spacing={2}>
-          <Grid xs={7}>
+  }
+  return (
+    <Box sx={{ flexGrow: 1, pl: 1 }}>
+      <Grid container spacing={2}>
+        <Grid xs={7}>
+          <Box
+            sx={{
+              display: "flex",
+              flexDirection: "column",
+              alignItems: "center",
+            }}
+          >
+            <Typography variant="h4" sx={{ fontWeight: "bold" }}>
+              مع: {campaign.receiverName}
+            </Typography>
+            <Avatar
+              src={campaign.receiverImage}
+              alt="Receiver Avatar"
+              sx={{ width: 200, height: 200, marginY: 2 }}
+            />{" "}
             <Box
               sx={{
                 display: "flex",
-                flexDirection: "column",
-                alignItems: "center",
+                flexDirection: "row",
+                justifyContent: "center",
+                width: "100%",
               }}
             >
-              <Typography variant="h4" sx={{ fontWeight: "bold" }}>
-                مع: {campaign.receiverName}
-              </Typography>
-              <Avatar
-                src={campaign.receiverImage}
-                alt="Receiver Avatar"
-                sx={{ width: 200, height: 200, marginY: 2 }}
-              />{" "}
-              <Box
-                sx={{
-                  display: "flex",
-                  flexDirection: "row",
-                  justifyContent: "center",
-                  width: "100%",
-                }}
-              >
-                <Box sx={{ display: "flex", alignItems: "center", px: 3 }}>
-                  <IconButton sx={{ marginRight: 1 }}>
-                    <MoneyOutlined />
-                  </IconButton>
-                  <Typography variant="body1">
-                    المبلغ: {campaign.amount} ريال
-                  </Typography>
-                </Box>
-                <Box sx={{ display: "flex", alignItems: "center", px: 3 }}>
-                  <IconButton sx={{ marginRight: 1 }}>
-                    <CalendarTodayOutlined />
-                  </IconButton>
-                  <Typography variant="body1">
-                    في تاريخ: {campaign.date.slice(0, 10)}
-                  </Typography>
-                </Box>
+              <Box sx={{ display: "flex", alignItems: "center", px: 3 }}>
+                <IconButton sx={{ marginRight: 1 }}>
+                  <MoneyOutlined />
+                </IconButton>
+                <Typography variant="body1">
+                  المبلغ: {campaign.amount} ريال
+                </Typography>
               </Box>
-              <Typography variant="h5" sx={{ marginY: 2 }}>
-                اسم الحملة: {campaign.campaignName}
-              </Typography>
-              <Typography variant="h6">الشروط:</Typography>
-              <List dense={false}>
-                {campaign.conditions.map((condition, index) => (
-                  <ListItem key={index} sx={{ paddingBottom: 1 }}>
-                    <CheckIcon sx={{ marginRight: 1 }} />
-                    <ListItemText primary={condition.content} />
-                  </ListItem>
-                ))}
-              </List>
+              <Box sx={{ display: "flex", alignItems: "center", px: 3 }}>
+                <IconButton sx={{ marginRight: 1 }}>
+                  <CalendarTodayOutlined />
+                </IconButton>
+                <Typography variant="body1">
+                  في تاريخ: {campaign.date.slice(0, 10)}
+                </Typography>
+              </Box>
             </Box>
-          </Grid>
-          <Grid xs={5}>
-            {campaign.isApproved ? (
-              <>
-                <Box sx={{ my: 3 }}>
-                  <Typography variant="h5">الحالة:</Typography>
-                  <Typography variant="h5" style={{ color: statusColor }}>
-                    {statusIcon}
-                    {campaign.status}
-                  </Typography>
-                </Box>
-                <Box sx={{ my: 3 }}>
-                  <Typography variant="h5">حالة الدفع: </Typography>
-                  <Typography variant="h5" style={{ color: paymentColor }}>
-                    {paymentIcon}
-                    {campaign.payment}
-                  </Typography>
-
+            <Typography variant="h5" sx={{ marginY: 2 }}>
+              اسم الحملة: {campaign.campaignName}
+            </Typography>
+            <Typography variant="h6">الشروط:</Typography>
+            <List dense={false}>
+              {campaign.conditions.map((condition, index) => (
+                <ListItem key={index} sx={{ paddingBottom: 1 }}>
+                  <CheckIcon sx={{ marginRight: 1 }} />
+                  <ListItemText primary={condition.content} />
+                </ListItem>
+              ))}
+            </List>
+          </Box>
+          {campaign.isApproved &&
+            campaign.status === "تم الانتهاء" &&
+            campaign.payment === "تم تحويل المبلغ" && (
+              <Box sx={{ display: "flex", justifyContent: "center", mt: 6 }}>
+                {user.type === "Business" ? (
+                  campaign.BusinessDispute ? (
+                    <Button
+                      variant="outlined"
+                      readOnly
+                      sx={{
+                        height: "40px",
+                        color: "red",
+                        borderColor: "red",
+                        width: "50%",
+                      }}
+                    >
+                      تم تقديم طلب خلاف، جاري التحقق
+                      <ReportProblemIcon
+                        sx={{ ml: 2, fontSize: 28, color: "primary" }}
+                      />
+                    </Button>
+                  ) : (
+                    <DisputeButton campaign={campaign} />
+                  )
+                ) : campaign.influencerDispute ? (
+                  <Button
+                    variant="outlined"
+                    readOnly
+                    sx={{
+                      height: "40px",
+                      color: "red",
+                      borderColor: "red",
+                      width: "50%",
+                    }}
+                  >
+                    تم تقديم طلب خلاف، جاري التحقق
+                    <ReportProblemIcon
+                      sx={{ ml: 2, fontSize: 28, color: "primary" }}
+                    />
+                  </Button>
+                ) : (
+                  <DisputeButton campaign={campaign} />
+                )}
+              </Box>
+            )}
+        </Grid>
+        <Grid xs={5}>
+          {campaign.isApproved ? (
+            <>
+              <Box sx={{ my: 3 }}>
+                <Typography variant="h5">الحالة:</Typography>
+                <ChangeStatus
+                  campaign={campaign}
+                  isReadOnly={user.type === "Business"}
+                  disabled={isDisabled}
+                />
+              </Box>
+              <Box sx={{ my: 3 }}>
+                <Typography variant="h5">حالة الدفع: </Typography>
+                <TextField
+                  fullWidth
+                  defaultValue={campaign.payment}
+                  InputProps={{
+                    readOnly: true,
+                  }}
+                />
+                <Box sx={{ my: 2 }}>
                   {user.type === "Business" &&
                     campaign.payment === "لم يتم الدفع" && (
-                      <PaymentProcess campaignId={campaign._id} />
+                      <PaymentProcess fullWidth campaignId={campaign._id} />
                     )}
                 </Box>
-                <CampaignNotes campaign={campaign} />
-              </>
-            ) : user.type === "Influencer" ? (
-              <Box>
+              </Box>
+              <Box sx={{ height: "500px" }}>
+                <CampaignNotes campaign={campaign} disabled={isDisabled} />
+              </Box>
+            </>
+          ) : user.type === "Influencer" ? (
+            <Box>
+              <Grid xs={12} sx={{ textAlign: "center" }}>
                 <Typography variant="h4" gutterBottom>
                   بانتظار الموافقة على الطلب
                 </Typography>
-                <Box sx={{ display: "flex", justifyContent: "center" }}>
+              </Grid>
+
+              <Box sx={{ display: "flex", justifyContent: "center" }}>
+                <Grid
+                  xs={6}
+                  sx={{ display: "flex", justifyContent: "flex-end" }}
+                >
                   <Button
                     variant="contained"
                     onClick={() => onApproveOrReject(true)}
                     color="success"
-                    sx={{ mr: 2 }}
                   >
-                    <ThumbUpIcon sx={{ fontSize: 30 }} />
+                    <ThumbUpIcon sx={{ fontSize: 60 }} />
                   </Button>
+                </Grid>
+                <Grid xs={6}>
                   <Button
                     variant="contained"
                     onClick={() => onApproveOrReject(false)}
                     color="error"
                   >
-                    <ThumbDownIcon sx={{ fontSize: 30 }} />
+                    <ThumbDownIcon sx={{ fontSize: 60 }} />
                   </Button>
-                </Box>
+                </Grid>
               </Box>
-            ) : (
-              <Box>
+            </Box>
+          ) : (
+            <Box>
+              <Grid xs={12} sx={{ textAlign: "center" }}>
                 <Typography variant="h4" gutterBottom>
                   بانتظار الموافقة على الطلب
                 </Typography>
+              </Grid>
+              <Grid xs={12}>
                 <Box sx={{ display: "flex", justifyContent: "center" }}>
                   <Button
                     variant="contained"
                     onClick={() => onApproveOrReject(false)}
                     color="error"
                   >
-                    <DisabledByDefaultIcon sx={{ fontSize: 30 }} />
+                    <DisabledByDefaultIcon sx={{ fontSize: 50 }} />
                   </Button>
                 </Box>
-              </Box>
-            )}
-          </Grid>
+              </Grid>
+            </Box>
+          )}
         </Grid>
-      </Box>
-    );
-  }
+
+        {isDisabled && (
+          <Grid xs={12}>
+            <Box
+              sx={{
+                textAlign: "center",
+                "& > legend": { mt: 2 },
+              }}
+            >
+              <Typography variant="h4" sx={{ my: 2 }}>
+                التقييم
+              </Typography>
+              <Rating value={rate} onChange={changeRate} size="large" />
+            </Box>
+          </Grid>
+        )}
+      </Grid>
+    </Box>
+  );
 }

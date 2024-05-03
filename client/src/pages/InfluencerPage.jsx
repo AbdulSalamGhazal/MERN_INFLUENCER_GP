@@ -15,7 +15,6 @@ import {
   Divider,
   Button,
   CardMedia,
-  Badge,
 } from "@mui/material";
 import { Link } from "react-router-dom";
 
@@ -30,16 +29,24 @@ import EmailIcon from "@mui/icons-material/Email";
 import CropFreeIcon from "@mui/icons-material/CropFree";
 import GradeIcon from "@mui/icons-material/Grade";
 import SellIcon from "@mui/icons-material/Sell";
+import Rating from "@mui/material/Rating";
+import useAuth from "../../context/AuthContext";
 
 function InfluencerPage() {
   let { influencerId } = useParams();
   const [influencer, setInfluencer] = useState(null);
+  const { user } = useAuth();
 
   useEffect(() => {
     const fetchData = async () => {
       try {
         const response = await axios.get(
-          `http://localhost:3001/influencers/${influencerId}`
+          `http://localhost:3001/influencers/${influencerId}`,
+          {
+            headers: {
+              Authorization: `Bearer ${user.token} ${user.type}`,
+            },
+          }
         );
 
         setInfluencer(response.data);
@@ -78,23 +85,6 @@ function InfluencerPage() {
                 objectFit: "cover",
               }}
             />
-            {influencer.verified && (
-              <Badge
-                color="primary"
-                badgeContent="✓"
-                sx={{
-                  position: "absolute",
-                  top: 16,
-                  right: 16,
-                  ".MuiBadge-badge": {
-                    backgroundColor: "#44b700",
-                    color: "#ffffff",
-                    border: `2px solid #ffffff`,
-                    padding: "0 4px",
-                  },
-                }}
-              />
-            )}
           </Box>
         </Grid>
         <Grid item xs={12} md={6}>
@@ -366,19 +356,23 @@ function InfluencerPage() {
             </ListItem>
           </List>
         </Grid>
-        <Grid item xs={6}>
-          <Button
-            variant="contained"
-            size="large"
-            startIcon={<FavoriteIcon />}
-            fullWidth
-            sx={{ mt: 2 }}
-          >
-            إضافة للمفضلة
-          </Button>
+        <Grid xs={12}>
+          <Typography variant="h4" gutterBottom sx={{ mx: 4 }}>
+            التقييمات
+          </Typography>
+          {influencer.campaigns.map((campaign) => (
+            <Box
+              key={campaign._id}
+              sx={{ display: "flex", justifyContent: "center" }}
+            >
+              <Typography variant="h6" sx={{ justifyContent: "center" }}>
+                {campaign.raterName}:
+                <Rating value={campaign.rate} size="medium" readOnly />
+              </Typography>
+            </Box>
+          ))}
         </Grid>
-
-        <Grid item xs={6}>
+        <Grid item xs={12}>
           <Link
             to={`/chat/${influencer.id}`}
             style={{ textDecoration: "none", color: "inherit" }}

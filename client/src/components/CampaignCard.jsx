@@ -9,18 +9,6 @@ import CancelIcon from "@mui/icons-material/Cancel";
 import ScheduleIcon from "@mui/icons-material/Schedule";
 
 export default function CampaignCard({ campaign }) {
-  const getStatusBackgroundColor = () => {
-    switch (campaign.status) {
-      case "لم يحن الموعد":
-        return "yellow";
-      case "جاري التنفيذ":
-        return "orange";
-      case "تم الانتهاء":
-        return "green";
-      default:
-        return "white";
-    }
-  };
   const formatCreatedAtDate = () => {
     const date = new Date(campaign.createdAt);
     return date.toLocaleDateString();
@@ -97,15 +85,24 @@ export default function CampaignCard({ campaign }) {
 
             <Box
               sx={{
-                backgroundColor: getStatusBackgroundColor(),
                 borderRadius: "4px",
                 padding: "4px 8px",
-                display: "inline-block",
                 mt: 1,
               }}
             >
               <Typography variant="h5" color="text.primary">
-                {campaign.status}
+                الحالة: {campaign.status}
+              </Typography>
+            </Box>
+            <Box
+              sx={{
+                borderRadius: "4px",
+                padding: "4px 8px",
+                mt: 1,
+              }}
+            >
+              <Typography variant="h5" color="text.primary">
+                حالة الدفع: {campaign.payment}
               </Typography>
             </Box>
             <Typography variant="body2" color="text.secondary" sx={{ mt: 1 }}>

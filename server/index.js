@@ -27,15 +27,52 @@ app.use(cors());
 
 mongoose.connect("mongodb://127.0.0.1:27017/MERN_INFLUENCER_GP");
 
-app.get("/influencers", async (req, res) => {
-  const query = filters(req.query);
-  const influencers = await Influencer.find(query);
-  res.json(influencers);
-});
-app.get("/influencers/:id", async (req, res) => {
-  const influencer = await Influencer.findById(req.params.id);
-  res.json(influencer);
-});
+app.get(
+  "/influencers",
+  protect,
+  asyncHandler(async (req, res) => {
+    const query = filters(req.query);
+    try {
+      const influencers = await Influencer.find(query);
+      res.json(influencers);
+    } catch (error) {
+      res.status(500).json({ message: "Internal server error" });
+    }
+  })
+);
+app.get(
+  "/influencers/:id",
+  protect,
+  asyncHandler(async (req, res) => {
+    try {
+      const influencer = await Influencer.findById(req.params.id);
+      if (!influencer) {
+        return res.status(404).json({ message: "influencer not found" });
+      }
+      const campaigns = await Campaign.find({
+        influencerId: influencer._id,
+        status: "تم الانتهاء",
+        payment: "تم تحويل المبلغ",
+        influencerRating: { $ne: -1 },
+      }).populate({
+        path: "businessId",
+        select: "companyName",
+      });
+      const formattedCampaigns = campaigns.map((campaign) => ({
+        rate: campaign.influencerRating,
+        raterName: campaign.businessId.companyName,
+      }));
+      const influencerWithCampaigns = {
+        ...influencer.toObject(),
+        campaigns: formattedCampaigns,
+      };
+
+      res.json(influencerWithCampaigns);
+    } catch (error) {
+      res.status(500).json({ message: "Internal server error" });
+    }
+  })
+);
 
 // creating influencer
 app.post("/influencers", upload.single("image"), async (req, res) => {
@@ -125,7 +162,30 @@ app.get(
   asyncHandler(async (req, res) => {
     try {
       const business = await Business.findById(req.params.id);
-      res.json(business);
+      if (!business) {
+        return res.status(404).json({ message: "Business not found" });
+      }
+      const campaigns = await Campaign.find({
+        businessId: business._id,
+        status: "تم الانتهاء",
+        payment: "تم تحويل المبلغ",
+        BusinessRating: { $ne: -1 },
+      }).populate({
+        path: "influencerId",
+        select: "name",
+      });
+
+      const formattedCampaigns = campaigns.map((campaign) => ({
+        rate: campaign.BusinessRating,
+        raterName: campaign.influencerId.name,
+      }));
+
+      const businessWithCampaigns = {
+        ...business.toObject(),
+        campaigns: formattedCampaigns,
+      };
+
+      res.json(businessWithCampaigns);
     } catch (error) {
       res.status(500).json({ message: "Internal server error" });
     }
@@ -465,38 +525,27 @@ app.post(
       if (!mongoose.isValidObjectId(receiverId)) {
         return res.status(400).json({ message: "Invalid receiver_id" });
       }
+      const influencerId = userType === "Influencer" ? sender_id : receiverId;
+      const businessId = userType === "Business" ? sender_id : receiverId;
 
-      const searchCriteria =
-        userType === "Influencer"
-          ? { influencerId: sender_id, businessId: receiverId }
-          : { influencerId: receiverId, businessId: sender_id };
-
-      let campaign = await Campaign.findOne(searchCriteria).populate({
-        path: userType === "Influencer" ? "businessId" : "influencerId",
+      const campaign = await Campaign.create({
+        influencerId: influencerId,
+        businessId: businessId,
+        campaignName: campaignName,
+        conditions: conditions,
+        amount: amount,
+        date: date,
+        status: "لم يحن الموعد",
+        payment: "لم يتم الدفع",
       });
+      // add campaign id to chat
+      const chat = await Chat.findOne({
+        influencerId: influencerId,
+        businessId: businessId,
+      });
+      chat.campaignId = campaign._id;
+      await chat.save();
 
-      if (!campaign) {
-        const influencerId = userType === "Influencer" ? sender_id : receiverId;
-        const businessId = userType === "Business" ? sender_id : receiverId;
-
-        campaign = await Campaign.create({
-          influencerId: influencerId,
-          businessId: businessId,
-          campaignName: campaignName,
-          conditions: conditions,
-          amount: amount,
-          date: date,
-          status: "لم يحن الموعد",
-          payment: "لم يتم الدفع",
-        });
-        // add campaign id to chat
-        const chat = await Chat.findOne({
-          influencerId: influencerId,
-          businessId: businessId,
-        });
-        chat.campaignId = campaign._id;
-        await chat.save();
-      }
       res.status(200).json(campaign._id);
     } catch (error) {
       res.status(500).json({ message: "Internal server error" });
@@ -605,6 +654,84 @@ app.patch(
     }
   })
 );
+// change status
+app.patch(
+  "/campaign/status/:campaignId",
+  protect,
+  asyncHandler(async (req, res) => {
+    const { campaignId } = req.params;
+    const { newStatus } = req.body;
+
+    try {
+      let campaign = await Campaign.findById(campaignId);
+
+      if (!campaign) {
+        return res.status(404).json({ message: "Campaign not found" });
+      }
+      campaign.status = newStatus;
+      await campaign.save();
+      res.json({ message: "success" });
+    } catch (error) {
+      res.status(500).json({ message: "Internal server error" });
+    }
+  })
+);
+// change rate
+app.patch(
+  "/campaign/rate/:campaignId",
+  protect,
+  asyncHandler(async (req, res) => {
+    const senderType = req.user.type;
+
+    const { campaignId } = req.params;
+    const { rate } = req.body;
+
+    try {
+      let campaign = await Campaign.findById(campaignId);
+
+      if (!campaign) {
+        return res.status(404).json({ message: "Campaign not found" });
+      }
+      if (senderType === "Business") {
+        campaign.influencerRating = rate;
+      } else {
+        campaign.BusinessRating = rate;
+      }
+      await campaign.save();
+      res.json({ message: "success" });
+    } catch (error) {
+      res.status(500).json({ message: "Internal server error" });
+    }
+  })
+);
+// report dispute
+app.patch(
+  "/campaign/dispute/:campaignId",
+  protect,
+  asyncHandler(async (req, res) => {
+    const senderType = req.user.type;
+
+    const { campaignId } = req.params;
+    const { disputeDesc } = req.body;
+
+    try {
+      let campaign = await Campaign.findById(campaignId);
+
+      if (!campaign) {
+        return res.status(404).json({ message: "Campaign not found" });
+      }
+      if (senderType === "Business") {
+        campaign.BusinessDispute = disputeDesc;
+      } else {
+        campaign.influencerDispute = disputeDesc;
+      }
+      await campaign.save();
+      res.json({ message: "success" });
+    } catch (error) {
+      res.status(500).json({ message: "Internal server error" });
+    }
+  })
+);
 // get notes
 app.get(
   "/campaign/notes/:campaign_id",
@@ -651,7 +778,60 @@ app.post(
   })
 );
 
-// handle auto meesage
+app.get(
+  "/admin",
+  asyncHandler(async (req, res) => {
+    try {
+      const campaigns = await Campaign.find();
+
+      res.json(campaigns);
+    } catch (error) {
+      console.error("Error fetching chats:", error);
+      res.status(500).json({ message: "Internal server error" });
+    }
+  })
+);
+// change payment
+app.patch("/admin/payment/:campaignId", async (req, res) => {
+  const { campaignId } = req.params;
+  const { newPayment } = req.body;
+
+  try {
+    let campaign = await Campaign.findById(campaignId);
+
+    if (!campaign) {
+      return res.status(404).json({ message: "Campaign not found" });
+    }
+    campaign.payment = newPayment;
+    await campaign.save();
+    res.json({ message: "success" });
+  } catch (error) {
+    res.status(500).json({ message: "Internal server error" });
+  }
+});
+// clear dispute
+app.patch("/admin/dispute/:campaignId", async (req, res) => {
+  const { campaignId } = req.params;
+  const { userType } = req.body;
+
+  try {
+    let campaign = await Campaign.findById(campaignId);
+
+    if (!campaign) {
+      return res.status(404).json({ message: "Campaign not found" });
+    }
+    if (userType === "Business") {
+      campaign.BusinessDispute = null;
+    } else {
+      campaign.influencerDispute = null;
+    }
+    await campaign.save();
+    res.json({ message: "success" });
+  } catch (error) {
+    res.status(500).json({ message: "Internal server error" });
+  }
+});
+
 app.listen(3001, () => {
   console.log("server is running");
 });

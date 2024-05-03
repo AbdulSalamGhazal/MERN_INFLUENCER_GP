@@ -10,7 +10,6 @@ import Select from "@mui/material/Select";
 import OutlinedInput from "@mui/material/OutlinedInput";
 import Slider from "@mui/material/Slider";
 import Button from "@mui/material/Button";
-import Switch from "@mui/material/Switch";
 import BackspaceIcon from "@mui/icons-material/Backspace";
 
 function Filters({ setFilters }) {
@@ -75,12 +74,6 @@ function Filters({ setFilters }) {
     setLocation(newLocation);
     updateFilters({ location: newLocation });
   };
-  const [checked, setChecked] = useState(false);
-  const handleChangeVerified = (event) => {
-    let isVerified = event.target.checked;
-    setChecked(isVerified);
-    updateFilters({ verified: isVerified });
-  };
 
   const handleClearFilters = () => {
     setSearch("");
@@ -90,7 +83,6 @@ function Filters({ setFilters }) {
     setCost([5000, 50000]);
     setFollowers("");
     setLocation([]);
-    setChecked(false);
 
     updateFilters({
       name: "",
@@ -300,18 +292,9 @@ function Filters({ setFilters }) {
               </Select>
             </FormControl>
           </Grid>
-          <Grid xs={2}>
-            <InputLabel id="check">موثق؟</InputLabel>
-
-            <Switch
-              sx={{ ml: 4 }}
-              checked={checked}
-              onChange={handleChangeVerified}
-            />
-          </Grid>
           <Grid xs={1}>
             <Button
-              sx={{ mt: 2 }}
+              sx={{ mt: 2, width: "200%" }}
               variant="outlined"
               startIcon={<BackspaceIcon />}
               onClick={handleClearFilters}

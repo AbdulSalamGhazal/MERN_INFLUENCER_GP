@@ -1,4 +1,5 @@
 const mongoose = require("mongoose");
+const influencer = require("./influencer");
 
 const campaignSchema = mongoose.Schema(
   {
@@ -6,6 +7,11 @@ const campaignSchema = mongoose.Schema(
     businessId: { type: mongoose.Schema.Types.ObjectId, ref: "Business" },
     campaignName: String,
     conditions: [{ type: mongoose.Schema.Types.ObjectId, ref: "Message" }],
+
+    isApproved: {
+      type: Boolean,
+      default: false,
+    },
     status: String,
     payment: String,
     paymentFile: String,
@@ -13,11 +19,16 @@ const campaignSchema = mongoose.Schema(
     amount: Number,
     date: String,
     notes: [{ type: mongoose.Schema.Types.ObjectId, ref: "Message" }],
-
-    isApproved: {
-      type: Boolean,
-      default: false,
+    influencerRating: {
+      type: Number,
+      default: -1,
     },
+    BusinessRating: {
+      type: Number,
+      default: -1,
+    },
+    influencerDispute: String,
+    BusinessDispute: String,
   },
   { timestamps: true }
 );

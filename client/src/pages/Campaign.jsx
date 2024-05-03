@@ -47,7 +47,7 @@ function Campaign() {
           <Grid container spacing={2}>
             {campaigns.map((campaign, index) => (
               <Grid xs={12} key={index}>
-                <CampaignCard  campaign={campaign} />
+                <CampaignCard campaign={campaign} />
               </Grid>
             ))}
           </Grid>
