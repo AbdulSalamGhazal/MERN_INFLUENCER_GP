@@ -46,11 +46,12 @@ export default function CampaignStarter({ campaignId }) {
         `http://localhost:3001/campaign/payment/${campaignId}`,
         {
           paymentNote: paymentNote,
-          // paymentFile: paymentFile,
+          paymentFile: selectedFile,
         },
         {
           headers: {
             Authorization: `Bearer ${user.token} ${user.type}`,
+            "Content-Type": "multipart/form-data",
           },
         }
       );

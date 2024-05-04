@@ -1,7 +1,6 @@
 import Button from "@mui/material/Button";
 import TextField from "@mui/material/TextField";
 import Box from "@mui/material/Box";
-import Typography from "@mui/material/Typography";
 import MenuItem from "@mui/material/MenuItem";
 import FormControl from "@mui/material/FormControl";
 import FormLabel from "@mui/material/FormLabel";
@@ -10,9 +9,10 @@ import ListItemText from "@mui/material/ListItemText";
 import Checkbox from "@mui/material/Checkbox";
 import IconButton from "@mui/material/IconButton";
 import Alert from "@mui/material/Alert";
+import Divider from "@mui/material/Divider";
+import CircularProgress from "@mui/material/CircularProgress";
 import AddCircleOutlineIcon from '@mui/icons-material/AddCircleOutline';
 
-import { useNavigate } from "react-router-dom";
 import { useState } from "react";
 import { useForm, useFieldArray, Controller } from "react-hook-form";
 import axios from "axios";
@@ -25,10 +25,11 @@ import patterns from "../utils/patterns";
 
 
 const MyAccountBusiness = ({ user }) => {
-  //   const navigate = useNavigate();
   const { login } = useAuth()
+  const [budgetRange, setBudgetRange] = useState(user.budgetRange || { min: 1000, max: 5000 })
   const [errorAlert, setErrorAlert] = useState(null);
-  const [budgetRange, setBudgetRange] = useState(user.budgetRange?.min || { min: 1000, max: 5000 })
+  const [successAlert, setSuccessAlert] = useState(null);
+  const [waiting, setWaiting] = useState(false);
 
   const {
     register,
@@ -41,7 +42,7 @@ const MyAccountBusiness = ({ user }) => {
     defaultValues: {
       ...user,
       image: undefined,
-      socialMediaLinks: user.socialMediaLinks && user.socialMediaLinks.length || [' ']
+      socialMediaLinks: user.socialMediaLinks.length && user.socialMediaLinks || [' ']
     }
   });
 
@@ -54,7 +55,16 @@ const MyAccountBusiness = ({ user }) => {
       rules: { minLength: 1 },
     });
 
+  const {
+    fields: generalRequest,
+    append: appendGeneralRequest,
+    remove: removeGeneralRequest } = useFieldArray({
+      control,
+      name: 'generalRequest', // unique name for your Field Array
+    });
+
   const onSubmit = async (inputs) => {
+    setWaiting(true);
     try {
       console.log(inputs)
       console.log(budgetRange)
@@ -67,11 +77,16 @@ const MyAccountBusiness = ({ user }) => {
           },
         }
       );
-      // setBusiness(inintialBusiness);
+
       login(data);
       localStorage.setItem("userInfo", JSON.stringify(data));
-      // navigate("/home");
+      setSuccessAlert('تم تحديث المعلومات بنجاح')
+      setTimeout(() => {
+        setSuccessAlert(null);
+      }, 3000);
+      setWaiting(false)
     } catch (error) {
+      setWaiting(false)
       console.error("Error fetching data:", error);
       setErrorAlert(error.message);
       setTimeout(() => {
@@ -80,23 +95,19 @@ const MyAccountBusiness = ({ user }) => {
     }
   };
 
+  const handleBugdtChange = (e, range) => setBudgetRange({ min: range[0], max: range[1] });
 
-  const handleBugdtChange = (e, range) => setBudgetRange({ min: range[0], max: range[1] })
-
-  console.log(getValues('socialMediaLinks'))
-  console.log(user)
   return (
     <Box>
-      {/* TODO: the title needs some styles */}
-      {/* <Typography component="h1" variant="h4" align="center">
-        Business Sign Up
-      </Typography> */}
       <Box
         component="form"
         onSubmit={handleSubmit(onSubmit)}
         noValidate
         sx={{ mt: 1, maxWidth: '500px', mx: 'auto' }}
       >
+        <Divider sx={{ my: 1, fontSize: '.75em' }}>
+          معلومات الشركة
+        </Divider>
         <TextField
           {...register("companyName", { required: "هذا الحقل مطلوب" })}
           error={errors.companyName}
@@ -227,9 +238,77 @@ const MyAccountBusiness = ({ user }) => {
                   {size}
                 </MenuItem>
               ))}
+              <TextField
+                {...register("description", { required: "هذا الحقل مطلوب" })}
+                error={errors.description}
+                helperText={errors.description?.message}
+                margin="dense"
+                size="small"
+                required
+                fullWidth
+                multiline
+                label="الوصف"
+                type="text"
+              />
             </TextField>
           )}
         />
+
+        <Divider sx={{ my: 1, fontSize: '.75em' }}>
+          حسابات التواصل الاجتماعي
+        </Divider>
+        {socialMediaLinks.map((link, index) => (
+          <PlatformInput
+            dir='ltr'
+            key={link.id} // important to include key with platform's id
+            {...register(`socialMediaLinks.${index}`, {
+              required: socialMediaLinks.length === 1 ? 'يجب ان تضيف حسابا واحدا على الاقل' : 'يجب ملئ هذا الحقل او حذفه',
+              pattern: {
+                value: patterns.urlPattern,
+                message: 'غير صالح'
+              }
+            })}
+            error={errors?.socialMediaLinks && Boolean(errors?.socialMediaLinks)}
+            helperText={errors?.socialMediaLinks && errors?.socialMediaLinks[index]?.message}
+            margin="dense"
+            size="small"
+            label='حسابات التواصل الاجتماعي'
+            required
+            fullWidth
+            handleDelete={() => removeLink(index)}
+            removable={socialMediaLinks.length > 1}
+            link={getValues(`socialMediaLinks.${index}`) || ' '}
+          />
+        ))}
+        <IconButton onClick={() => appendLink(' ')} color="primary" aria-label="add field">
+          <AddCircleOutlineIcon />
+        </IconButton>
+
+        <Divider sx={{ my: 1, fontSize: '.75em' }}>
+          معلومات الحملة
+        </Divider>
+
+        <FormControl fullWidth margin="dense"
+          size="small" required>
+          <FormLabel>ميزانية الحملة</FormLabel>
+          <Slider
+            value={[budgetRange.min, budgetRange.max]}
+            onChange={handleBugdtChange}
+            min={100}
+            step={100}
+            max={100000}
+            marks={[
+              {
+                value: budgetRange.min,
+                label: `${budgetRange.min}ر.س`,
+              },
+              {
+                value: budgetRange.max,
+                label: `${budgetRange.max}ر.س`,
+              },
+            ]}
+          />
+        </FormControl>
 
         <Controller
           name='targetAudience'
@@ -265,45 +344,6 @@ const MyAccountBusiness = ({ user }) => {
           )}
         />
 
-        <TextField
-          {...register("description", { required: "هذا الحقل مطلوب" })}
-          error={errors.description}
-          helperText={errors.description?.message}
-          margin="dense"
-          size="small"
-          required
-          fullWidth
-          multiline
-          label="الوصف"
-          type="text"
-        />
-
-        <FormControl fullWidth margin="dense"
-          size="small" required>
-          {/* <InputLabel HTMLFor="age" >Audience age range</InputLabel> */}
-          <FormLabel>ميزانية الحملة</FormLabel>
-          <Slider
-            // {...register("budget", {required: 'هذا الحقل مطلوب'})}
-            // error={errors.budget}
-            // helperText={errors.budget?.message}
-            value={[budgetRange.min, budgetRange.max]}
-            onChange={handleBugdtChange}
-            min={100}
-            step={100}
-            max={100000}
-            marks={[
-              {
-                value: budgetRange.min,
-                label: budgetRange.min,
-              },
-              {
-                value: budgetRange.max,
-                label: budgetRange.max,
-              },
-            ]}
-          />
-        </FormControl>
-
         <Controller
           name='campaignGoals'
           control={control}
@@ -336,83 +376,55 @@ const MyAccountBusiness = ({ user }) => {
           )}
         />
 
-        {/* <FormControl fullWidth margin="dense"
-        size="small">
-          <FormLabel>Add general requests</FormLabel>
-          <ListForm
-            register={register}
-            errors={errors}
-            list={business.generalRequest}
-            handleAdd={handleAddRequest}
-            handleDelete={handleDeleteRequest}
-            handleChange={handleChangeRequest}
-            label={"request"}
-          />
-        </FormControl> */}
+        <Divider sx={{ my: 1, fontSize: '.75em' }}>
+          الطلبات العامة
+        </Divider>
 
-        {/* <FormControl fullWidth margin="dense"
-        size="small">
-          <FormLabel>Add social media links</FormLabel>
-          <ListForm
-            register={register}
-            errors={errors}
-            list={business.socialMediaLinks}
-            handleAdd={handleAddSocialMediaLink}
-            handleDelete={handleDeleteSocialMediaLink}
-            handleChange={handleChangeSocialMediaLink}
-            label={"link"}
-          />
-        </FormControl> */}
-
-
-        {socialMediaLinks.map((link, index) => (
+        {generalRequest.map((req, index) => (
           <PlatformInput
-            dir='ltr'
-            key={link.id} // important to include key with platform's id
-            {...register(`socialMediaLinks.${index}`, {
-              required: socialMediaLinks.length === 1 ? 'يجب ان تضيف حسابا واحدا على الاقل' : 'يجب ملئ هذا الحقل او حذفه',
-              pattern: {
-                value: patterns.urlPattern,
-                message: 'غير صالح'
-              }
+            defaultValue={getValues('generalRequest')}
+            dir='rtl'
+            key={req.id} // important to include key with platform's id
+            {...register(`generalRequest.${index}`, {
+              required: 'يجب ملئ هذا الحقل او حذفه',
             })}
-            error={errors?.socialMediaLinks && Boolean(errors?.socialMediaLinks)}
-            helperText={errors?.socialMediaLinks && errors?.socialMediaLinks[index]?.message}
+            error={errors?.generalRequest && Boolean(errors?.generalRequest)}
+            helperText={errors?.generalRequest && errors?.generalRequest[index]?.message}
             margin="dense"
-            size="small"
-            label='حسابات التواصل الاجتماعي'
+            size='small'
+            label='طلب'
             required
             fullWidth
-            handleDelete={() => removeLink(index)}
-            removable={socialMediaLinks.length > 1}
-            link={getValues(`socialMediaLinks.${index}`) || ' '}
+            handleDelete={() => removeGeneralRequest(index)}
+            removable={true}
           />
         ))}
-        <IconButton onClick={() => appendLink(' ')} color="primary" aria-label="add field">
+        <IconButton onClick={() => appendGeneralRequest(' ')} color="primary" aria-label="add field">
           <AddCircleOutlineIcon />
         </IconButton>
 
+        <Divider sx={{ my: 1, fontSize: '.75em' }}>
+          الرد الآلي
+        </Divider>
         <TextField
           {...register("autoReply")}
           error={errors.autoReply}
           helperText={errors.autoReply?.message}
           margin="dense"
           size="small"
-          required
           fullWidth
           multiline
           label="رسالة الرد الآلي"
           type="text"
         />
 
-        {errorAlert && <Alert severity="error">{errorAlert}</Alert>}
         <Button
           type="submit"
           fullWidth
           variant="contained"
-          sx={{ mt: 3, mb: 2 }}
+          sx={{ mt: 3 }}
         >
-          تحديث المعلومات
+          {waiting ? <CircularProgress color="inherit" size={23} /> : "تحديث المعلومات"}
         </Button>
         <Button
           href='/'
@@ -423,6 +435,8 @@ const MyAccountBusiness = ({ user }) => {
           sx={{ my: 1 }}
         >الصفحة الرئيسية
         </Button>
+        {errorAlert && <Alert severity="error">{errorAlert}</Alert>}
+        {successAlert && <Alert severity="success">{successAlert}</Alert>}
       </Box>
     </Box>
   );
