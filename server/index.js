@@ -78,14 +78,6 @@ app.get(
 app.post("/influencers", upload.single("image"), async (req, res) => {
   Influencer.create({ ...req.body, image: req.file?.path })
     .then((influencer) =>
-      // res.json({
-      //   _id: influencer._id,
-      //   token: generateToken(influencer._id),
-      //   type: "Influencer",
-      //   name: influencer.name,
-      //   image: influencer.image,
-      //   description: influencer.description,
-      // })
       res.json({
         token: generateToken(influencer._id),
         type: "Influencer",
@@ -126,14 +118,6 @@ app.patch(
 app.post("/business", upload.single("image"), async (req, res) => {
   Business.create({ ...req.body, image: req.file?.path })
     .then((business) =>
-      // res.json({
-      //   _id: business._id,
-      //   token: generateToken(business._id),
-      //   type: "Business",
-      //   name: business.companyName,
-      //   image: business.image,
-      //   description: business.description,
-      // })
       res.json({
         token: generateToken(business._id),
         type: "Business",
@@ -234,14 +218,6 @@ app.post(
       throw new Error("Invalid Type");
     }
     if (user && (await user.matchPassword(password))) {
-      // res.json({
-      //   _id: user._id,
-      //   token: generateToken(user._id),
-      //   type,
-      //   name: user.name ? user.name : user.companyName,
-      //   image: user.image,
-      //   description: user.description,
-      // });
       res.json({
         ...user._doc,
         token: generateToken(user._id),
@@ -634,7 +610,7 @@ app.patch(
   asyncHandler(async (req, res) => {
     const { campaignId } = req.params;
     const { paymentNote } = req.body;
-    const { paymentFile } = req.file.path;
+    const paymentFile = req.file?.path;
 
     // you find it in: PaymentProcess.jsx
     // handle storing payment file in cloudinry @Abdulqader
@@ -644,6 +620,7 @@ app.patch(
       if (!campaign) {
         return res.status(404).json({ message: "Campaign not found" });
       }
+      
       campaign.payment = "تم التحويل، جاري التحقق";
       campaign.paymentNote = paymentNote;
       campaign.paymentFile = paymentFile;
