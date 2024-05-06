@@ -634,7 +634,7 @@ app.patch(
   asyncHandler(async (req, res) => {
     const { campaignId } = req.params;
     const { paymentNote } = req.body;
-    const { paymentFile} = req.file.path;
+    const { paymentFile } = req.file.path;
 
     // you find it in: PaymentProcess.jsx
     // handle storing payment file in cloudinry @Abdulqader
@@ -646,7 +646,7 @@ app.patch(
       }
       campaign.payment = "تم التحويل، جاري التحقق";
       campaign.paymentNote = paymentNote;
-      campaign.paymentFile = paymentFile
+      campaign.paymentFile = paymentFile;
       await campaign.save();
       res.json({ message: "success" });
     } catch (error) {
