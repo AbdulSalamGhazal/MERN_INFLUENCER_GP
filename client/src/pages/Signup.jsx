@@ -5,13 +5,12 @@ import Tab from "@mui/material/Tab";
 import { useState } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 
-
-import InfluencerSignup from './InfluencerSignup';
-import BusinessSignup from './BusinessSignup';
+import InfluencerSignup from "./InfluencerSignup";
+import BusinessSignup from "./BusinessSignup";
 
 const Signup = () => {
-  const navigate = useNavigate()
-  const {type} = useParams();
+  const navigate = useNavigate();
+  const { type } = useParams();
   // const [type, setType] = useState('Business');
 
   return (
@@ -29,15 +28,13 @@ const Signup = () => {
           onChange={(e, newValue) => navigate(`/signup/${newValue}`)}
           variant="fullWidth"
         >
-          <Tab label="صاحب عمل" value={"business"} />
+          <Tab label="تاجر" value={"business"} />
           <Tab label="مؤثر" value={"influencer"} />
         </Tabs>
       </Box>
 
-      <Box
-        sx={{ mt: 1 }}
-      >
-        {type == 'influencer'? <InfluencerSignup /> : <BusinessSignup/>}
+      <Box sx={{ mt: 1 }}>
+        {type == "influencer" ? <InfluencerSignup /> : <BusinessSignup />}
       </Box>
     </Box>
   );

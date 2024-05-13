@@ -24,7 +24,7 @@ const Login = () => {
     watch,
     formState: { errors },
   } = useForm({
-    mode: 'onChange'
+    mode: "onChange",
   });
 
   const [errorAlert, setErrorAlert] = useState(null);
@@ -55,15 +55,15 @@ const Login = () => {
       if (error.response) {
         // The request was made and the server responded with a status code
         // setErrorAlert(error.response.data.error);
-        setErrorAlert('البريد لالكتروني او كلمة خاطئة');
+        setErrorAlert("البريد لالكتروني او كلمة خاطئة");
       } else if (error.request) {
         // The request was made but no response was received
         // setErrorAlert("no reply, try later");
-        setErrorAlert('حدث خطأ حاول مجددا');
+        setErrorAlert("حدث خطأ حاول مجددا");
       } else {
         // Something happened in setting up the request that triggered an Error
         // setErrorAlert("an error happend, try again");
-        setErrorAlert('حدث خطأ حاول مجددا');
+        setErrorAlert("حدث خطأ حاول مجددا");
       }
       setTimeout(() => {
         setErrorAlert(null);
@@ -95,7 +95,7 @@ const Login = () => {
           onChange={(e, newValue) => setType(newValue)}
           variant="fullWidth"
         >
-          <Tab label="صاحب عمل" value={"Business"} />
+          <Tab label="تاجر" value={"Business"} />
           <Tab label="مؤثر" value={"Influencer"} />
         </Tabs>
       </Box>
@@ -138,7 +138,7 @@ const Login = () => {
           // value={password}
           // onChange={(e) => setPassword(e.target.value)}
           {...register("password", { required: "هذا الحقل مطلوب" })}
-          filled={Boolean(watch('password'))}
+          filled={Boolean(watch("password"))}
           error={errors.password != undefined}
           helperText={errors.password?.message}
         />
