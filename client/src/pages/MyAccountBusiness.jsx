@@ -26,7 +26,7 @@ import patterns from "../utils/patterns";
 
 const MyAccountBusiness = ({ user }) => {
   const { login } = useAuth()
-  const [budgetRange, setBudgetRange] = useState(user.budgetRange || { min: 1000, max: 5000 })
+  const [budgetRange, setBudgetRange] = useState(user.budgetRange.min || { min: 1000, max: 5000 })
   const [errorAlert, setErrorAlert] = useState(null);
   const [successAlert, setSuccessAlert] = useState(null);
   const [waiting, setWaiting] = useState(false);
@@ -64,6 +64,7 @@ const MyAccountBusiness = ({ user }) => {
     });
 
   const onSubmit = async (inputs) => {
+    console.log('clicked submit')
     setWaiting(true);
     try {
       console.log(inputs)
@@ -96,7 +97,8 @@ const MyAccountBusiness = ({ user }) => {
   };
 
   const handleBugdtChange = (e, range) => setBudgetRange({ min: range[0], max: range[1] });
-
+  console.log(getValues())
+  console.log(errors)
   return (
     <Box>
       <Box
@@ -238,20 +240,21 @@ const MyAccountBusiness = ({ user }) => {
                   {size}
                 </MenuItem>
               ))}
-              <TextField
-                {...register("description", { required: "هذا الحقل مطلوب" })}
-                error={errors.description}
-                helperText={errors.description?.message}
-                margin="dense"
-                size="small"
-                required
-                fullWidth
-                multiline
-                label="الوصف"
-                type="text"
-              />
             </TextField>
           )}
+        />
+        
+        <TextField
+          {...register("description", { required: "هذا الحقل مطلوب" })}
+          error={errors.description}
+          helperText={errors.description?.message}
+          margin="dense"
+          size="small"
+          required
+          fullWidth
+          multiline
+          label="الوصف"
+          type="text"
         />
 
         <Divider sx={{ my: 1, fontSize: '.75em' }}>
@@ -429,7 +432,6 @@ const MyAccountBusiness = ({ user }) => {
         <Button
           href='/'
           size="small"
-          type="submit"
           fullWidth
           variant="contained"
           sx={{ my: 1 }}
