@@ -18,6 +18,12 @@ import PasswordInput from "../components/signup/PasswordInput";
 import patterns from "../utils/patterns";
 
 const Login = () => {
+  const { user } = useAuth();
+  const navigate = useNavigate();
+
+  if (user) {
+    return navigate("/");
+  }
   const {
     register,
     handleSubmit,
@@ -32,7 +38,6 @@ const Login = () => {
 
   const [type, setType] = useState("Business");
   const { login } = useAuth();
-  let navigate = useNavigate();
 
   const onSubmit = async (inputs) => {
     setWaiting(true);
@@ -77,7 +82,6 @@ const Login = () => {
       align="center"
       sx={{ maxWidth: "450px", margin: "auto" }}
     >
-      {/* {errorAlert && <Alert severity="error">{errorAlert}</Alert>} */}
       {
         <Alert
           severity="error"
@@ -115,8 +119,6 @@ const Login = () => {
           label="البريد الإلكتروني"
           autoComplete="email"
           autoFocus
-          // onChange={(e) => setEmail(e.target.value)}
-          // value={getValues('email')}
           {...register("email", {
             required: "هذا الحقل مطلوب",
             pattern: {
@@ -135,18 +137,11 @@ const Login = () => {
           label="كلمة المرور"
           type="password"
           autoComplete="current-password"
-          // value={password}
-          // onChange={(e) => setPassword(e.target.value)}
           {...register("password", { required: "هذا الحقل مطلوب" })}
           filled={Boolean(watch("password"))}
           error={errors.password != undefined}
           helperText={errors.password?.message}
         />
-        {/* should keep it? */}
-        {/* <FormControlLabel
-          control={<Checkbox value="remember" color="primary" />}
-          label="Remember me"
-        /> */}
         <Button
           size="small"
           type="submit"
@@ -156,13 +151,7 @@ const Login = () => {
         >
           {waiting ? <CircularProgress color="inherit" size={23} /> : "سجل"}
         </Button>
-        {/* TODO: correct Link should be added in both links */}
         <Grid container justifyContent={"space-between"}>
-          {/* <Grid>
-            <Link href="#" variant="body2">
-              هل نسيت كلمة المرور
-            </Link>
-          </Grid> */}
           <Grid>
             <Link href={`/signup/${type.toLowerCase()}`} variant="body2">
               {"ليس لديك حساب؟ قم بالتسجيل"}
@@ -171,8 +160,6 @@ const Login = () => {
         </Grid>
       </Box>
 
-      {/* <TabPanel value="business"><LoginForm /></TabPanel>
-      <TabPanel value="influencer"><LoginForm /></TabPanel> */}
     </Box>
   );
 };
