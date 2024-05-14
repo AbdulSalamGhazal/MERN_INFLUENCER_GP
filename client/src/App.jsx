@@ -104,6 +104,7 @@ function App() {
           <Route path="/account" element={<MyAccount />} />
           <Route path="/login" element={<Login />} />
           <Route path="/signup/:type" element={<Signup />} />
+          <Route path="/signup" element={<Signup />} />
         </Routes>
       </Container>
       {showAssests() && <Footer />}

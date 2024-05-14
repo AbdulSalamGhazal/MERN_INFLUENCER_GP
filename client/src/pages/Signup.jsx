@@ -7,12 +7,16 @@ import { useParams, useNavigate } from "react-router-dom";
 
 import InfluencerSignup from "./InfluencerSignup";
 import BusinessSignup from "./BusinessSignup";
+import useAuth from "../../context/AuthContext";
 
 const Signup = () => {
+  const { user } = useAuth();
   const navigate = useNavigate();
-  const { type } = useParams();
-  // const [type, setType] = useState('Business');
-
+  if (user) {
+    return navigate("/");
+  }
+  const { type } = useParams() || "influencer";
+  
   return (
     <Box
       component="main"
