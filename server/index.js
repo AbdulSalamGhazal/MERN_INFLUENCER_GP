@@ -489,7 +489,6 @@ app.get(
   })
 );
 // access or create new campaign
-// @post  { receiver_id } = req.body - {sender_id,userType} = req.user
 app.post(
   "/campaign",
   protect,

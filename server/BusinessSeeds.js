@@ -31,6 +31,7 @@ const businesses = [
       min: 7500,
       max: 12000,
     },
+    isActive: true,
   },
   {
     companyName: "مؤسسة التميمي للمستلزمات الرياضية",
@@ -66,6 +67,7 @@ const businesses = [
       min: 15000,
       max: 25000,
     },
+    isActive: true,
   },
   {
     companyName: "مطبخ بكران",
@@ -96,6 +98,7 @@ const businesses = [
       min: 4000,
       max: 8000,
     },
+    isActive: true,
   },
   {
     companyName: "مدارس الأقصى الحديثة",
@@ -127,6 +130,7 @@ const businesses = [
       min: 3000,
       max: 5000,
     },
+    isActive: true,
   },
   {
     companyName: "فنادق سويس ان تبوك",
@@ -157,6 +161,7 @@ const businesses = [
       min: 20000,
       max: 50000,
     },
+    isActive: true,
   },
   {
     companyName: "شركة أحمد عبد الواحد",
@@ -192,6 +197,8 @@ const businesses = [
       min: 12000,
       max: 25000,
     },
+    isActive: true,
+
   },
   {
     companyName: "ممنون لملابس الاطفال",
@@ -226,6 +233,7 @@ const businesses = [
       min: 9000,
       max: 18000,
     },
+    isActive: true,
   },
 ];
 

@@ -38,11 +38,14 @@ function Businesses() {
       <BusinessFilters setFilters={setFilters} />
       <Box sx={{ flexGrow: 1, pl: 1 }}>
         <Grid container spacing={2}>
-          {businesses.map((business) => (
-            <Grid xs={3} key={business.id}>
-              <BusinessCard business={business} />
-            </Grid>
-          ))}
+          {businesses.map(
+            (business) =>
+              business.isActive && (
+                <Grid xs={3} key={business.id}>
+                  <BusinessCard business={business} />
+                </Grid>
+              )
+          )}
         </Grid>
       </Box>
     </>

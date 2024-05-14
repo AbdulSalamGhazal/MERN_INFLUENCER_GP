@@ -5,6 +5,7 @@ import DoneIcon from "@mui/icons-material/Done";
 import TransferIcon from "@mui/icons-material/TransferWithinAStation";
 import MoneyIcon from "@mui/icons-material/Money";
 import StarIcon from "@mui/icons-material/Star";
+import CircularProgress from "@mui/material/CircularProgress";
 
 const Dashboard = () => {
   return (
@@ -27,7 +28,7 @@ const Dashboard = () => {
               المحادثات
             </Typography>
             <Typography variant="h3" gutterBottom>
-              7
+              <CircularProgress />
             </Typography>
           </Paper>
         </Grid>
@@ -45,7 +46,7 @@ const Dashboard = () => {
               الحملات الجارية
             </Typography>
             <Typography variant="h3" gutterBottom>
-              2
+              <CircularProgress />
             </Typography>
           </Paper>
         </Grid>
@@ -63,7 +64,7 @@ const Dashboard = () => {
               الحملات المنتهية
             </Typography>
             <Typography variant="h3" gutterBottom>
-              3
+              <CircularProgress />
             </Typography>
           </Paper>
         </Grid>
@@ -81,7 +82,7 @@ const Dashboard = () => {
               طلبات تحويل إلى حملة
             </Typography>
             <Typography variant="h3" gutterBottom>
-              0
+              <CircularProgress />
             </Typography>
           </Paper>
         </Grid>
@@ -99,7 +100,7 @@ const Dashboard = () => {
               إجمالي المبلغ المعلق
             </Typography>
             <Typography variant="h3" gutterBottom>
-              14500 ريال
+              <CircularProgress />
             </Typography>
           </Paper>
         </Grid>
@@ -117,7 +118,7 @@ const Dashboard = () => {
               متوسط التقييم
             </Typography>
             <Typography variant="h3" gutterBottom>
-              4.5/5
+              <CircularProgress />
             </Typography>
           </Paper>
         </Grid>

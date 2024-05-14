@@ -17,13 +17,16 @@ const businessSchema = new Schema({
 
   targetAudience: [String],
   campaignGoals: [String],
-
+  isActive: {
+    type: Boolean,
+    default: false,
+  },
   generalRequest: [String],
   budgetRange: {
     min: Number,
     max: Number,
   },
-  autoReply:String
+  autoReply: String,
 });
 businessSchema.methods.matchPassword = async function (enteredPassword) {
   return await bcrypt.compare(enteredPassword, this.password);
