@@ -140,7 +140,7 @@ const businesses = [
     password: "123456@Ab",
     address: "تبوك",
     image:
-      "https://scontent.fmed1-1.fna.fbcdn.net/v/t39.30808-6/309200326_495667179233819_3975026588392305885_n.png?_nc_cat=103&ccb=1-7&_nc_sid=5f2048&_nc_ohc=dXZrLfKTEGgAb6Cb_iM&_nc_ht=scontent.fmed1-1.fna&oh=00_AfDRvXehl4qxK1O-0EG7O5Nh4VxLZurn9Vl9l1cyjxEIQQ&oe=662F4085",
+      "https://dezone.net/wp-content/uploads/2022/05/%D9%81%D9%86%D8%AF%D9%82-%D8%B3%D9%88%D9%8A%D8%B3-%D8%A7%D9%86-%D8%A7%D9%84%D9%85%D9%87%D9%86%D8%AF%D8%B3%D9%8A%D9%86.jpg",
 
     websiteURL: "https://swissintabuk.com/",
     socialMediaLinks: [
@@ -198,7 +198,6 @@ const businesses = [
       max: 25000,
     },
     isActive: true,
-
   },
   {
     companyName: "ممنون لملابس الاطفال",
@@ -232,6 +231,37 @@ const businesses = [
     budgetRange: {
       min: 9000,
       max: 18000,
+    },
+    isActive: true,
+  },
+  {
+    companyName: "تشيكي تشيز",
+    industry: "الترفيه",
+    size: "متوسطة: 51 إلى 250 موظفاً",
+    email: "chucky_cheese@gmail.com",
+    password: "123456@Ab",
+    address: "جدة",
+    image:
+      "https://www.testaahel.qa/wp-content/uploads/2023/06/chuck-e-cheese.png?undefined=undefined",
+
+    websiteURL: "https://chuckecheese.com.sa/ar/",
+    socialMediaLinks: [
+      "https://www.instagram.com/chuckecheesessa/",
+      "https://twitter.com/ChuckeCheesesSA?lang=en",
+    ],
+    description:
+      "عيش جو المغامرة و الحماس في عالم من الألعاب في تشكي تشيز! مكانك المفضّل للتسلية والمرح وخلق الذكريات مع الأصدقاء.",
+
+    targetAudience: ["الألعاب", "الترفيه", "الأنشطة الخارجية"],
+    campaignGoals: ["جذب حركة المرور", "تعزيز التفاعل"],
+
+    generalRequest: [
+      "يجب ان يكون المعلن طفل من العمر 5 الى 10 سنة",
+      "يجب ان يكون الطفل برفقة احد والديه",
+    ],
+    budgetRange: {
+      min: 10000,
+      max: 13000,
     },
     isActive: true,
   },

@@ -356,22 +356,24 @@ function InfluencerPage() {
             </ListItem>
           </List>
         </Grid>
-        <Grid xs={12}>
-          <Typography variant="h4" gutterBottom sx={{ mx: 4 }}>
-            التقييمات
-          </Typography>
-          {influencer.campaigns.map((campaign) => (
-            <Box
-              key={campaign._id}
-              sx={{ display: "flex", justifyContent: "center" }}
-            >
-              <Typography variant="h6" sx={{ justifyContent: "center" }}>
-                {campaign.raterName}:
-                <Rating value={campaign.rate} size="medium" readOnly />
-              </Typography>
-            </Box>
-          ))}
-        </Grid>
+        {influencer.campaigns.length > 0 && (
+          <Grid xs={12}>
+            <Typography variant="h4" gutterBottom sx={{ mx: 4 }}>
+              التقييمات
+            </Typography>
+            {influencer.campaigns.map((campaign) => (
+              <Box
+                key={campaign._id}
+                sx={{ display: "flex", justifyContent: "center" }}
+              >
+                <Typography variant="h6" sx={{ justifyContent: "center" }}>
+                  {campaign.raterName}:
+                  <Rating value={campaign.rate} size="medium" readOnly />
+                </Typography>
+              </Box>
+            ))}
+          </Grid>
+        )}
         <Grid item xs={12}>
           <Link
             to={`/chat/${influencer.id}`}

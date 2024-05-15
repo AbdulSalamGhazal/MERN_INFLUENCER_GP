@@ -8,8 +8,6 @@ import Login from "./pages/Login";
 import Navbar from "./components/Navbar";
 import Footer from "./components/Footer";
 import Chat from "./pages/Chat";
-import InfluencerSignup from "./pages/InfluencerSignup";
-import BusinessSignup from "./pages/BusinessSignup";
 import Signup from "./pages/Signup";
 import Campaign from "./pages/Campaign";
 import CampaignPage from "./pages/CampaignPage";
@@ -18,7 +16,7 @@ import Businesses from "./pages/Businesses";
 import BusinessPage from "./pages/BusinessPage";
 import MyAccount from "./pages/MyAccount";
 import Admin from "./pages/Admin";
-
+import HomePageBefore from "./pages/HomePageBefore";
 function App() {
   const location = useLocation();
 
@@ -35,7 +33,15 @@ function App() {
       {showAssests() && <Navbar />}
       <Container maxWidth="xl" sx={{ mt: 3, mb: 4, flex: 1 }}>
         <Routes>
-          <Route path="/" element={<Home />} />
+          <Route path="/home" element={<HomePageBefore />} />
+          <Route
+            path="/"
+            element={
+              <ProtectedRoute>
+                <Home />
+              </ProtectedRoute>
+            }
+          />
           <Route path="/admin" element={<Admin />} />
           <Route
             path="/influencers"
